@@ -422,6 +422,47 @@ html:has(.onb),body:has(.onb){background:#0B1C36}
 .kpi.warn{background:var(--gold-soft);border-color:var(--gold-2)}
 .kpi.warn b{color:var(--gold-ink)}
 
+/* ---------- Vérification d'identité ---------- */
+.nudge{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:1px solid var(--gold-2);background:linear-gradient(120deg,var(--gold-soft),var(--card));border-radius:var(--r);padding:12px 14px;margin:0 0 14px}
+.nudge .ic{width:36px;height:36px;border-radius:11px;background:var(--navy);color:var(--gold-2);display:grid;place-items:center;flex:none}
+.nudge .ic svg{width:19px;height:19px}
+.nudge b{display:block;font-size:14px;color:var(--navy)}
+.nudge small{display:block;font-size:12px;line-height:1.35;color:var(--muted);margin-top:2px}
+.nudge .arr{margin-left:auto;color:var(--gold-ink);font-size:22px;font-weight:700}
+.idst{display:flex;gap:12px;align-items:flex-start;border-radius:14px;padding:12px;margin-top:12px}
+.idst .ic{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;flex:none}
+.idst .ic svg{width:18px;height:18px}
+.idst b{display:block;font-size:14px}
+.idst span:not(.ic){font-size:12.5px;color:var(--muted)}
+.idst.ok{background:var(--green-soft)}.idst.ok .ic{background:var(--green);color:#fff}.idst.ok b{color:var(--green)}
+.idst.wait{background:var(--gold-soft)}.idst.wait .ic{background:var(--gold);color:#fff}.idst.wait b{color:var(--gold-ink)}
+.idst.no{background:var(--red-soft)}.idst.no .ic{background:var(--red);color:#fff}.idst.no b{color:var(--red)}
+.shot{position:relative;display:flex;align-items:center;gap:12px;background:var(--card);border:1.5px dashed var(--gold-2);border-radius:16px;padding:12px;margin-bottom:10px;cursor:pointer;min-height:76px;transition:border-color .2s,background .2s}
+.shot input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.shot:focus-within{outline:2px solid var(--gold);outline-offset:2px}
+.shot-ic{width:48px;height:48px;border-radius:14px;background:var(--navy);color:var(--gold-2);display:grid;place-items:center;flex:none}
+.shot-ic svg{width:26px;height:26px}
+.shot-tx{flex:1;min-width:0}
+.shot-tx b{display:block;font-size:14.5px;color:var(--navy)}
+.shot-tx small{font-size:12.5px;color:var(--muted)}
+.shot img{width:64px;height:48px;object-fit:cover;border-radius:10px;flex:none}
+.shot-ok{display:none;position:absolute;top:-7px;right:-7px;width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;place-items:center;box-shadow:0 0 0 3px var(--cream)}
+.shot-ok svg{width:12px;height:12px}
+.shot.done{border-style:solid;border-color:var(--green);background:#FBFEFC}
+.shot.done .shot-ok{display:grid}
+.shot.done .shot-ic{display:none}
+.shot.busy{opacity:.6;pointer-events:none}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--ink);margin:2px 0 14px;cursor:pointer}
+.consent input{appearance:none;-webkit-appearance:none;flex:none;width:22px;height:22px;margin:0;border:1.5px solid var(--gold);border-radius:6px;background:var(--card);display:grid;place-items:center}
+.consent input:checked{background:var(--gold)}
+.consent input:checked::after{content:"";width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.idpics{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.idpics a{position:relative;display:block;border-radius:12px;overflow:hidden;background:var(--sand);aspect-ratio:4/3}
+.idpics img{width:100%;height:100%;object-fit:cover;display:block}
+.idpics a span{position:absolute;left:8px;bottom:8px;font-size:11px;font-weight:800;color:#fff;background:rgba(11,28,54,.7);border-radius:99px;padding:3px 9px}
+.nopic{display:grid;place-items:center;aspect-ratio:4/3;border-radius:12px;background:var(--sand);font-size:12px;color:var(--muted);text-align:center;padding:8px}
+button.kpi{text-align:left;font:inherit;cursor:pointer}
+
 </style>
 </head>
 <body>
@@ -617,6 +658,8 @@ const RAMADAN_START = "2027-02-08"; // date estimée, à confirmer selon l'obser
 
 /* ---------- icônes ---------- */
 const I = {
+  idcard: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.2"/><path d="M5.8 16c.6-1.6 1.8-2.4 3.2-2.4s2.6.8 3.2 2.4M14.5 10h4M14.5 13.5h3"/></svg>',
+  selfie: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="10" r="3"/><path d="M7.5 17c.9-2 2.6-3 4.5-3s3.6 1 4.5 3"/></svg>',
   home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11L12 4l9 7M5 10v10h14V10M10 20v-5h4v5"/></svg>',
   map: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg>',
   moon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3a9 9 0 1 0 6 15A7.5 7.5 0 0 1 15 3z"/></svg>',
@@ -1150,6 +1193,7 @@ function reportSheet(l) {
 /* ---------- ouvrir ma table ---------- */
 VIEWS.host = {
   html: () => `${topbar("J'ouvre ma table")}<form class="pad" id="hF" novalidate>
+    ${S.profile?.id_verified ? "" : `<button type="button" class="nudge" data-go="me"><span class="ic">${I.shield}</span><span><b>Faites vérifier votre identité</b><small>Le badge « Vérifié » rassure vos invités.</small></span><span class="arr">›</span></button>`}
     <div id="asPartner"></div>
     <div class="opt" id="fmt"><button type="button" class="on" data-f="table"><span><b>Chez moi</b><span>Mes invités rompent le jeûne à ma table</span></span></button><button type="button" data-f="plat"><span><b>Plat à emporter</b><span>Une part à récupérer avant Maghrib</span></span></button></div>
     <div class="sect"><h3>Quand et où</h3></div><div class="panel">
@@ -1460,7 +1504,7 @@ function recipeSheet(r) {
 /* ---------- espace administration ---------- */
 VIEWS.admin = {
   html: () => `${topbar("Espace admin")}<div class="pad">
-    <div class="seg2" id="adTab"><button type="button" data-t="dash" class="${(S.params.tab || "dash") === "dash" ? "on" : ""}">Bilan</button><button type="button" data-t="part" class="${S.params.tab === "part" ? "on" : ""}">Partenaires</button><button type="button" data-t="rep" class="${S.params.tab === "rep" ? "on" : ""}">Signalements</button><button type="button" data-t="host" class="${S.params.tab === "host" ? "on" : ""}">Hôtes</button></div>
+    <div class="seg2" id="adTab"><button type="button" data-t="dash" class="${(S.params.tab || "dash") === "dash" ? "on" : ""}">Bilan</button><button type="button" data-t="part" class="${S.params.tab === "part" ? "on" : ""}">Partenaires</button><button type="button" data-t="rep" class="${S.params.tab === "rep" ? "on" : ""}">Signalements</button><button type="button" data-t="host" class="${S.params.tab === "host" ? "on" : ""}">Identités</button></div>
     <div id="adBody">${loading()}</div></div>`,
   async mount() {
     if (!S.isAdmin) { toast("Réservé à l'administration"); return go("me"); }
@@ -1468,8 +1512,10 @@ VIEWS.admin = {
     const tab = S.params.tab || "dash", box = $("#adBody");
     if (tab === "dash") {
       const { data: st, error } = await sb.rpc("admin_stats"); if (error) return toast(errMsg(error));
-      const T = [["membres", "Membres"], ["hotes", "Hôtes"], ["annonces_ouvertes", "Annonces ouvertes"], ["annonces", "Annonces au total"], ["demandes", "Demandes"], ["repas_partages", "Repas partagés"], ["partenaires_attente", "Partenaires à valider"], ["signalements", "Signalements ouverts"]];
-      box.innerHTML = `<div class="kpis">${T.map(([k, n]) => `<div class="kpi ${["partenaires_attente", "signalements"].includes(k) && st[k] > 0 ? "warn" : ""}"><b class="num">${st[k]}</b><span>${n}</span></div>`).join("")}</div>`;
+      const T = [["membres", "Membres"], ["hotes", "Hôtes"], ["annonces_ouvertes", "Annonces ouvertes"], ["annonces", "Annonces au total"], ["demandes", "Demandes"], ["repas_partages", "Repas partagés"], ["identites", "Identités à vérifier"], ["verifies", "Identités vérifiées"], ["partenaires_attente", "Partenaires à valider"], ["signalements", "Signalements ouverts"]];
+      const GOTO = { identites: "host", partenaires_attente: "part", signalements: "rep" };
+      box.innerHTML = `<div class="kpis">${T.map(([k, n]) => GOTO[k] ? `<button type="button" class="kpi ${st[k] > 0 ? "warn" : ""}" data-kt="${GOTO[k]}"><b class="num">${st[k] ?? 0}</b><span>${n} ›</span></button>` : `<div class="kpi"><b class="num">${st[k] ?? 0}</b><span>${n}</span></div>`).join("")}</div>`;
+      $$("[data-kt]", box).forEach((b) => b.onclick = () => { S.params = { tab: b.dataset.kt }; render(); });
     } else if (tab === "part") {
       const { data, error } = await sb.from("partners").select("*, owner:profiles!partners_owner_id_fkey(first_name)").order("created_at", { ascending: false }); if (error) return toast(errMsg(error));
       const PS = { en_attente: ["À valider", "st-wait"], verifie: ["Vérifié", "st-ok"], refuse: ["Refusé", "st-no"] }, K = { mosquee: "Mosquée", association: "Association", restaurant: "Restaurant", sponsor: "Sponsor" };
@@ -1485,25 +1531,107 @@ VIEWS.admin = {
         ${x.handled ? "" : `<div class="row">${x.listing_id ? `<button class="btn line sm" type="button" data-go="detail" data-id="${x.listing_id}">Voir l'annonce</button>` : ""}<button class="btn danger sm" type="button" data-hr="${x.id}" data-close-l="1">Fermer l'annonce</button><button class="btn ghost sm" type="button" data-hr="${x.id}">Classer</button></div>`}</div>`).join("") : `<div class="empty"><b>Aucun signalement</b>Tout va bien.</div>`;
       $$("[data-hr]", box).forEach((b) => b.onclick = async () => { const { error: e } = await sb.rpc("admin_handle_report", { p_report: b.dataset.hr, p_close_listing: !!b.dataset.closeL }); if (e) return toast(errMsg(e)); toast(b.dataset.closeL ? "Annonce fermée" : "Signalement classé"); render(); });
     } else {
-      const { data, error } = await sb.rpc("admin_hosts"); if (error) return toast(errMsg(error));
-      box.innerHTML = `<p class="hint" style="margin:0 0 10px">Marquez « vérifié » un hôte après avoir contrôlé sa pièce d'identité.</p>` + (data.length ? data.map((x) => `<div class="req" style="grid-template-columns:1fr"><div class="h"><div class="av">${esc((x.first_name || "?")[0])}</div><div style="min-width:0;flex:1"><b>${esc(x.first_name || "Sans prénom")}</b><span class="hint">${esc(x.city || "")} · ${x.annonces} annonce${x.annonces > 1 ? "s" : ""}</span></div><button class="btn ${x.id_verified ? "ghost" : "gold"} sm" type="button" style="width:auto" data-ver="${x.id}" data-v="${x.id_verified ? "" : "1"}">${x.id_verified ? "Vérifié ✓" : "Vérifier"}</button></div></div>`).join("") : `<div class="empty"><b>Aucun hôte</b>Les membres qui publient une table apparaîtront ici.</div>`);
+      const [{ data, error }, { data: ck, error: e2 }] = await Promise.all([sb.rpc("admin_hosts"), sb.from("id_checks").select("*, user:profiles!id_checks_user_id_fkey(first_name,city)").eq("status", "en_attente").order("created_at")]);
+      if (error || e2) return toast(errMsg(error || e2));
+      const paths = (ck || []).flatMap((c) => [c.doc_path, c.selfie_path]).filter(Boolean);
+      const { data: su } = paths.length ? await sb.storage.from("id-docs").createSignedUrls(paths, 900) : { data: [] };
+      const U = Object.fromEntries((su || []).map((x) => [x.path, x.signedUrl]));
+      const pic = (path, l) => U[path] ? `<a href="${esc(U[path])}" target="_blank" rel="noopener"><img src="${esc(U[path])}" alt="${l}" loading="lazy"><span>${l}</span></a>` : `<div class="nopic">${l} indisponible</div>`;
+      box.innerHTML = `<div class="sect" style="margin-top:0"><h3>À vérifier</h3><span class="hint">${ck.length}</span></div>` + (ck.length ? ck.map((c) => `<div class="req idrev"><div class="h"><div class="av">${esc((c.user?.first_name || "?")[0])}</div><div style="min-width:0;flex:1"><b>${esc(c.user?.first_name || "Membre")}</b><span class="hint">${DOC_T[c.doc_type]} · ${esc(c.user?.city || "ville non renseignée")} · ${new Date(c.created_at).toLocaleDateString("fr-FR")}</span></div><span class="status st-wait">À vérifier</span></div>
+        <div class="idpics">${pic(c.doc_path, "Pièce")}${pic(c.selfie_path, "Selfie")}</div>
+        <p class="hint" style="margin:0">Vérifiez que le visage correspond, que le prénom est « ${esc(c.user?.first_name || "")} » et que la pièce n'est pas expirée.</p>
+        <div class="row"><button class="btn gold sm" type="button" data-idok="${c.id}">Valider</button><button class="btn line sm" type="button" data-idno="${c.id}">Refuser</button></div></div>`).join("") : `<div class="empty" style="margin-bottom:12px"><b>Rien à vérifier</b>Les nouvelles demandes apparaîtront ici.</div>`)
+        + `<div class="sect"><h3>Hôtes</h3></div><p class="hint" style="margin:-6px 0 10px">Vous pouvez aussi retirer un badge en cas de problème.</p>` + (data.length ? data.map((x) => `<div class="req" style="grid-template-columns:1fr"><div class="h"><div class="av">${esc((x.first_name || "?")[0])}</div><div style="min-width:0;flex:1"><b>${esc(x.first_name || "Sans prénom")}</b><span class="hint">${esc(x.city || "")} · ${x.annonces} annonce${x.annonces > 1 ? "s" : ""}</span></div><button class="btn ${x.id_verified ? "ghost" : "gold"} sm" type="button" style="width:auto" data-ver="${x.id}" data-v="${x.id_verified ? "" : "1"}">${x.id_verified ? "Vérifié ✓" : "Vérifier"}</button></div></div>`).join("") : `<div class="empty"><b>Aucun hôte</b>Les membres qui publient une table apparaîtront ici.</div>`);
+      const review = async (c, ok, reason) => {
+        const files = [c.doc_path, c.selfie_path].filter(Boolean);
+        if (files.length) { const { error: re } = await sb.storage.from("id-docs").remove(files); if (re) return toast("Suppression des photos impossible : " + errMsg(re)); }
+        const { error: e } = await sb.rpc("admin_review_id_check", { p_check: c.id, p_ok: ok, p_reason: reason || null }); if (e) return toast(errMsg(e));
+        closeSheet(); toast(ok ? "Identité validée · photos supprimées" : "Demande refusée · photos supprimées"); render();
+      };
+      $$("[data-idok]", box).forEach((b) => b.onclick = () => review(ck.find((c) => c.id === b.dataset.idok), true));
+      $$("[data-idno]", box).forEach((b) => b.onclick = () => {
+        const c = ck.find((x) => x.id === b.dataset.idno);
+        const R = ["Photo floue ou illisible", "Le visage ne correspond pas", "Le prénom ne correspond pas", "Pièce expirée", "Document non accepté"];
+        const sh = sheet(`<h2>Refuser la demande de ${esc(c.user?.first_name || "")}</h2><p class="lead">Le motif sera affiché au membre pour qu'il puisse réessayer.</p><div class="chips" id="rjR" style="margin:12px 0 16px">${R.map((r, i) => `<button type="button" class="chip ${i ? "" : "on"}" data-r="${esc(r)}">${r}</button>`).join("")}</div><button class="btn danger" type="button" id="rjGo">Refuser et supprimer les photos</button>`);
+        $("#rjR", sh).onclick = (e) => { const x = e.target.closest("[data-r]"); if (!x) return; $$("#rjR .chip", sh).forEach((y) => y.classList.toggle("on", y === x)); };
+        $("#rjGo", sh).onclick = () => review(c, false, $("#rjR .on", sh)?.dataset.r);
+      });
       $$("[data-ver]", box).forEach((b) => b.onclick = async () => { const { error: e } = await sb.rpc("admin_set_verified", { p_user: b.dataset.ver, p_verified: !!b.dataset.v }); if (e) return toast(errMsg(e)); toast(b.dataset.v ? "Hôte vérifié" : "Vérification retirée"); render(); });
     }
   },
 };
 
 
+/* ---------- vérification d'identité ---------- */
+const DOC_T = { cni: "Carte d'identité", passeport: "Passeport", permis: "Permis de conduire", autre: "Autre pièce officielle" };
+function idPanelHTML(p, c) {
+  const mail = `<div class="hint">${I.check.replace("<svg", '<svg style="width:14px;height:14px;color:var(--green);vertical-align:-2px"')} Email confirmé</div>`;
+  let st;
+  if (p.id_verified) st = `<div class="idst ok"><span class="ic">${I.shield}</span><div><b>Identité vérifiée</b><span>Le badge « Vérifié » apparaît sur vos annonces.</span></div></div>`;
+  else if (c?.status === "en_attente") st = `<div class="idst wait"><span class="ic">${I.clock}</span><div><b>Vérification en cours</b><span>Envoyée le ${new Date(c.created_at).toLocaleDateString("fr-FR")}. Réponse sous 48 h en général.</span></div></div>`;
+  else st = (c?.status === "refusee" ? `<div class="idst no"><span class="ic">${I.idcard}</span><div><b>Vérification refusée</b><span>${esc(c.reject_reason || "Photos non conformes")}. Vous pouvez réessayer.</span></div></div>` : `<p class="hint" style="margin:10px 0 0">Les hôtes vérifiés rassurent leurs invités et reçoivent plus de demandes.</p>`)
+    + `<button class="btn gold" type="button" id="idGo" style="margin-top:12px">${I.shield} ${c?.status === "refusee" ? "Réessayer" : "Vérifier mon identité"}</button>`;
+  return `<div class="panel"><h4>Vérifications</h4>${mail}${st}</div>`;
+}
+async function prepImg(file, mark) {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((ok, ko) => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => ko(new Error("img")); i.src = url; });
+    const k = Math.min(1, 1600 / Math.max(img.naturalWidth, img.naturalHeight));
+    const c = document.createElement("canvas"); c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+    const g = c.getContext("2d"); g.drawImage(img, 0, 0, c.width, c.height);
+    if (mark) {
+      const t = `SUFRA · VÉRIFICATION UNIQUEMENT · ${new Date().toLocaleDateString("fr-FR")}`, fs = Math.max(14, Math.round(c.width / 26)), d = Math.hypot(c.width, c.height);
+      g.save(); g.translate(c.width / 2, c.height / 2); g.rotate(-Math.PI / 7); g.font = `800 ${fs}px sans-serif`; g.textAlign = "center"; g.fillStyle = "rgba(201,154,69,.5)"; g.strokeStyle = "rgba(11,28,54,.25)"; g.lineWidth = 1;
+      for (let y = -d / 2; y < d / 2; y += fs * 4) { g.fillText(t, 0, y); g.strokeText(t, 0, y); }
+      g.restore();
+    }
+    return await new Promise((ok) => c.toBlob(ok, "image/jpeg", 0.85));
+  } finally { URL.revokeObjectURL(url); }
+}
+function idSheet() {
+  const F = { doc: null, selfie: null }; let type = "cni";
+  const bg = sheet(`<h2>Vérifier mon identité</h2><p class="lead">Deux photos, une minute. L'équipe Sufra vérifie sous 48 h.</p>
+    <div class="field"><span class="lbl">Type de pièce</span><div class="chips" id="idT">${Object.entries(DOC_T).map(([k, n]) => `<button type="button" class="chip ${k === type ? "on" : ""}" data-t="${k}">${n}</button>`).join("")}</div></div>
+    <label class="shot" id="shDoc"><input type="file" accept="image/*"><span class="shot-ic">${I.idcard}</span><span class="shot-tx"><b>1. Photo de la pièce</b><small>Recto, bien à plat, sans reflet, lisible</small></span><img alt="" hidden><span class="shot-ok">${I.check}</span></label>
+    <label class="shot" id="shSelfie"><input type="file" accept="image/*" capture="user"><span class="shot-ic">${I.selfie}</span><span class="shot-tx"><b>2. Selfie</b><small>Visage dégagé, face à la lumière</small></span><img alt="" hidden><span class="shot-ok">${I.check}</span></label>
+    <div class="notice">${I.shield}<span>Vos photos ne sont <b>jamais visibles par les autres membres</b>. Seule l'équipe Sufra les voit, et elles sont <b>supprimées dès la décision</b>. Un filigrane « Sufra · vérification uniquement » est ajouté à votre pièce, et la localisation de la photo est retirée.</span></div>
+    <label class="consent"><input type="checkbox" id="idOk"><span>J'accepte que Sufra utilise ces photos uniquement pour vérifier mon identité.</span></label>
+    <button class="btn gold" type="button" id="idSend" disabled>Envoyer pour vérification</button>`);
+  const upd = () => { $("#idSend", bg).disabled = !(F.doc && F.selfie && $("#idOk", bg).checked); };
+  $("#idT", bg).onclick = (e) => { const b = e.target.closest("[data-t]"); if (!b) return; type = b.dataset.t; $$("#idT .chip", bg).forEach((x) => x.classList.toggle("on", x === b)); };
+  [["doc", "#shDoc", true], ["selfie", "#shSelfie", false]].forEach(([k, sel, mark]) => {
+    const box = $(sel, bg), inp = $("input", box), im = $("img", box);
+    inp.onchange = async () => {
+      const f = inp.files?.[0]; if (!f) return;
+      box.classList.add("busy");
+      try { F[k] = await prepImg(f, mark); if (im.src) URL.revokeObjectURL(im.src); im.src = URL.createObjectURL(F[k]); im.hidden = false; box.classList.add("done"); }
+      catch (_) { F[k] = null; toast("Photo illisible : essayez en JPEG ou reprenez-la"); }
+      box.classList.remove("busy"); upd();
+    };
+  });
+  $("#idOk", bg).onchange = upd;
+  $("#idSend", bg).onclick = async () => {
+    const btn = $("#idSend", bg); btn.disabled = true; btn.textContent = "Envoi en cours…";
+    const base = `${me()}/${Date.now()}`, P = { doc: `${base}-piece.jpg`, selfie: `${base}-selfie.jpg` }, st = sb.storage.from("id-docs");
+    const fail = async (e) => { await st.remove([P.doc, P.selfie]).catch(() => {}); toast(errMsg(e)); btn.disabled = false; btn.textContent = "Envoyer pour vérification"; };
+    for (const k of ["doc", "selfie"]) { const { error } = await st.upload(P[k], F[k], { contentType: "image/jpeg", upsert: false }); if (error) return fail(error); }
+    const { error } = await sb.rpc("submit_id_check", { p_doc: P.doc, p_selfie: P.selfie, p_doc_type: type }); if (error) return fail(error);
+    closeSheet(); toast("Demande envoyée. Réponse sous 48 h."); render();
+  };
+}
+
 /* ---------- profil ---------- */
 VIEWS.me = {
   html: () => `${topbar("Mon profil", false)}<div class="pad"><div id="meBody">${loading()}</div></div>`,
   async mount() {
     const p = S.profile || {};
-    const [{ data: parts }, { data: rv }] = await Promise.all([sb.from("partners").select("*").eq("owner_id", me()).order("created_at"), sb.from("reviews").select("rating").eq("target_id", me())]);
+    const [{ data: parts }, { data: rv }, { data: idc }] = await Promise.all([sb.from("partners").select("*").eq("owner_id", me()).order("created_at"), sb.from("reviews").select("rating").eq("target_id", me()), sb.from("id_checks").select("status,reject_reason,created_at").eq("user_id", me()).order("created_at", { ascending: false }).limit(1)]);
     const avg = rv?.length ? (rv.reduce((a, b) => a + b.rating, 0) / rv.length).toFixed(1).replace(".", ",") : null;
     const PS = { en_attente: ["En vérification", "st-wait"], verifie: ["Vérifié", "st-ok"], refuse: ["Refusé", "st-no"] };
     $("#meBody").innerHTML = `
       <div class="prof"><div class="av lg" style="background:linear-gradient(135deg,#C99A45,#8A6418)">${esc((p.first_name || "?")[0])}</div><div><h2>${esc(p.first_name)}</h2><div class="hint">${esc(S.session.user.email)}</div><div class="hint">${avg ? `<span class="stars">★</span> ${avg}/5 · ${rv.length} avis` : "Pas encore d'avis"}</div></div></div>
-      <div class="panel"><h4>Vérifications</h4><div class="hint">${I.check.replace("<svg", '<svg style="width:14px;height:14px;color:var(--green);vertical-align:-2px"')} Email confirmé</div><div class="hint" style="margin-top:6px">${p.id_verified ? "Identité vérifiée" : "Vérification d'identité : bientôt disponible"}</div></div>
+      ${idPanelHTML(p, idc?.[0])}
       <form class="panel" id="pF"><h4>Mes informations</h4>
         <div class="field"><label for="pN">Prénom</label><input id="pN" maxlength="40" value="${esc(p.first_name)}"></div>
         <div class="field"><label for="pC">Ville</label><input id="pC" maxlength="80" value="${esc(p.city)}"></div>
@@ -1522,6 +1650,7 @@ VIEWS.me = {
       Object.assign(S.profile, upd); toast("Profil enregistré");
     };
     const np = $("#newPart"); if (np) np.onclick = () => partnerSheet();
+    const ig = $("#idGo"); if (ig) ig.onclick = () => idSheet();
     $("#logout").onclick = async () => { await sb.auth.signOut(); };
   },
 };
