@@ -11,9 +11,9 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230B1C36'/%3E%3Ccircle cx='50' cy='52' r='34' fill='%23C99A45'/%3E%3Ccircle cx='62' cy='45' r='29' fill='%230B1C36'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Nunito+Sans:wght@400;600;700;800&family=Parisienne&family=Amiri:wght@700&display=swap">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" crossorigin="">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js" crossorigin=""></script>
 
 <style>
 :root{
@@ -183,8 +183,9 @@ svg.logo{display:block}
 .mapwrap{position:relative;margin:12px 0;border-radius:22px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line);height:300px;transition:height .25s ease;isolation:isolate}
 .mapwrap.big{height:calc(100vh - 230px);min-height:420px}
 #map{position:absolute;inset:0;background:#F2EFE9;z-index:0;font-family:var(--body)}
-.leaflet-container{background:#F2EFE9!important}
-.leaflet-control-attribution{background:rgba(255,255,255,.7)!important;font-size:9.5px!important;border-radius:6px 0 0 0;color:var(--muted)!important}
+.maplibregl-ctrl-attrib{font-size:10px}
+.maplibregl-ctrl-bottom-right{right:auto;left:0}
+.pin2{border:0;background:none;padding:0;cursor:pointer}
 .mapctl{position:absolute;right:10px;top:10px;z-index:500;display:flex;flex-direction:column;gap:8px}
 .mapctl>button,.mapctl .zoom{background:rgba(255,255,255,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:0;border-radius:12px;box-shadow:0 2px 10px rgba(19,41,75,.18);color:var(--navy)}
 .mapctl>button{width:40px;height:40px;display:grid;place-items:center}
@@ -300,6 +301,18 @@ svg.logo{display:block}
 .field input::-webkit-date-and-time-value{text-align:left;margin:0}
 .field input[type=date]::-webkit-calendar-picker-indicator,.field input[type=time]::-webkit-calendar-picker-indicator{opacity:.6}
 .pills input[type=date]{-webkit-appearance:none;appearance:none}
+
+/* Zellige : motif marocain doré sur fond nuit */
+:root{--zellige:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23E2BD72' stroke-width='1.1'%3E%3Cg stroke-opacity='.42'%3E%3Crect x='20' y='20' width='32' height='32'/%3E%3Crect x='20' y='20' width='32' height='32' transform='rotate(45 36 36)'/%3E%3C/g%3E%3Cg stroke-opacity='.3'%3E%3Ccircle cx='36' cy='36' r='8'/%3E%3Cpath d='M36 4v10M36 58v10M4 36h10M58 36h10'/%3E%3Cpath d='M0 -9L9 0L0 9L-9 0Z M72 -9L81 0L72 9L63 0Z M0 63L9 72L0 81L-9 72Z M72 63L81 72L72 81L63 72Z'/%3E%3C/g%3E%3C/g%3E%3Cpath d='M36 26l2.9 7.1L46 36l-7.1 2.9L36 46l-2.9-7.1L26 36l7.1-2.9z' fill='%23E2BD72' fill-opacity='.22'/%3E%3C/svg%3E");--rosace:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cg fill='none' stroke='%23E2BD72' stroke-width='1.4' stroke-opacity='.55'%3E%3Crect x='45' y='45' width='110' height='110'/%3E%3Crect x='45' y='45' width='110' height='110' transform='rotate(45 100 100)'/%3E%3Crect x='45' y='45' width='110' height='110' transform='rotate(22.5 100 100)'/%3E%3Crect x='45' y='45' width='110' height='110' transform='rotate(67.5 100 100)'/%3E%3Ccircle cx='100' cy='100' r='38'/%3E%3Ccircle cx='100' cy='100' r='22'/%3E%3Ccircle cx='100' cy='100' r='92'/%3E%3C/g%3E%3C/svg%3E")}
+.dhero{height:220px;padding:18px 20px 22px;flex-direction:column;justify-content:flex-end;align-items:flex-start;gap:8px;overflow:hidden;
+  background:radial-gradient(120% 90% at 85% 10%,rgba(226,189,114,.20),transparent 55%),linear-gradient(180deg,rgba(11,28,54,0) 40%,rgba(11,28,54,.85) 100%),var(--zellige),linear-gradient(160deg,var(--k,#13294B),#0B1C36 75%);
+  background-size:auto,auto,72px 72px,auto;border-radius:0 0 28px 28px}
+.dhero::before{content:"";position:absolute;width:240px;height:240px;right:-70px;top:-30px;background:var(--rosace) center/contain no-repeat;opacity:.9;pointer-events:none}
+.dhero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:linear-gradient(90deg,transparent,var(--gold-2),transparent);opacity:.7}
+.dhero .eyebrow{position:relative;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-2);background:rgba(11,28,54,.55);border:1px solid rgba(226,189,114,.4);border-radius:99px;padding:5px 11px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.dhero h2{font-size:26px;line-height:1.15}
+.dhero .rb{background:rgba(11,28,54,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(226,189,114,.35);z-index:2}
+.hh{background:radial-gradient(120% 80% at 90% 0%,rgba(226,189,114,.16),transparent 60%),linear-gradient(rgba(11,28,54,.45),rgba(11,28,54,.45)),var(--zellige),linear-gradient(180deg,var(--navy-2),var(--navy));background-size:auto,auto,72px 72px,auto}
 
 </style>
 </head>
@@ -433,7 +446,7 @@ function go(view, params = {}, push = true) {
 }
 function back() { const p = S.stack.pop(); if (p) { S.view = p[0]; S.params = p[1]; render(); } else go("home"); }
 function cleanup() {
-  if (S.map) { S.map.remove(); S.map = null; }
+  if (S.map) { try { S.map.remove(); } catch (_) {} S.map = null; }
   if (S.channel) { sb.removeChannel(S.channel); S.channel = null; }
   if (S.timer) { clearInterval(S.timer); S.timer = null; }
 }
@@ -688,45 +701,49 @@ VIEWS.explore = {
   },
 };
 
-/* Carte : fond CARTO « Voyager » (style doux proche d'Apple Plans), épingles aux couleurs de Sufra */
-function pinHTML(r, on) {
-  const k = kindStyle(r), free = r.places - r.taken;
-  return `<div class="pin2 ${on ? "on" : ""}" style="--c:${k.c}"><span class="pin2-ic">${k.i}</span>${free > 0 ? `<span class="pin2-n">${free}</span>` : ""}</div>`;
+/* Carte : MapLibre + OpenFreeMap (style « Liberty », vectoriel, gratuit et sans clé), épingles aux couleurs de Sufra */
+const MAP_STYLE = "https://tiles.openfreemap.org/styles/liberty";
+function pinEl(r) {
+  const k = kindStyle(r), free = r.places - r.taken, el = document.createElement("button");
+  el.type = "button"; el.className = "pin2"; el.style.setProperty("--c", k.c);
+  el.setAttribute("aria-label", titleOf(r, r.host, r.partner));
+  el.innerHTML = `<span class="pin2-ic">${k.i}</span>${free > 0 ? `<span class="pin2-n">${free}</span>` : ""}`;
+  return el;
 }
 function drawMap(rows) {
   const box = $("#map");
-  if (!window.L) { box.innerHTML = `<p class="hint" style="padding:16px">Carte indisponible hors connexion.</p>`; return; }
+  if (!window.maplibregl) { box.innerHTML = `<p class="hint" style="padding:16px">Carte indisponible hors connexion.</p>`; return; }
   const pts = rows.filter((r) => r.approx_lat != null);
-  S.map = L.map(box, { zoomControl: false, attributionControl: false, tap: true }).setView([S.pos.lat, S.pos.lng], 13);
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", { subdomains: "abcd", maxZoom: 19, detectRetina: true }).addTo(S.map);
-  L.control.attribution({ prefix: false, position: "bottomleft" }).addAttribution("© OpenStreetMap © CARTO").addTo(S.map);
-  L.marker([S.pos.lat, S.pos.lng], { icon: L.divIcon({ className: "", html: `<div class="me-dot"></div>`, iconSize: [18, 18], iconAnchor: [9, 9] }), interactive: false, keyboard: false }).addTo(S.map);
-  const markers = {}; let sel = null;
-  const card = $("#mapCard");
+  const map = S.map = new maplibregl.Map({ container: box, style: MAP_STYLE, center: [S.pos.lng, S.pos.lat], zoom: 13, attributionControl: { compact: true }, dragRotate: false, pitchWithRotate: false, cooperativeGestures: false });
+  map.touchZoomRotate.disableRotation();
+  const me = document.createElement("div"); me.className = "me-dot";
+  new maplibregl.Marker({ element: me, anchor: "center" }).setLngLat([S.pos.lng, S.pos.lat]).addTo(map);
+  const card = $("#mapCard"), els = {}; let sel = null;
   const select = (r) => {
-    if (sel && markers[sel]) markers[sel].setIcon(L.divIcon({ className: "", html: pinHTML(rows.find((x) => x.id === sel), false), iconSize: [40, 48], iconAnchor: [20, 46] }));
+    if (sel && els[sel]) els[sel].classList.remove("on");
     sel = r ? r.id : null;
     if (!r) { card.hidden = true; return; }
-    markers[r.id].setIcon(L.divIcon({ className: "", html: pinHTML(r, true), iconSize: [40, 48], iconAnchor: [20, 46] }));
-    markers[r.id].setZIndexOffset(1000);
+    els[r.id].classList.add("on");
     card.innerHTML = itemHTML(r).replace('class="item"', 'class="item map-item"');
     card.hidden = false;
     $("[data-listing]", card).onclick = () => go("detail", { id: r.id });
-    S.map.panTo([r.approx_lat, r.approx_lng], { animate: true });
+    map.easeTo({ center: [r.approx_lng, r.approx_lat], duration: 350 });
   };
   pts.forEach((r) => {
-    markers[r.id] = L.marker([r.approx_lat, r.approx_lng], { icon: L.divIcon({ className: "", html: pinHTML(r, false), iconSize: [40, 48], iconAnchor: [20, 46] }), title: titleOf(r, r.host, r.partner), riseOnHover: true })
-      .addTo(S.map).on("click", (e) => { L.DomEvent.stopPropagation(e); select(r); });
+    const el = els[r.id] = pinEl(r);
+    el.addEventListener("click", (e) => { e.stopPropagation(); select(r); });
+    new maplibregl.Marker({ element: el, anchor: "bottom" }).setLngLat([r.approx_lng, r.approx_lat]).addTo(map);
   });
-  S.map.on("click", () => select(null));
+  map.on("click", () => select(null));
   if (pts.length) {
-    const b = L.latLngBounds(pts.map((r) => [r.approx_lat, r.approx_lng]).concat([[S.pos.lat, S.pos.lng]]));
-    S.map.fitBounds(b, { padding: [36, 36], maxZoom: 15 });
+    const b = new maplibregl.LngLatBounds([S.pos.lng, S.pos.lat], [S.pos.lng, S.pos.lat]);
+    pts.forEach((r) => b.extend([r.approx_lng, r.approx_lat]));
+    map.fitBounds(b, { padding: { top: 50, bottom: 50, left: 40, right: 70 }, maxZoom: 15, duration: 0 });
   }
-  $("#mzIn").onclick = () => S.map.zoomIn();
-  $("#mzOut").onclick = () => S.map.zoomOut();
-  $("#mzMe").onclick = () => S.map.setView([S.pos.lat, S.pos.lng], 14, { animate: true });
-  $("#mzBig").onclick = () => { const big = box.parentElement.classList.toggle("big"); $("#mzBig").setAttribute("aria-label", big ? "Réduire la carte" : "Agrandir la carte"); setTimeout(() => S.map.invalidateSize(), 260); };
+  $("#mzIn").onclick = () => map.zoomIn();
+  $("#mzOut").onclick = () => map.zoomOut();
+  $("#mzMe").onclick = () => map.flyTo({ center: [S.pos.lng, S.pos.lat], zoom: 14, duration: 600 });
+  $("#mzBig").onclick = () => { const big = box.parentElement.classList.toggle("big"); $("#mzBig").setAttribute("aria-label", big ? "Réduire la carte" : "Agrandir la carte"); setTimeout(() => map.resize(), 270); };
 }
 
 /* ---------- fiche d'une annonce ---------- */
@@ -751,10 +768,10 @@ VIEWS.detail = {
     else if (!l.is_open || free <= 0) cta = `<button class="btn" type="button" disabled>Complet</button>`;
     else cta = `<button class="btn gold" type="button" id="ask">${pro ? "Je m'inscris" : l.format === "plat" ? "Je réserve une part" : "Je souhaite participer"}</button>`;
     $("main", app).innerHTML = `
-      <div class="dhero" style="background:linear-gradient(160deg,${k.c},#0B1C36)">
+      <div class="dhero" style="--k:${k.c}">
         <button class="rb l" type="button" data-back aria-label="Retour">${I.back}</button>
         <button class="rb r ${fav ? "on" : ""}" type="button" id="fav" aria-label="Favori">${fav ? I.heart : I.heartO}</button>
-        <h2>${esc(titleOf(l, l.host, l.partner))}</h2></div>
+        <span class="eyebrow">${k.t}${l.kind === "habitant" ? " · chez l'habitant" : ""}</span><h2>${esc(titleOf(l, l.host, l.partner))}</h2></div>
       <div class="pad">
         <div class="dmeta">
           <div class="r">${I.pin}${priv.data ? esc(priv.data.address) : esc(l.neighborhood) + (l.dist != null ? ` · à environ ${km(l.dist)}` : "")}${l.host?.id_verified || l.partner ? `<span class="tagv" style="margin-left:auto">${I.check}${pro ? "Partenaire vérifié" : "Hôte vérifié"}</span>` : ""}</div>
@@ -768,7 +785,7 @@ VIEWS.detail = {
           <div><b>${esc(l.partner?.name || l.host?.first_name || "Hôte")}</b><div class="hint">${l.rating ? `<span class="stars">★</span> ${l.rating.toFixed(1).replace(".", ",")}/5 · ${l.nRev} avis` : "Nouveau sur Sufra"}</div></div></div>
           ${l.note ? `<p style="margin:12px 0 0">${esc(l.note)}</p>` : ""}</div>
         ${rv.data?.length ? `<div class="panel"><h4>Avis</h4>${rv.data.map((r) => `<div class="review"><b>${esc(r.author?.first_name || "Invité")}</b> <span class="stars">${"★".repeat(r.rating)}</span>${r.comment ? `<div>${esc(r.comment)}</div>` : ""}</div>`).join("")}</div>` : ""}
-        <div class="notice">${I.shield}<span>${pro ? "Adresse publique, inscription confirmée immédiatement." : "L'adresse exacte est partagée uniquement après acceptation par l'hôte."}</span></div>
+        <div class="notice">${I.shield}<span>${pro ? "Adresse publique, inscription confirmée immédiatement." : mine ? "C'est votre annonce : seuls vous et vos invités acceptés voyez l'adresse exacte." : "L'adresse exacte est partagée uniquement après acceptation par l'hôte."}</span></div>
         <div class="dcta">${cta}</div>
         ${mine ? "" : `<button class="btn line sm" type="button" id="report" style="margin:6px 0 20px">Signaler cette annonce</button>`}
       </div>`;
