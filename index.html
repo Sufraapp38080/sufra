@@ -1,0 +1,1047 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B1C36">
+<meta name="description" content="Sufra : partagez l'iftar. Personne ne devrait rompre le jeûne seul.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Sufra">
+<title>Sufra · Partageons l'iftar</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230B1C36'/%3E%3Ccircle cx='50' cy='52' r='34' fill='%23C99A45'/%3E%3Ccircle cx='62' cy='45' r='29' fill='%230B1C36'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Nunito+Sans:wght@400;600;700;800&family=Parisienne&family=Amiri:wght@700&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+<style>
+:root{
+  --cream:#FAF5EC;--sand:#F2E8D8;--card:#FFFFFF;--line:#EADFCD;--ink:#18233A;--muted:#6B6457;
+  --navy:#13294B;--navy-2:#0B1C36;--gold:#C99A45;--gold-2:#E2BD72;--gold-soft:#F6EAD2;--gold-ink:#8A6418;
+  --green:#2E8B57;--green-soft:#E3F2E8;--red:#B0412E;--red-soft:#F8E4DF;
+  --title:"Montserrat",system-ui,sans-serif;--body:"Nunito Sans",system-ui,-apple-system,sans-serif;--script:"Parisienne",cursive;--arabic:"Amiri",serif;
+  --r:18px;--shadow:0 1px 2px rgba(19,41,75,.06),0 10px 28px -16px rgba(19,41,75,.3);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+[hidden]{display:none!important}
+.num{font-variant-numeric:tabular-nums}
+#app{max-width:520px;margin:0 auto;min-height:100%;position:relative;background:var(--cream)}
+.view{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+.pad{padding:0 18px}
+.bar-top{display:flex;align-items:center;gap:12px;padding:calc(16px + env(safe-area-inset-top,0px)) 18px 12px;position:sticky;top:0;background:var(--cream);z-index:3}
+.bar-top h1{font-family:var(--title);font-weight:600;font-size:19px;color:var(--navy);margin:0;flex:1}
+.back{width:38px;height:38px;border-radius:50%;border:0;background:none;display:grid;place-items:center;color:var(--navy);margin-left:-8px}
+.back svg{width:22px;height:22px}
+.wordmark{font-family:var(--title);font-weight:700;letter-spacing:.2em;color:var(--navy);line-height:1}
+svg.logo{display:block}
+
+/* nav */
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:520px;display:grid;grid-template-columns:repeat(5,1fr);background:var(--card);border-top:1px solid var(--line);padding:8px 6px calc(10px + env(safe-area-inset-bottom,0px));z-index:20}
+.nav button{background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;font-weight:700;color:var(--muted);padding:4px;position:relative}
+.nav svg{width:22px;height:22px}
+.nav button.on{color:var(--navy)}
+.nav button.on::before{content:"";position:absolute;top:-9px;width:28px;height:3px;border-radius:0 0 3px 3px;background:var(--gold)}
+.nbadge{position:absolute;top:0;right:calc(50% - 22px);background:var(--gold);color:#fff;border-radius:99px;font-size:10px;min-width:17px;height:17px;display:grid;place-items:center;padding:0 4px;font-weight:800}
+
+/* communs */
+.btn{border:0;background:var(--navy);color:#fff;border-radius:14px;padding:15px 16px;font-weight:800;width:100%;font-size:15px;display:flex;justify-content:center;align-items:center;gap:8px}
+.btn.gold{background:linear-gradient(180deg,var(--gold-2),var(--gold));color:var(--navy-2)}
+.btn.ghost{background:var(--sand);color:var(--navy)}
+.btn.line{background:none;border:1.5px solid var(--line);color:var(--navy)}
+.btn.danger{background:var(--red-soft);color:var(--red)}
+.btn.sm{padding:10px 12px;font-size:13.5px;border-radius:12px}
+.btn:disabled{opacity:.5;cursor:default}
+.btn svg{width:18px;height:18px}
+.row{display:flex;gap:8px}
+.row>*{flex:1}
+.hint{font-size:12.5px;color:var(--muted)}
+.sect{display:flex;justify-content:space-between;align-items:baseline;margin:22px 0 12px}
+.sect h3{font-family:var(--title);font-weight:600;font-size:17px;color:var(--navy);margin:0}
+.sect button{background:none;border:0;font-size:13px;color:var(--gold-ink);font-weight:800}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.panel h4{font-family:var(--title);font-weight:600;font-size:15px;color:var(--navy);margin:0 0 12px}
+.tagv{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--green);background:var(--green-soft);border-radius:99px;padding:3px 9px;white-space:nowrap}
+.tagv svg{width:13px;height:13px}
+.tg{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:700;border-radius:99px;padding:3px 9px;background:var(--sand);color:var(--navy);white-space:nowrap}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.notice{display:flex;gap:10px;background:var(--gold-soft);border-radius:14px;padding:12px 14px;font-size:13px;margin-bottom:12px}
+.notice svg{flex:none;width:18px;height:18px;color:var(--gold-ink);margin-top:1px}
+.notice.err{background:var(--red-soft);color:var(--red)}
+.notice.ok{background:var(--green-soft);color:var(--green)}
+.av{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-family:var(--title);font-weight:700;color:#fff;flex:none;font-size:17px;background:var(--navy)}
+.av.lg{width:72px;height:72px;font-size:28px}
+.av.sq{border-radius:12px}
+.av svg{width:22px;height:22px}
+.stars{color:var(--gold)}
+.empty{text-align:center;color:var(--muted);padding:28px 18px;background:var(--card);border:1px dashed var(--line);border-radius:var(--r)}
+.empty b{display:block;font-family:var(--title);font-weight:600;color:var(--navy);margin-bottom:4px}
+.spin{width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:sp 1s linear infinite;margin:30px auto}
+@keyframes sp{to{transform:rotate(360deg)}}
+.status{font-size:11.5px;font-weight:800;border-radius:99px;padding:4px 10px;white-space:nowrap}
+.st-wait{background:var(--gold-soft);color:var(--gold-ink)}
+.st-ok{background:var(--green-soft);color:var(--green)}
+.st-no{background:var(--red-soft);color:var(--red)}
+.st-host{background:var(--sand);color:var(--navy)}
+
+/* onboarding */
+.onb{min-height:100vh;display:flex;flex-direction:column;color:#fff;background:linear-gradient(180deg,#0B1C36 0%,#1B3360 45%,#7A5A55 72%,#C9874A 88%,#2A1B12 100%)}
+.onb-in{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(36px + env(safe-area-inset-top,0px)) 30px 30px;text-align:center}
+.onb .wordmark{color:#fff;font-size:24px;letter-spacing:.32em;margin:10px 0 0 .32em}
+.onb .slog{font-family:var(--title);font-weight:500;font-size:12.5px;opacity:.75;margin-top:6px}
+.onb h2{font-family:var(--title);font-weight:500;font-size:18px;line-height:1.4;margin:30px 0 14px}
+.hadith{font-size:12px;font-style:italic;opacity:.78;max-width:30ch;line-height:1.5;margin-bottom:28px;position:relative;padding-top:14px}
+.hadith::before{content:"";position:absolute;top:0;left:50%;width:28px;height:1px;background:var(--gold-2);transform:translateX(-50%)}
+.choices{display:grid;gap:10px;width:100%;max-width:300px}
+.pill{display:flex;align-items:center;justify-content:center;gap:9px;border-radius:99px;height:48px;width:100%;border:1px solid rgba(255,255,255,.45);background:none;color:#fff;font-family:var(--title);font-weight:600;font-size:14px}
+.pill.gold{background:var(--gold-2);border-color:var(--gold-2);color:var(--navy-2)}
+.pill svg{width:17px;height:17px}
+
+/* auth */
+.auth{padding:calc(28px + env(safe-area-inset-top,0px)) 22px 40px;max-width:420px;margin:0 auto}
+.auth h2{font-family:var(--title);font-weight:600;font-size:24px;color:var(--navy);margin:18px 0 6px}
+.seg2{display:flex;background:var(--sand);border-radius:12px;padding:4px;gap:4px;margin-bottom:16px}
+.seg2 button{flex:1;border:0;background:none;border-radius:9px;padding:9px;font-weight:800;font-size:13px;color:var(--muted)}
+.seg2 button.on{background:var(--card);color:var(--navy);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+
+/* champs */
+.field{display:grid;gap:7px;margin-bottom:14px}
+.field:last-child{margin-bottom:0}
+.field label,.lbl{font-size:13px;font-weight:800;color:var(--navy)}
+.field input,.field select,.field textarea{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:12px 13px;width:100%;font-size:16px}
+.field textarea{resize:vertical;min-height:76px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{display:grid;gap:10px}
+.opt button{border:1.5px solid var(--line);background:var(--card);border-radius:16px;padding:14px;text-align:left;display:flex;gap:12px;align-items:center}
+.opt b{display:block;color:var(--navy);font-family:var(--title);font-weight:600;font-size:14.5px}
+.opt span{font-size:12.5px;color:var(--muted)}
+.opt button.on{border-color:var(--gold);background:var(--gold-soft)}
+.dishrow{display:flex;gap:6px;margin-bottom:6px}
+.dishrow input{flex:1;min-width:0}
+.x{border:1px solid var(--line);background:var(--cream);border-radius:12px;width:44px;flex:none}
+.add{border:1.5px dashed var(--gold);background:none;color:var(--gold-ink);border-radius:12px;padding:10px;font-weight:800;width:100%}
+.stepper{display:flex;align-items:center;border:1px solid var(--line);border-radius:12px;background:var(--cream);width:max-content}
+.stepper button{border:0;background:none;width:46px;height:44px;font-size:20px;color:var(--navy);font-weight:700}
+.stepper output{min-width:34px;text-align:center;font-weight:800;font-size:16px;color:var(--navy)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1.5px solid var(--line);background:var(--card);border-radius:99px;padding:7px 12px;font-size:13px;font-weight:700;color:var(--navy)}
+.chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+
+/* accueil */
+.hh{background:linear-gradient(180deg,var(--navy-2),var(--navy));color:#fff;padding:calc(16px + env(safe-area-inset-top,0px)) 18px 0}
+.hh-row{display:flex;justify-content:space-between;align-items:center}
+.brand{display:flex;align-items:center;gap:8px}
+.brand .wordmark{font-size:17px;color:#fff}
+.loc{font-size:12.5px;font-weight:700;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:99px;padding:6px 11px;display:flex;align-items:center;gap:5px;max-width:55%}
+.loc span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.loc svg{width:14px;height:14px;flex:none}
+.hh-greet{font-family:var(--title);font-weight:500;font-size:15px;opacity:.85;margin:14px 0 10px}
+.hh-count{display:flex;align-items:center;gap:14px;width:100%;background:none;border:0;color:#fff;padding:0 0 14px;text-align:left}
+.hh-mid{display:grid;flex:1}
+.hh-mid .k{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;opacity:.6}
+.hh-mid .v{font-family:var(--title);font-weight:600;font-size:22px}
+.hh-times{display:grid;gap:2px;font-size:11.5px;text-align:right;opacity:.85}
+.hh-times b{color:var(--gold-2)}
+.hh-prog{height:3px;background:rgba(255,255,255,.12);margin:0 -18px}
+.hh-prog i{display:block;height:100%;background:var(--gold-2);width:0}
+.acts{display:grid;grid-template-columns:1fr 1fr;background:var(--card);border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
+.act{display:flex;align-items:center;justify-content:center;gap:8px;border:0;background:none;padding:13px 8px;color:var(--navy)}
+.act+.act{border-left:1px solid var(--line)}
+.act .ai{width:28px;height:28px;border-radius:50%;background:var(--gold-soft);color:var(--gold-ink);display:grid;place-items:center;flex:none}
+.act .ai svg{width:15px;height:15px}
+.act b{font-family:var(--title);font-weight:600;font-size:12.5px;text-align:left}
+.dua{margin-top:22px;border:1px solid var(--line);border-radius:var(--r);padding:16px;background:var(--card);text-align:center}
+.dua-k{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-ink);font-weight:800}
+.dua-ar{font-family:var(--arabic);font-size:21px;color:var(--navy);line-height:1.8;margin:8px 0 4px}
+.dua-fr{font-size:13px;font-style:italic}
+.dua-fr span{display:block;font-style:normal;font-size:11.5px;color:var(--muted);margin-top:4px}
+.list{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.list button{display:flex;align-items:center;gap:12px;width:100%;border:0;background:none;padding:12px 14px;text-align:left}
+.list button+button{border-top:1px solid var(--line)}
+.list .ic{width:34px;height:34px;border-radius:10px;background:var(--gold-soft);color:var(--gold-ink);display:grid;place-items:center;flex:none}
+.list .ic svg{width:18px;height:18px}
+.list b{display:block;font-size:14px;color:var(--navy)}
+.list small{font-size:12px;color:var(--muted)}
+.list .arr{margin-left:auto;color:var(--muted);font-size:20px}
+.sign{font-family:var(--script);color:var(--gold);font-size:22px;text-align:center;margin:22px 0 4px}
+
+/* explorer */
+.pills{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.pills::-webkit-scrollbar{display:none}
+.pills button,.pills label{flex:none;border:1.5px solid var(--line);background:var(--card);border-radius:99px;padding:8px 14px;font-size:13px;font-weight:700;color:var(--navy);position:relative}
+.pills .on{background:var(--navy);border-color:var(--navy);color:#fff}
+.pills input[type=date]{position:absolute;inset:0;opacity:0}
+.kinds{display:flex;gap:18px;border-bottom:1px solid var(--line);margin-top:12px}
+.kinds button{border:0;background:none;padding:10px 0;font-weight:800;font-size:13.5px;color:var(--muted);border-bottom:2.5px solid transparent;margin-bottom:-1px}
+.kinds button.on{color:var(--navy);border-color:var(--gold)}
+#map{height:230px;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);margin:12px 0;background:#EEF1E6;z-index:0}
+.item{display:flex;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px;margin-top:12px;width:100%;text-align:left;box-shadow:var(--shadow);align-items:flex-start}
+.item .ph{width:72px;height:72px;border-radius:14px;flex:none;display:grid;place-items:center;color:#fff}
+.item .ph svg{width:30px;height:30px}
+.item .tx{flex:1;min-width:0;display:grid;gap:4px}
+.item b{font-family:var(--title);font-weight:600;font-size:15px;color:var(--navy)}
+.ln{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px}
+.ln span{display:inline-flex;gap:4px;align-items:center}
+.ln svg{width:14px;height:14px;color:var(--navy)}
+.ln.m{color:var(--muted)}
+.mk{width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+
+/* détail */
+.dhero{height:190px;position:relative;display:flex;align-items:flex-end;padding:16px 18px;color:#fff}
+.dhero .rb{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));width:40px;height:40px;border-radius:50%;border:0;background:rgba(11,28,54,.75);color:#fff;display:grid;place-items:center}
+.dhero .rb svg{width:20px;height:20px}
+.dhero .rb.l{left:14px}.dhero .rb.r{right:14px}
+.dhero .rb.r.on{background:var(--gold);color:var(--navy-2)}
+.dhero h2{font-family:var(--title);font-weight:600;font-size:24px;margin:0;position:relative;text-shadow:0 1px 8px rgba(0,0,0,.3)}
+.dmeta{display:grid;gap:10px;margin:16px 0}
+.dmeta .r{display:flex;align-items:center;gap:10px;font-size:14px;flex-wrap:wrap}
+.dmeta svg{width:18px;height:18px;color:var(--navy);flex:none}
+.course{display:grid;grid-template-columns:96px 1fr;gap:4px 12px;margin:0}
+.course dt{color:var(--gold-ink);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding-top:3px}
+.course dd{margin:0 0 6px}
+.hostbox{display:flex;align-items:center;gap:12px}
+.hostbox b{font-family:var(--title);font-weight:600;color:var(--navy)}
+.review{font-size:14px;border-top:1px solid var(--line);padding-top:10px;margin-top:10px}
+.review:first-of-type{border-top:0;padding-top:0;margin-top:0}
+.dcta{position:sticky;bottom:calc(70px + env(safe-area-inset-bottom,0px));padding:14px 0 6px;background:linear-gradient(transparent,var(--cream) 30%)}
+
+/* sheet */
+.sheet-bg{position:fixed;inset:0;background:rgba(11,28,54,.5);display:flex;align-items:flex-end;justify-content:center;z-index:50}
+.sheet{background:var(--cream);width:100%;max-width:520px;max-height:92vh;overflow-y:auto;border-radius:26px 26px 0 0;padding:0 18px calc(22px + env(safe-area-inset-bottom,0px));animation:up .26s cubic-bezier(.2,.8,.2,1)}
+@keyframes up{from{transform:translateY(40px);opacity:.5}}
+@media (prefers-reduced-motion:reduce){.sheet,.toast{animation:none!important}}
+.grab{width:40px;height:4px;background:var(--line);border-radius:4px;margin:10px auto 14px}
+.sheet h2{font-family:var(--title);font-weight:600;font-size:21px;color:var(--navy);margin:0 0 4px}
+.sheet .lead{color:var(--muted);font-size:14px;margin:0 0 16px}
+
+/* réservations */
+.req{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px;display:grid;gap:12px;box-shadow:var(--shadow)}
+.req .h{display:flex;gap:12px;align-items:center}
+.req .h b{font-family:var(--title);font-weight:600;color:var(--navy);display:block}
+.req .h .status{margin-left:auto}
+.guest{display:flex;gap:10px;align-items:flex-start;border-top:1px solid var(--line);padding-top:12px}
+.guest .av{width:36px;height:36px;font-size:14px}
+.progress{height:7px;border-radius:7px;background:var(--sand);overflow:hidden}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--gold-2),var(--gold));border-radius:7px}
+.tier{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-top:8px}
+.tier .tn{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:13px;background:var(--sand);color:var(--muted);flex:none}
+.tier b{display:block;font-size:13.5px;color:var(--navy)}
+.tier span{font-size:12px;color:var(--muted)}
+.tier .ts{margin-left:auto;font-size:11.5px;font-weight:800;white-space:nowrap}
+.tier.done .tn{background:var(--green);color:#fff}.tier.done .ts{color:var(--green)}
+.tier.ready{border-color:var(--gold)}.tier.ready .tn{background:var(--gold);color:#fff}
+.tier.lock{opacity:.75}
+
+/* chat */
+.chat{display:flex;flex-direction:column;gap:8px;min-height:240px;padding:4px 0 12px}
+.msg{max-width:80%;padding:10px 13px;border-radius:16px;font-size:14px;white-space:pre-wrap;word-wrap:break-word}
+.msg.them{background:var(--card);border:1px solid var(--line);border-bottom-left-radius:4px;align-self:flex-start}
+.msg.me{background:var(--navy);color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+.compose{display:flex;gap:8px;position:sticky;bottom:calc(76px + env(safe-area-inset-bottom,0px));background:var(--cream);padding:8px 0}
+.compose input{flex:1;min-width:0;border:1px solid var(--line);background:var(--card);border-radius:14px;padding:12px 13px;font-size:16px}
+.compose button{width:48px;border:0;border-radius:14px;background:var(--gold);color:var(--navy-2);display:grid;place-items:center}
+.compose svg{width:18px;height:18px}
+
+/* calendrier */
+.cal-head,.cday{display:grid;grid-template-columns:40px 1fr 52px 62px 56px;gap:6px;align-items:center;padding:0 12px}
+.cal-head{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800;padding-bottom:6px}
+.cal-head span:nth-child(n+3),.cday span:nth-child(n+3){text-align:right}
+.callist{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.cday{padding-block:10px;font-size:13px;border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
+.cday:first-child{border-top:0}
+.cday .n{font-family:var(--title);font-weight:600;color:var(--navy)}
+.cday .m{font-weight:800;color:var(--navy)}
+.cday .d{color:var(--muted)}
+.cday.past{opacity:.5}
+.cday.today{background:var(--navy);color:#fff}
+.cday.today .n,.cday.today .m{color:var(--gold-2)}
+.cday.today .d{color:rgba(255,255,255,.75)}
+.cday.last .n{color:var(--gold-ink)}
+
+/* profil */
+.prof{display:flex;gap:16px;align-items:center;padding:4px 0 14px}
+.prof h2{font-family:var(--title);font-weight:600;font-size:22px;color:var(--navy);margin:0}
+.toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 16px;border-radius:99px;font-size:13px;font-weight:800;z-index:60;box-shadow:var(--shadow);max-width:calc(100% - 40px);width:max-content;text-align:center;animation:tup .25s}
+@keyframes tup{from{transform:translate(-50%,20px);opacity:.5}}
+
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* =====================================================================
+   SUFRA · application web v1
+   Données : Supabase (auth, base, temps réel). Carte : Leaflet + OpenStreetMap.
+   Adresses : api-adresse.data.gouv.fr (Base Adresse Nationale).
+   ===================================================================== */
+const SUPABASE_URL = "https://nrhikltszevayxvsvbbi.supabase.co";
+const SUPABASE_KEY = "sb_publishable_KH6NzA-iZgu5KdfGJERWug_1h7qJPFn";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/* ---------- état ---------- */
+const S = {
+  session: null, profile: null, view: "onb", params: {}, stack: [],
+  pos: { lat: 45.7578, lng: 4.8320, label: "Lyon" },
+  date: null, kind: "all", map: null, channel: null, timer: null, pending: 0,
+};
+const store = {
+  get(k, d) { try { const v = localStorage.getItem("sufra_" + k); return v ? JSON.parse(v) : d; } catch (_) { return d; } },
+  set(k, v) { try { localStorage.setItem("sufra_" + k, JSON.stringify(v)); } catch (_) {} },
+};
+S.pos = store.get("pos", S.pos);
+
+/* ---------- utilitaires ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const me = () => S.session?.user?.id;
+const pad2 = (n) => String(n).padStart(2, "0");
+const isoDay = (d) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+const today = () => isoDay(new Date());
+const addDays = (iso, n) => { const d = new Date(iso + "T12:00:00"); d.setDate(d.getDate() + n); return isoDay(d); };
+const JOURS = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+const MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+function dayLabel(iso) {
+  if (iso === today()) return "Aujourd'hui";
+  if (iso === addDays(today(), 1)) return "Demain";
+  const d = new Date(iso + "T12:00:00");
+  return `${JOURS[d.getDay()][0].toUpperCase() + JOURS[d.getDay()].slice(1)} ${d.getDate()} ${MOIS[d.getMonth()]}`;
+}
+const hhmm = (t) => (t || "").slice(0, 5);
+const km = (d) => (d < 1 ? `${Math.round(d * 1000 / 50) * 50} m` : `${d.toLocaleString("fr-FR", { maximumFractionDigits: 1 })} km`);
+function dist(a, b, c, d) {
+  const r = Math.PI / 180, x = Math.sin((c - a) * r / 2) ** 2 + Math.cos(a * r) * Math.cos(c * r) * Math.sin((d - b) * r / 2) ** 2;
+  return 6371 * 2 * Math.asin(Math.sqrt(x));
+}
+function toast(m) {
+  $$(".toast").forEach((t) => t.remove());
+  const d = document.createElement("div"); d.className = "toast"; d.setAttribute("role", "status"); d.textContent = m;
+  document.body.appendChild(d); setTimeout(() => d.remove(), 2800);
+}
+function errMsg(e) {
+  const m = e?.message || String(e);
+  if (/Invalid login/i.test(m)) return "Email ou mot de passe incorrect.";
+  if (/Email not confirmed/i.test(m)) return "Confirmez d'abord votre email (lien reçu par mail).";
+  if (/already registered/i.test(m)) return "Un compte existe déjà avec cet email. Connectez-vous.";
+  if (/Password should be/i.test(m)) return "Le mot de passe doit faire au moins 6 caractères.";
+  if (/duplicate key.*bookings/i.test(m)) return "Vous avez déjà fait une demande pour cette table.";
+  if (/Failed to fetch|NetworkError/i.test(m)) return "Pas de connexion. Vérifiez votre réseau.";
+  return m;
+}
+
+/* ---------- horaires de prière (Fajr 12°, Maghrib au coucher du soleil) ---------- */
+function prayer(iso, lat, lng) {
+  const d = new Date(iso + "T12:00:00");
+  const start = new Date(d.getFullYear(), 0, 0), N = Math.round((d - start) / 864e5);
+  const tz = -d.getTimezoneOffset() / 60, r = Math.PI / 180;
+  const B = 2 * Math.PI * (N - 81) / 364, eot = 9.87 * Math.sin(2 * B) - 7.53 * Math.cos(B) - 1.5 * Math.sin(B);
+  const dec = 23.45 * Math.sin(2 * Math.PI * (284 + N) / 365) * r, la = lat * r;
+  const noon = 12 + tz - lng / 15 - eot / 60;
+  const H = (alt) => Math.acos((Math.sin(alt * r) - Math.sin(la) * Math.sin(dec)) / (Math.cos(la) * Math.cos(dec))) / r / 15;
+  return { fajr: noon - H(-12), maghrib: noon + H(-0.833) };
+}
+const fmtH = (h) => { const m = Math.round(h * 60); return `${pad2(Math.floor(m / 60))}:${pad2(m % 60)}`; };
+const RAMADAN_START = "2027-02-08"; // date estimée, à confirmer selon l'observation du croissant
+
+/* ---------- icônes ---------- */
+const I = {
+  home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11L12 4l9 7M5 10v10h14V10M10 20v-5h4v5"/></svg>',
+  map: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg>',
+  moon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3a9 9 0 1 0 6 15A7.5 7.5 0 0 1 15 3z"/></svg>',
+  cal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>',
+  user: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>',
+  search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>',
+  pin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>',
+  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  ppl: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c.8-3.6 3.2-5.2 6-5.2s5.2 1.6 6 5.2"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.8c2.4 0 4.3 1.4 5 4.2"/></svg>',
+  back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5 9-10"/></svg>',
+  shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>',
+  heart: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11z"/></svg>',
+  heartO: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11z"/></svg>',
+  chat: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>',
+  send: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 12l16-8-6 16-2.5-6.5z"/></svg>',
+  mosque: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21V11l8-6 8 6v10M9 21v-5a3 3 0 0 1 6 0v5M12 2v3"/></svg>',
+  shop: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10l1.5-6h13L20 10M4 10v10h16V10M4 10h16M9 20v-5h6v5"/></svg>',
+  bag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 8h14l-1.5 12h-11zM9 8V6a3 3 0 0 1 6 0v2"/></svg>',
+  basket: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 10h18l-2 10H5zM7 10l4-6M17 10l-4-6M9 14v3M15 14v3"/></svg>',
+  plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>',
+};
+const logo = (fg = "#13294B", size = 76) => `<svg class="logo" width="${size}" height="${size}" viewBox="0 0 100 100" aria-label="Sufra" role="img"><defs><mask id="cres${size}"><rect width="100" height="100" fill="#fff"/><circle cx="64" cy="42" r="37" fill="#000"/></mask></defs><circle cx="50" cy="52" r="44" fill="#C99A45" mask="url(#cres${size})"/><path d="M53 47 C53 38 58 30 67 23" fill="none" stroke="${fg}" stroke-width="2" stroke-linecap="round"/><g fill="${fg}"><ellipse cx="49" cy="39" rx="2.8" ry="6.2" transform="rotate(-38 49 39)"/><ellipse cx="59.5" cy="38.5" rx="2.8" ry="6.2" transform="rotate(52 59.5 38.5)"/><ellipse cx="53.5" cy="29.5" rx="2.6" ry="5.8" transform="rotate(-30 53.5 29.5)"/><ellipse cx="64.5" cy="30" rx="2.6" ry="5.8" transform="rotate(60 64.5 30)"/><ellipse cx="68.5" cy="21" rx="2.4" ry="5.2" transform="rotate(35 68.5 21)"/><rect x="34" y="48" width="38" height="7" rx="2"/><path d="M39 57 h28 l-3 5 h-22z"/><rect x="42" y="63" width="8" height="17" rx="1.5"/><rect x="56" y="63" width="8" height="17" rx="1.5"/></g></svg>`;
+
+/* ---------- vocabulaire ---------- */
+const AUD = { tout_le_monde: "Tout le monde", familles: "Familles", femmes: "Femmes uniquement", hommes: "Hommes uniquement", etudiants: "Étudiants" };
+const COURSES = [["rupture", "Rupture du jeûne"], ["entree", "Soupe et entrées"], ["plat", "Plat"], ["dessert", "Douceurs et boissons"]];
+const TAGS = ["Halal", "Enfants bienvenus", "Prière ensemble", "Non-fumeur", "Accessible PMR", "Végétarien possible"];
+const STATUS = { en_attente: ["En attente", "st-wait"], acceptee: ["Confirmée", "st-ok"], refusee: ["Refusée", "st-no"], annulee: ["Annulée", "st-no"], expiree: ["Expirée", "st-no"] };
+function kindStyle(l) {
+  if (l.kind === "mosquee") return { c: "#2E8B57", i: I.mosque, t: "Iftar collectif" };
+  if (l.kind === "restaurant") return { c: "#8A6418", i: I.shop, t: "Restaurant" };
+  if (l.format === "plat") return { c: "#C99A45", i: I.bag, t: "À emporter" };
+  return { c: "#13294B", i: I.home, t: "À table" };
+}
+function titleOf(l, host, partner) {
+  if (partner) return partner.name;
+  const n = host?.first_name || "un hôte";
+  return l.format === "plat" ? `Plat de ${n}` : `Iftar chez ${n}`;
+}
+const flatMenu = (m) => COURSES.flatMap(([k]) => m?.[k] || []);
+
+/* ---------- navigation ---------- */
+const TABS = ["home", "explore", "cal", "resa", "me"];
+function go(view, params = {}, push = true) {
+  if (push && S.view && !TABS.includes(view)) S.stack.push([S.view, S.params]);
+  if (TABS.includes(view)) S.stack = [];
+  S.view = view; S.params = params; render();
+}
+function back() { const p = S.stack.pop(); if (p) { S.view = p[0]; S.params = p[1]; render(); } else go("home"); }
+function cleanup() {
+  if (S.map) { S.map.remove(); S.map = null; }
+  if (S.channel) { sb.removeChannel(S.channel); S.channel = null; }
+  if (S.timer) { clearInterval(S.timer); S.timer = null; }
+}
+function nav() {
+  const t = [["home", I.home, "Accueil"], ["explore", I.map, "Carte"], ["cal", I.moon, "Ramadan"], ["resa", I.cal, "Résas"], ["me", I.user, "Profil"]];
+  const cur = TABS.includes(S.view) ? S.view : ({ host: "home", detail: "explore", chat: "resa" }[S.view] || "");
+  return `<nav class="nav" aria-label="Navigation">${t.map(([v, ic, l]) => `<button type="button" data-tab="${v}" class="${cur === v ? "on" : ""}">${ic}${l}${v === "resa" && S.pending ? `<span class="nbadge">${S.pending}</span>` : ""}</button>`).join("")}</nav>`;
+}
+function topbar(title, canBack = true) {
+  return `<div class="bar-top">${canBack ? `<button class="back" type="button" data-back aria-label="Retour">${I.back}</button>` : ""}<h1>${esc(title)}</h1></div>`;
+}
+const loading = () => `<div class="spin" aria-label="Chargement"></div>`;
+
+/* ---------- feuilles (bottom sheets) ---------- */
+function sheet(html) {
+  closeSheet();
+  const bg = document.createElement("div"); bg.className = "sheet-bg";
+  bg.innerHTML = `<div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div>${html}</div>`;
+  bg.addEventListener("click", (e) => { if (e.target === bg || e.target.closest("[data-close]")) closeSheet(); });
+  document.body.appendChild(bg);
+  return bg;
+}
+const closeSheet = () => $$(".sheet-bg").forEach((s) => s.remove());
+
+/* ---------- rendu principal ---------- */
+async function render() {
+  cleanup(); closeSheet();
+  const app = $("#app");
+  if (!S.session && !["onb", "auth"].includes(S.view)) S.view = store.get("seen", false) ? "auth" : "onb";
+  if (S.session && S.profile && (!S.profile.first_name || !S.profile.gender) && S.view !== "complete") S.view = "complete";
+  const V = VIEWS[S.view] || VIEWS.home;
+  const withNav = S.session && !["onb", "auth", "complete"].includes(S.view);
+  app.innerHTML = `<main class="view">${V.html ? V.html() : loading()}</main>${withNav ? nav() : ""}`;
+  window.scrollTo(0, 0);
+  app.onclick = (e) => {
+    const t = e.target.closest("[data-tab]"); if (t) return go(t.dataset.tab);
+    if (e.target.closest("[data-back]")) return back();
+    const g = e.target.closest("[data-go]"); if (g) return go(g.dataset.go, g.dataset.id ? { id: g.dataset.id } : {});
+  };
+  try { if (V.mount) await V.mount(app); } catch (e) { console.error(e); toast(errMsg(e)); }
+}
+
+/* =====================================================================
+   VUES
+   ===================================================================== */
+const VIEWS = {};
+
+/* ---------- page de garde ---------- */
+VIEWS.onb = {
+  html: () => `<div class="onb"><div class="onb-in">
+    ${logo("#FFFFFF", 76)}
+    <div class="wordmark">SUFRA</div><div class="slog">Partageons l'iftar.</div>
+    <h2>Personne ne devrait<br>rompre le jeûne seul.</h2>
+    <div class="hadith">« Celui qui donne à manger à un jeûneur obtient la même récompense que lui. » — <span style="white-space:nowrap">hadith rapporté par At-Tirmidhî</span></div>
+    <div class="choices">
+      <button class="pill gold" type="button" data-start="host">${I.home}J'ouvre ma table</button>
+      <button class="pill" type="button" data-start="explore">${I.search}Je cherche une table</button>
+    </div></div></div>`,
+  mount(app) {
+    $$("[data-start]", app).forEach((b) => b.onclick = () => { store.set("seen", true); store.set("after", b.dataset.start); go("auth", {}, false); });
+  },
+};
+
+/* ---------- connexion / inscription ---------- */
+VIEWS.auth = {
+  html: () => `<div class="auth">
+    <div style="display:flex;align-items:center;gap:10px">${logo("#13294B", 44)}<span class="wordmark" style="font-size:20px">SUFRA</span></div>
+    <h2 id="aTitle">Créer mon compte</h2>
+    <p class="hint" style="margin:0 0 16px">Gratuit, sans publicité. Vos données restent en Europe.</p>
+    <div class="seg2"><button type="button" class="on" data-m="up">Inscription</button><button type="button" data-m="in">Connexion</button></div>
+    <form id="aForm" novalidate>
+      <div id="upOnly">
+        <div class="field"><label for="aName">Prénom</label><input id="aName" autocomplete="given-name" maxlength="40"></div>
+        <div class="field"><span class="lbl">Je suis</span><div class="seg2" id="aGender" style="margin:0"><button type="button" data-g="femme">Une femme</button><button type="button" data-g="homme">Un homme</button></div><span class="hint">Sert uniquement aux tables réservées aux femmes ou aux hommes.</span></div>
+      </div>
+      <div class="field"><label for="aEmail">Email</label><input id="aEmail" type="email" autocomplete="email" inputmode="email"></div>
+      <div class="field"><label for="aPass">Mot de passe</label><input id="aPass" type="password" autocomplete="new-password" minlength="6"><span class="hint" id="passHint">6 caractères minimum.</span></div>
+      <div id="aMsg"></div>
+      <button class="btn gold" type="submit" id="aBtn">Créer mon compte</button>
+      <button class="btn line" type="button" id="aForgot" style="margin-top:10px" hidden>Mot de passe oublié</button>
+    </form>
+    <p class="hint" style="margin-top:18px">En créant un compte, vous acceptez que Sufra traite votre prénom et votre genre pour organiser les iftars. Vous pouvez supprimer votre compte à tout moment.</p>
+  </div>`,
+  mount(app) {
+    let mode = "up", gender = null;
+    const setMode = (m) => {
+      mode = m; $$(".seg2 [data-m]", app).forEach((b) => b.classList.toggle("on", b.dataset.m === m));
+      $("#upOnly").hidden = m !== "up"; $("#aForgot").hidden = m !== "in"; $("#passHint").hidden = m !== "up";
+      $("#aTitle").textContent = m === "up" ? "Créer mon compte" : "Me connecter";
+      $("#aBtn").textContent = m === "up" ? "Créer mon compte" : "Me connecter";
+      $("#aPass").autocomplete = m === "up" ? "new-password" : "current-password"; $("#aMsg").innerHTML = "";
+    };
+    $$(".seg2 [data-m]", app).forEach((b) => b.onclick = () => setMode(b.dataset.m));
+    $$("#aGender [data-g]", app).forEach((b) => b.onclick = () => { gender = b.dataset.g; $$("#aGender button").forEach((x) => x.classList.toggle("on", x === b)); });
+    const msg = (t, k = "err") => $("#aMsg").innerHTML = `<div class="notice ${k}">${esc(t)}</div>`;
+    $("#aForgot").onclick = async () => {
+      const email = $("#aEmail").value.trim(); if (!email) return msg("Entrez d'abord votre email.");
+      const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });
+      error ? msg(errMsg(error)) : msg("Un lien pour choisir un nouveau mot de passe vous a été envoyé.", "ok");
+    };
+    $("#aForm").onsubmit = async (e) => {
+      e.preventDefault();
+      const email = $("#aEmail").value.trim(), password = $("#aPass").value, name = $("#aName").value.trim();
+      if (!email || !password) return msg("Email et mot de passe requis.");
+      const btn = $("#aBtn"); btn.disabled = true;
+      try {
+        if (mode === "up") {
+          if (!name) throw new Error("Indiquez votre prénom.");
+          if (!gender) throw new Error("Indiquez si vous êtes une femme ou un homme.");
+          const { data, error } = await sb.auth.signUp({ email, password, options: { data: { first_name: name, gender }, emailRedirectTo: location.origin + location.pathname } });
+          if (error) throw error;
+          if (!data.session) { msg("Compte créé ! Ouvrez le lien reçu par email pour l'activer, puis connectez-vous.", "ok"); setMode("in"); }
+        } else {
+          const { error } = await sb.auth.signInWithPassword({ email, password });
+          if (error) throw error;
+        }
+      } catch (err) { msg(errMsg(err)); } finally { btn.disabled = false; }
+    };
+  },
+};
+
+/* ---------- compléter le profil ---------- */
+VIEWS.complete = {
+  html: () => `<div class="auth"><div style="display:flex;align-items:center;gap:10px">${logo("#13294B", 44)}<span class="wordmark" style="font-size:20px">SUFRA</span></div>
+    <h2>Bienvenue !</h2><p class="hint" style="margin:0 0 16px">Deux informations pour commencer.</p>
+    <form id="cForm"><div class="field"><label for="cName">Prénom</label><input id="cName" maxlength="40" value="${esc(S.profile?.first_name)}"></div>
+    <div class="field"><span class="lbl">Je suis</span><div class="seg2" id="cGender" style="margin:0"><button type="button" data-g="femme" class="${S.profile?.gender === "femme" ? "on" : ""}">Une femme</button><button type="button" data-g="homme" class="${S.profile?.gender === "homme" ? "on" : ""}">Un homme</button></div></div>
+    <div class="field"><label for="cCity">Ville</label><input id="cCity" maxlength="80" value="${esc(S.profile?.city || S.pos.label)}"></div>
+    <div id="cMsg"></div><button class="btn gold" type="submit">Continuer</button></form></div>`,
+  mount() {
+    let g = S.profile?.gender;
+    $$("#cGender [data-g]").forEach((b) => b.onclick = () => { g = b.dataset.g; $$("#cGender button").forEach((x) => x.classList.toggle("on", x === b)); });
+    $("#cForm").onsubmit = async (e) => {
+      e.preventDefault();
+      const first_name = $("#cName").value.trim(), city = $("#cCity").value.trim();
+      if (!first_name || !g) return $("#cMsg").innerHTML = `<div class="notice err">Prénom et genre requis.</div>`;
+      const { error } = await sb.from("profiles").update({ first_name, gender: g, city }).eq("id", me());
+      if (error) return toast(errMsg(error));
+      Object.assign(S.profile, { first_name, gender: g, city });
+      const after = store.get("after", "home"); store.set("after", "home"); go(after === "host" ? "host" : after);
+    };
+  },
+};
+
+/* ---------- accueil ---------- */
+VIEWS.home = {
+  html: () => `<header class="hh">
+      <div class="hh-row"><div class="brand">${logo("#FFFFFF", 30)}<span class="wordmark">SUFRA</span></div>
+      <button class="loc" type="button" id="locBtn">${I.pin}<span>${esc(S.pos.label)}</span></button></div>
+      <div class="hh-greet">Salam, ${esc(S.profile?.first_name || "")}</div>
+      <button class="hh-count" type="button" data-go="cal"><span class="hh-mid"><span class="k" id="cdK">Iftar dans</span><span class="v num" id="cdV">--:--:--</span></span>
+      <span class="hh-times"><span>Maghrib <b class="num" id="tM"></b></span><span>Fajr <b class="num" id="tF"></b></span></span></button>
+      <div class="hh-prog"><i id="cdP"></i></div></header>
+    <div class="acts"><button class="act" type="button" data-go="host"><span class="ai">${I.home}</span><b>J'ouvre ma table</b></button><button class="act" type="button" data-go="explore"><span class="ai">${I.search}</span><b>Je cherche une table</b></button></div>
+    <div class="pad">
+      <div class="sect"><h3>Ce soir près de vous</h3><button type="button" data-go="explore">Tout voir</button></div>
+      <div id="tonight">${loading()}</div>
+      <div class="dua"><div class="dua-k">Invocation de la rupture du jeûne</div>
+        <div class="dua-ar" lang="ar" dir="rtl">ذَهَبَ الظَّمَأُ وَابْتَلَّتِ الْعُرُوقُ وَثَبَتَ الأَجْرُ إِنْ شَاءَ اللَّهُ</div>
+        <div class="dua-fr">« La soif est partie, les veines sont humidifiées et la récompense est acquise, si Allah le veut. » <span>Rapporté par Abû Dâwûd</span></div></div>
+      <div class="sect"><h3>Agir autrement</h3></div>
+      <div class="list">
+        <button type="button" data-go="resa"><span class="ic">${I.basket}</span><span><b>Récompenses des hôtes</b><small>Un panier gourmand dès 3 invités</small></span><span class="arr">›</span></button>
+        <button type="button" data-go="cal"><span class="ic">${I.cal}</span><span><b>Calendrier du Ramadan</b><small>Horaires de votre ville</small></span><span class="arr">›</span></button>
+        <button type="button" data-go="me"><span class="ic">${I.mosque}</span><span><b>Devenir partenaire</b><small>Mosquée, association, restaurant</small></span><span class="arr">›</span></button>
+      </div>
+      <p class="sign">Le partage crée des liens qui durent.</p></div>`,
+  async mount() {
+    $("#locBtn").onclick = locate;
+    const tick = () => {
+      const t = today(), p = prayer(t, S.pos.lat, S.pos.lng), now = new Date(), h = now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600;
+      $("#tM").textContent = fmtH(p.maghrib); $("#tF").textContent = fmtH(p.fajr);
+      if (h < p.maghrib) {
+        const s = Math.round((p.maghrib - h) * 3600);
+        $("#cdK").textContent = "Iftar dans"; $("#cdV").textContent = `${pad2(Math.floor(s / 3600))}:${pad2(Math.floor(s % 3600 / 60))}:${pad2(s % 60)}`;
+        $("#cdP").style.width = Math.max(0, Math.min(100, (h - p.fajr) / (p.maghrib - p.fajr) * 100)) + "%";
+      } else { $("#cdK").textContent = "Maghrib passé"; $("#cdV").textContent = "Bon iftar !"; $("#cdP").style.width = "100%"; }
+    };
+    tick(); S.timer = setInterval(tick, 1000);
+    const rows = await nearby(today(), 25);
+    $("#tonight").innerHTML = rows.length ? rows.slice(0, 4).map(itemHTML).join("") : `<div class="empty"><b>Pas encore de table ce soir</b>Soyez le premier à ouvrir la vôtre près de chez vous.</div>`;
+    bindItems($("#tonight"));
+  },
+};
+
+async function locate() {
+  if (!navigator.geolocation) return toast("Localisation indisponible sur cet appareil.");
+  toast("Recherche de votre position…");
+  navigator.geolocation.getCurrentPosition(async (p) => {
+    S.pos = { lat: p.coords.latitude, lng: p.coords.longitude, label: "Ma position" };
+    try {
+      const r = await fetch(`https://api-adresse.data.gouv.fr/reverse/?lon=${S.pos.lng}&lat=${S.pos.lat}&limit=1`).then((x) => x.json());
+      if (r.features?.[0]) S.pos.label = r.features[0].properties.city;
+    } catch (_) {}
+    store.set("pos", S.pos); render();
+  }, () => toast("Position refusée. Autorisez la localisation dans les réglages."), { enableHighAccuracy: false, timeout: 10000 });
+}
+
+/* ---------- données des annonces ---------- */
+async function enrich(rows) {
+  const hostIds = [...new Set(rows.map((r) => r.host_id))], partIds = [...new Set(rows.map((r) => r.partner_id).filter(Boolean))];
+  const [h, p, rv] = await Promise.all([
+    hostIds.length ? sb.from("profiles").select("id,first_name,id_verified").in("id", hostIds) : { data: [] },
+    partIds.length ? sb.from("partners").select("id,name,kind,address").in("id", partIds) : { data: [] },
+    hostIds.length ? sb.from("reviews").select("target_id,rating").in("target_id", hostIds) : { data: [] },
+  ]);
+  const H = Object.fromEntries((h.data || []).map((x) => [x.id, x])), P = Object.fromEntries((p.data || []).map((x) => [x.id, x]));
+  const R = {}; (rv.data || []).forEach((x) => { (R[x.target_id] ||= []).push(x.rating); });
+  return rows.map((l) => ({ ...l, host: H[l.host_id], partner: P[l.partner_id], rating: R[l.host_id] ? R[l.host_id].reduce((a, b) => a + b, 0) / R[l.host_id].length : null, nRev: R[l.host_id]?.length || 0, dist: l.approx_lat != null ? dist(S.pos.lat, S.pos.lng, l.approx_lat, l.approx_lng) : null }));
+}
+async function nearby(date, radius = 25) {
+  const { data, error } = await sb.rpc("listings_nearby", { p_lat: S.pos.lat, p_lng: S.pos.lng, p_date: date, p_radius_km: radius });
+  if (error) { toast(errMsg(error)); return []; }
+  return enrich(data || []);
+}
+function itemHTML(l) {
+  const k = kindStyle(l), free = l.places - l.taken;
+  return `<button type="button" class="item" data-listing="${l.id}">
+    <span class="ph" style="background:${k.c}">${k.i}</span>
+    <span class="tx"><b>${esc(titleOf(l, l.host, l.partner))}</b>
+      <span class="ln"><span>${I.pin}${l.dist != null ? km(l.dist) : esc(l.neighborhood)}</span><span>${I.clock}${hhmm(l.arrival_time)}</span><span>${I.ppl}${free > 0 ? `${free} ${l.format === "plat" ? "part" : "place"}${free > 1 ? "s" : ""}` : "Complet"}</span></span>
+      ${flatMenu(l.menu).length ? `<span class="ln m">${esc(flatMenu(l.menu).slice(0, 4).join(", "))}</span>` : ""}
+      <span class="tags"><span class="tg">${k.t}</span><span class="tg">${AUD[l.audience]}</span>${l.host?.id_verified || l.partner ? `<span class="tagv">${I.check}Vérifié</span>` : ""}</span></span></button>`;
+}
+const bindItems = (root) => $$("[data-listing]", root).forEach((b) => b.onclick = () => go("detail", { id: b.dataset.listing }));
+
+/* ---------- carte et liste ---------- */
+VIEWS.explore = {
+  html: () => {
+    S.date ||= today();
+    const t = today(), tm = addDays(t, 1), other = S.date !== t && S.date !== tm;
+    return `${topbar("Tables disponibles", false)}<div class="pad">
+      <div class="pills"><button type="button" data-d="${t}" class="${S.date === t ? "on" : ""}">Aujourd'hui</button><button type="button" data-d="${tm}" class="${S.date === tm ? "on" : ""}">Demain</button>
+      <label class="${other ? "on" : ""}">${other ? dayLabel(S.date) : "Autre date"}<input type="date" id="dPick" min="${t}" value="${S.date}" aria-label="Choisir une date"></label>
+      <button type="button" id="locBtn2">${esc(S.pos.label)}</button></div>
+      <div id="map" role="region" aria-label="Carte des tables"></div>
+      <div class="kinds"><button type="button" data-k="all" class="${S.kind === "all" ? "on" : ""}">Tout</button><button type="button" data-k="habitant" class="${S.kind === "habitant" ? "on" : ""}">Chez l'habitant</button><button type="button" data-k="mosquee" class="${S.kind === "mosquee" ? "on" : ""}">Mosquées</button><button type="button" data-k="restaurant" class="${S.kind === "restaurant" ? "on" : ""}">Restaurants</button></div>
+      <div id="list">${loading()}</div></div>`;
+  },
+  async mount() {
+    $$("[data-d]").forEach((b) => b.onclick = () => { S.date = b.dataset.d; render(); });
+    $("#dPick").onchange = (e) => { if (e.target.value) { S.date = e.target.value; render(); } };
+    $("#locBtn2").onclick = locate;
+    $$("[data-k]").forEach((b) => b.onclick = () => { S.kind = b.dataset.k; render(); });
+    let rows = await nearby(S.date, 30);
+    if (S.kind !== "all") rows = rows.filter((r) => r.kind === S.kind);
+    $("#list").innerHTML = rows.length ? rows.map(itemHTML).join("") : `<div class="empty" style="margin-top:12px"><b>Aucune table pour cette date</b>Essayez un autre jour, ou ouvrez votre table.</div>`;
+    bindItems($("#list"));
+    if (window.L) {
+      S.map = L.map("map", { zoomControl: false, attributionControl: true }).setView([S.pos.lat, S.pos.lng], 12);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 18, attribution: "© OpenStreetMap" }).addTo(S.map);
+      L.circleMarker([S.pos.lat, S.pos.lng], { radius: 7, color: "#fff", weight: 3, fillColor: "#2F7BEA", fillOpacity: 1 }).addTo(S.map);
+      rows.filter((r) => r.approx_lat != null).forEach((r) => {
+        const ic = L.divIcon({ className: "", html: `<div class="mk" style="background:${kindStyle(r).c}"></div>`, iconSize: [30, 30], iconAnchor: [15, 30] });
+        L.marker([r.approx_lat, r.approx_lng], { icon: ic, title: titleOf(r, r.host, r.partner) }).addTo(S.map).on("click", () => go("detail", { id: r.id }));
+      });
+    } else $("#map").innerHTML = `<p class="hint" style="padding:16px">Carte indisponible hors connexion.</p>`;
+  },
+};
+
+/* ---------- fiche d'une annonce ---------- */
+VIEWS.detail = {
+  html: () => loading(),
+  async mount(app) {
+    const id = S.params.id;
+    const { data: l0, error } = await sb.from("listings").select("*").eq("id", id).single();
+    if (error) { toast(errMsg(error)); return back(); }
+    const [l] = await enrich([l0]);
+    const [bk, priv, rv, fv] = await Promise.all([
+      sb.from("bookings").select("*").eq("listing_id", id).eq("guest_id", me()).maybeSingle(),
+      sb.from("listing_private").select("address").eq("listing_id", id).maybeSingle(),
+      sb.from("reviews").select("rating,comment,author:profiles!reviews_author_id_fkey(first_name)").eq("target_id", l.host_id).order("created_at", { ascending: false }).limit(5),
+      sb.from("favorites").select("listing_id").eq("user_id", me()).eq("listing_id", id).maybeSingle(),
+    ]);
+    const k = kindStyle(l), free = l.places - l.taken, mine = l.host_id === me(), my = bk.data, fav = !!fv.data, pro = l.kind !== "habitant";
+    const courses = COURSES.filter(([c]) => l.menu?.[c]?.length);
+    let cta;
+    if (mine) cta = `<button class="btn ghost" type="button" data-go="resa">Gérer mon annonce</button>`;
+    else if (my && ["en_attente", "acceptee"].includes(my.status)) cta = `<button class="btn ghost" type="button" data-go="resa">Voir ma réservation · ${STATUS[my.status][0]}</button>`;
+    else if (!l.is_open || free <= 0) cta = `<button class="btn" type="button" disabled>Complet</button>`;
+    else cta = `<button class="btn gold" type="button" id="ask">${pro ? "Je m'inscris" : l.format === "plat" ? "Je réserve une part" : "Je souhaite participer"}</button>`;
+    $("main", app).innerHTML = `
+      <div class="dhero" style="background:linear-gradient(160deg,${k.c},#0B1C36)">
+        <button class="rb l" type="button" data-back aria-label="Retour">${I.back}</button>
+        <button class="rb r ${fav ? "on" : ""}" type="button" id="fav" aria-label="Favori">${fav ? I.heart : I.heartO}</button>
+        <h2>${esc(titleOf(l, l.host, l.partner))}</h2></div>
+      <div class="pad">
+        <div class="dmeta">
+          <div class="r">${I.pin}${priv.data ? esc(priv.data.address) : esc(l.neighborhood) + (l.dist != null ? ` · à environ ${km(l.dist)}` : "")}${l.host?.id_verified || l.partner ? `<span class="tagv" style="margin-left:auto">${I.check}${pro ? "Partenaire vérifié" : "Hôte vérifié"}</span>` : ""}</div>
+          <div class="r">${I.cal}${dayLabel(l.iftar_date)} · arrivée ${hhmm(l.arrival_time)} · Maghrib ${fmtH(prayer(l.iftar_date, l.approx_lat ?? S.pos.lat, l.approx_lng ?? S.pos.lng).maghrib)}</div>
+          <div class="r">${I.ppl}${free > 0 ? `${free} ${l.format === "plat" ? "part" : "place"}${free > 1 ? "s" : ""} disponible${free > 1 ? "s" : ""} sur ${l.places}` : "Complet"} · ${AUD[l.audience]}</div>
+          ${l.price_label ? `<div class="r">${I.shop}${esc(l.price_label)}</div>` : ""}
+        </div>
+        ${courses.length ? `<div class="panel"><h4>Au menu</h4><dl class="course">${courses.map(([c, n]) => `<dt>${n}</dt><dd>${l.menu[c].map(esc).join("<br>")}</dd>`).join("")}</dl></div>` : ""}
+        ${l.tags?.length ? `<div class="tags" style="margin-bottom:12px">${l.tags.map((t) => `<span class="tg">${esc(t)}</span>`).join("")}</div>` : ""}
+        <div class="panel"><div class="hostbox"><div class="av ${pro ? "sq" : ""}">${pro ? (l.kind === "mosquee" ? I.mosque : I.shop) : esc((l.host?.first_name || "?")[0])}</div>
+          <div><b>${esc(l.partner?.name || l.host?.first_name || "Hôte")}</b><div class="hint">${l.rating ? `<span class="stars">★</span> ${l.rating.toFixed(1).replace(".", ",")}/5 · ${l.nRev} avis` : "Nouveau sur Sufra"}</div></div></div>
+          ${l.note ? `<p style="margin:12px 0 0">${esc(l.note)}</p>` : ""}</div>
+        ${rv.data?.length ? `<div class="panel"><h4>Avis</h4>${rv.data.map((r) => `<div class="review"><b>${esc(r.author?.first_name || "Invité")}</b> <span class="stars">${"★".repeat(r.rating)}</span>${r.comment ? `<div>${esc(r.comment)}</div>` : ""}</div>`).join("")}</div>` : ""}
+        <div class="notice">${I.shield}<span>${pro ? "Adresse publique, inscription confirmée immédiatement." : "L'adresse exacte est partagée uniquement après acceptation par l'hôte."}</span></div>
+        <div class="dcta">${cta}</div>
+        ${mine ? "" : `<button class="btn line sm" type="button" id="report" style="margin:6px 0 20px">Signaler cette annonce</button>`}
+      </div>`;
+    $("#fav").onclick = async () => {
+      const q = fav ? sb.from("favorites").delete().eq("user_id", me()).eq("listing_id", id) : sb.from("favorites").insert({ user_id: me(), listing_id: id });
+      const { error: e } = await q; if (e) return toast(errMsg(e)); render();
+    };
+    const a = $("#ask"); if (a) a.onclick = () => askSheet(l);
+    const rp = $("#report"); if (rp) rp.onclick = () => reportSheet(l);
+  },
+};
+
+function askSheet(l) {
+  const free = l.places - l.taken, pro = l.kind !== "habitant"; let n = 1, forOther = false;
+  const bg = sheet(`<h2>${pro ? "Inscription" : "Ma demande"}</h2><p class="lead">${esc(titleOf(l, l.host, l.partner))} · ${dayLabel(l.iftar_date)} · ${hhmm(l.arrival_time)}</p>
+    <form id="askF"><div class="panel">
+      <div class="field"><span class="lbl">Pour qui ?</span><div class="seg2" id="forSeg" style="margin:0"><button type="button" class="on" data-for="me">Pour moi</button><button type="button" data-for="other">Pour un proche</button></div></div>
+      <div id="forOther" hidden><div class="row2"><div class="field"><label for="oName">Prénom du proche</label><input id="oName" maxlength="40"></div><div class="field"><label for="oLink">Lien</label><select id="oLink"><option>Ma mère</option><option>Mon père</option><option>Un voisin</option><option>Une amie</option><option>Autre</option></select></div></div>
+        <div class="field"><label for="oPhone">Son téléphone (facultatif)</label><input id="oPhone" inputmode="tel" maxlength="20"></div></div>
+      <div class="field"><span class="lbl">Nombre de personnes</span><div class="stepper"><button type="button" data-s="-1" aria-label="Moins">−</button><output id="nb" class="num">1</output><button type="button" data-s="1" aria-label="Plus">+</button></div><span class="hint">${free} disponible${free > 1 ? "s" : ""}</span></div>
+      ${pro ? "" : `<div class="field"><label for="askMsg">Présentez-vous</label><textarea id="askMsg" maxlength="600">Salam aleykoum ! Ce serait un plaisir de rompre le jeûne avec vous.</textarea></div>
+      <div class="field"><label for="askBring">J'apporte</label><select id="askBring"><option>Des dattes</option><option>Des pâtisseries</option><option>Une boisson</option><option value="">Rien, merci</option></select></div>`}
+      <div class="field"><label for="askAll">Allergies ou régime</label><input id="askAll" maxlength="200"></div>
+    </div><button class="btn gold" type="submit">${pro ? "Confirmer" : "Envoyer ma demande"}</button></form>`);
+  $$("[data-s]", bg).forEach((b) => b.onclick = () => { n = Math.max(1, Math.min(free, 12, n + +b.dataset.s)); $("#nb").textContent = n; });
+  $$("#forSeg [data-for]", bg).forEach((b) => b.onclick = () => { forOther = b.dataset.for === "other"; $$("#forSeg button").forEach((x) => x.classList.toggle("on", x === b)); $("#forOther").hidden = !forOther; });
+  $("#askF").onsubmit = async (e) => {
+    e.preventDefault();
+    const rel = forOther ? { name: $("#oName").value.trim(), link: $("#oLink").value, phone: $("#oPhone").value.trim() } : null;
+    if (forOther && !rel.name) return toast("Indiquez le prénom de votre proche.");
+    const { error } = await sb.rpc("request_booking", { p_listing: l.id, p_party: n, p_message: $("#askMsg")?.value || null, p_bring: $("#askBring")?.value || null, p_allergies: $("#askAll").value || null, p_for_relative: rel });
+    if (error) return toast(errMsg(error));
+    closeSheet(); toast(pro ? "Inscription confirmée" : "Demande envoyée"); go("resa");
+  };
+}
+function reportSheet(l) {
+  const bg = sheet(`<h2>Signaler</h2><p class="lead">Notre équipe examine chaque signalement sous 24 h.</p><form id="repF"><div class="field"><label for="repR">Que se passe-t-il ?</label><textarea id="repR" maxlength="1000" required></textarea></div><button class="btn" type="submit">Envoyer</button></form>`);
+  $("#repF", bg).onsubmit = async (e) => {
+    e.preventDefault(); const reason = $("#repR").value.trim(); if (reason.length < 3) return;
+    const { error } = await sb.from("reports").insert({ reporter_id: me(), listing_id: l.id, target_id: l.host_id, reason });
+    if (error) return toast(errMsg(error)); closeSheet(); toast("Merci, signalement envoyé");
+  };
+}
+
+/* ---------- ouvrir ma table ---------- */
+VIEWS.host = {
+  html: () => `${topbar("J'ouvre ma table")}<form class="pad" id="hF" novalidate>
+    <div id="asPartner"></div>
+    <div class="opt" id="fmt"><button type="button" class="on" data-f="table"><span><b>Chez moi</b><span>Mes invités rompent le jeûne à ma table</span></span></button><button type="button" data-f="plat"><span><b>Plat à emporter</b><span>Une part à récupérer avant Maghrib</span></span></button></div>
+    <div class="sect"><h3>Quand et où</h3></div><div class="panel">
+      <div class="row2"><div class="field"><label for="hDate">Jour</label><input id="hDate" type="date" min="${today()}" value="${today()}"></div><div class="field"><label for="hTime">Heure d'arrivée</label><input id="hTime" type="time" value="18:00"></div></div>
+      <div class="field"><label for="hAddr">Adresse exacte</label><input id="hAddr" autocomplete="street-address" placeholder="12 rue des Lilas, Lyon"><span class="hint" id="hAddrHint">Jamais affichée publiquement : seuls vos invités acceptés la verront.</span></div>
+      <div class="field"><label for="hHood">Quartier affiché</label><input id="hHood" maxlength="80" placeholder="Lyon 7e · Gerland"></div>
+      <div class="field"><span class="lbl" id="plLbl">Places disponibles</span><div class="stepper"><button type="button" data-p="-1" aria-label="Moins">−</button><output id="hPl" class="num">3</output><button type="button" data-p="1" aria-label="Plus">+</button></div></div>
+    </div>
+    <div class="sect"><h3>Au menu</h3></div><div class="panel">${COURSES.map(([c, n]) => `<div class="field"><span class="lbl">${n}</span><div data-course="${c}"></div><button type="button" class="add" data-addc="${c}">+ Ajouter</button></div>`).join("")}</div>
+    <div class="sect"><h3>Mes invités</h3></div><div class="panel">
+      <div class="field"><label for="hAud">Qui peut venir ?</label><select id="hAud">${Object.entries(AUD).map(([k, v]) => `<option value="${k}">${v}</option>`).join("")}</select></div>
+      <div class="field"><span class="lbl">Précisions</span><div class="chips" id="hTags">${TAGS.map((t) => `<button type="button" class="chip ${t === "Halal" ? "on" : ""}" data-t="${t}">${t}</button>`).join("")}</div></div>
+      <div class="field"><label for="hNote">Un mot pour vos invités</label><textarea id="hNote" maxlength="600"></textarea></div>
+    </div>
+    <div class="notice">${I.shield}<span>Chaque invité accueilli vous rapproche d'un panier gourmand offert par nos partenaires.</span></div>
+    <div id="hMsg"></div><button class="btn gold" type="submit" id="hBtn">Publier ma table</button><div style="height:20px"></div></form>`,
+  async mount() {
+    let fmt = "table", places = 3, geo = null, partnerId = null;
+    const { data: parts } = await sb.from("partners").select("id,name,kind,city,address").eq("owner_id", me()).eq("status", "verifie").in("kind", ["mosquee", "association", "restaurant"]);
+    if (parts?.length) {
+      $("#asPartner").innerHTML = `<div class="panel"><div class="field"><label for="hAs">Publier au nom de</label><select id="hAs"><option value="">Moi-même (iftar chez moi)</option>${parts.map((p) => `<option value="${p.id}">${esc(p.name)}</option>`).join("")}</select></div></div>`;
+      $("#hAs").onchange = (e) => { partnerId = e.target.value || null; $("#fmt").hidden = !!partnerId; const p = parts.find((x) => x.id === partnerId); if (p && p.address) $("#hAddr").value = p.address; $("#plLbl").textContent = partnerId ? "Places par soir" : "Places disponibles"; };
+    }
+    const addDish = (c, v = "") => { const d = document.createElement("div"); d.className = "dishrow"; d.innerHTML = `<input maxlength="60" aria-label="Plat" value="${esc(v)}"><button type="button" class="x" aria-label="Retirer">×</button>`; d.querySelector(".x").onclick = () => d.remove(); $(`[data-course="${c}"]`).appendChild(d); };
+    [["rupture", "Dattes et lben"], ["entree", "Chorba"], ["plat", ""], ["dessert", "Thé à la menthe"]].forEach(([c, v]) => addDish(c, v));
+    $$("[data-addc]").forEach((b) => b.onclick = () => addDish(b.dataset.addc));
+    $$("#fmt [data-f]").forEach((b) => b.onclick = () => { fmt = b.dataset.f; $$("#fmt button").forEach((x) => x.classList.toggle("on", x === b)); $("#plLbl").textContent = fmt === "plat" ? "Nombre de parts" : "Places disponibles"; });
+    $$("[data-p]").forEach((b) => b.onclick = () => { places = Math.max(1, Math.min(partnerId ? 2000 : 20, places + +b.dataset.p)); $("#hPl").textContent = places; });
+    $$("#hTags [data-t]").forEach((b) => b.onclick = () => b.classList.toggle("on"));
+    const geocode = async () => {
+      const q = $("#hAddr").value.trim(); geo = null; if (q.length < 6) return;
+      try {
+        const r = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(q)}&limit=1`).then((x) => x.json());
+        const f = r.features?.[0];
+        if (f && f.properties.score > 0.4) {
+          geo = { lat: f.geometry.coordinates[1], lng: f.geometry.coordinates[0], label: f.properties.label };
+          $("#hAddrHint").innerHTML = `<span style="color:var(--green);font-weight:700">Adresse trouvée : ${esc(f.properties.label)}</span>`;
+          if (!$("#hHood").value) $("#hHood").value = f.properties.district ? `${f.properties.city} · ${f.properties.district.replace(f.properties.city, "").trim()}`.replace(/ · $/, "") : f.properties.city;
+        } else $("#hAddrHint").innerHTML = `<span style="color:var(--red);font-weight:700">Adresse introuvable. Précisez le numéro, la rue et la ville.</span>`;
+      } catch (_) { $("#hAddrHint").textContent = "Vérification de l'adresse impossible (réseau)."; }
+    };
+    $("#hAddr").onchange = geocode;
+    $("#hF").onsubmit = async (e) => {
+      e.preventDefault();
+      const msg = (t) => { $("#hMsg").innerHTML = `<div class="notice err">${esc(t)}</div>`; };
+      if (!geo) await geocode();
+      if (!geo) return msg("Indiquez une adresse valide : elle sert à vous placer sur la carte.");
+      const hood = $("#hHood").value.trim(); if (!hood) return msg("Indiquez le quartier affiché.");
+      const menu = {}; COURSES.forEach(([c]) => { menu[c] = $$(`[data-course="${c}"] input`).map((i) => i.value.trim()).filter(Boolean); });
+      if (!flatMenu(menu).length) return msg("Ajoutez au moins un plat au menu.");
+      const part = parts?.find((p) => p.id === partnerId);
+      const row = {
+        host_id: me(), partner_id: partnerId, kind: part ? (part.kind === "restaurant" ? "restaurant" : "mosquee") : "habitant",
+        format: part ? (part.kind === "restaurant" ? "restaurant" : "collectif") : fmt,
+        iftar_date: $("#hDate").value, arrival_time: $("#hTime").value, places, audience: $("#hAud").value, neighborhood: hood,
+        menu, tags: $$("#hTags .on").map((b) => b.dataset.t), note: $("#hNote").value.trim() || null,
+      };
+      if (!row.iftar_date || !row.arrival_time) return msg("Indiquez le jour et l'heure.");
+      $("#hBtn").disabled = true;
+      const { data, error } = await sb.from("listings").insert(row).select("id").single();
+      if (error) { $("#hBtn").disabled = false; return msg(errMsg(error)); }
+      const { error: e2 } = await sb.from("listing_private").insert({ listing_id: data.id, address: geo.label, lat: geo.lat, lng: geo.lng });
+      if (e2) { await sb.from("listings").delete().eq("id", data.id); $("#hBtn").disabled = false; return msg(errMsg(e2)); }
+      toast("Table publiée !"); go("resa", { tab: "host" });
+    };
+  },
+};
+
+/* ---------- réservations ---------- */
+VIEWS.resa = {
+  html: () => `${topbar("Mes réservations", false)}<div class="pad">
+    <div class="seg2" id="rTab"><button type="button" data-t="guest" class="${S.params.tab !== "host" ? "on" : ""}">Mes demandes</button><button type="button" data-t="host" class="${S.params.tab === "host" ? "on" : ""}">Mes tables</button></div>
+    <div id="rBody">${loading()}</div></div>`,
+  async mount() {
+    $$("#rTab [data-t]").forEach((b) => b.onclick = () => { S.params = { tab: b.dataset.t }; render(); });
+    S.params.tab === "host" ? await hostTab() : await guestTab();
+    refreshPending();
+  },
+};
+async function guestTab() {
+  const { data, error } = await sb.from("bookings").select("*, listing:listings(*)").eq("guest_id", me()).order("created_at", { ascending: false });
+  if (error) return toast(errMsg(error));
+  const lst = await enrich((data || []).map((b) => b.listing).filter(Boolean));
+  const L = Object.fromEntries(lst.map((l) => [l.id, l]));
+  const acc = (data || []).filter((b) => b.status === "acceptee").map((b) => b.listing_id);
+  const { data: priv } = acc.length ? await sb.from("listing_private").select("listing_id,address").in("listing_id", acc) : { data: [] };
+  const A = Object.fromEntries((priv || []).map((p) => [p.listing_id, p.address]));
+  const { data: myRev } = await sb.from("reviews").select("booking_id").eq("author_id", me());
+  const reviewed = new Set((myRev || []).map((r) => r.booking_id));
+  $("#rBody").innerHTML = data?.length ? data.map((b) => {
+    const l = L[b.listing_id]; if (!l) return "";
+    const st = STATUS[b.status], ok = b.status === "acceptee", passed = l.iftar_date <= today();
+    return `<div class="req"><div class="h"><div><b>${esc(titleOf(l, l.host, l.partner))}</b><span class="hint">${dayLabel(l.iftar_date)} · ${hhmm(l.arrival_time)} · ${b.party_size} pers.</span>${b.for_relative ? `<div class="hint" style="color:var(--gold-ink);font-weight:800">Pour ${esc(b.for_relative.name)} · ${esc(b.for_relative.link)}</div>` : ""}</div><span class="status ${st[1]}">${b.arrived_at ? "Arrivé" : st[0]}</span></div>
+      ${ok ? `<div class="notice">${I.pin}<span><b>Adresse :</b> ${esc(A[b.listing_id] || l.partner?.address || "—")}</span></div>` : ""}
+      ${ok && !b.arrived_at ? `<button class="btn gold sm" type="button" data-arrive="${b.id}">${I.pin}${b.for_relative ? esc(b.for_relative.name) + " est bien arrivé(e)" : "Je suis bien arrivé"}</button>` : ""}
+      ${b.arrived_at ? `<div class="notice ok">${I.check}<span>Arrivée confirmée${b.notified_contact ? ` · ${esc(b.notified_contact)} prévenu(e)` : ""}</span></div>` : ""}
+      <div class="row">${["en_attente", "acceptee"].includes(b.status) && l.kind === "habitant" ? `<button class="btn line sm" type="button" data-chat="${b.id}">${I.chat}Messages</button>` : ""}
+      ${ok && passed && !reviewed.has(b.id) && l.kind === "habitant" ? `<button class="btn ghost sm" type="button" data-review="${b.id}" data-target="${l.host_id}">Laisser un avis</button>` : ""}
+      ${["en_attente", "acceptee"].includes(b.status) && !passed ? `<button class="btn danger sm" type="button" data-cancel="${b.id}">Annuler</button>` : ""}</div></div>`;
+  }).join("") : `<div class="empty"><b>Aucune demande</b>Trouvez une table pour ce soir.<br><br><button class="btn sm" type="button" data-go="explore">Chercher une table</button></div>`;
+  $$("[data-chat]").forEach((x) => x.onclick = () => go("chat", { id: x.dataset.chat }));
+  $$("[data-cancel]").forEach((x) => x.onclick = async () => { if (!x.dataset.sure) { x.dataset.sure = 1; x.textContent = "Confirmer l'annulation"; return; } const { error: e } = await sb.rpc("cancel_booking", { p_booking: x.dataset.cancel }); if (e) return toast(errMsg(e)); toast("Réservation annulée"); render(); });
+  $$("[data-arrive]").forEach((x) => x.onclick = () => arriveSheet(x.dataset.arrive));
+  $$("[data-review]").forEach((x) => x.onclick = () => reviewSheet(x.dataset.review, x.dataset.target));
+}
+async function hostTab() {
+  const { data, error } = await sb.from("listings").select("*, bookings(*, guest:profiles(first_name,gender,id_verified))").eq("host_id", me()).order("iftar_date", { ascending: false });
+  if (error) return toast(errMsg(error));
+  const { data: myRev } = await sb.from("reviews").select("booking_id").eq("author_id", me());
+  const reviewed = new Set((myRev || []).map((r) => r.booking_id));
+  const listHTML = data?.length ? data.map((l) => {
+    const bks = (l.bookings || []).filter((b) => !["annulee"].includes(b.status)).sort((a, b) => (a.status === "en_attente" ? -1 : 1));
+    return `<div class="req"><div class="h"><div><b>${l.format === "plat" ? "Mon plat à partager" : l.kind === "habitant" ? "Ma table" : "Iftar collectif"}</b><span class="hint">${dayLabel(l.iftar_date)} · ${hhmm(l.arrival_time)} · ${l.taken}/${l.places} ${l.format === "plat" ? "parts" : "places"}</span></div><span class="status ${l.is_open ? "st-ok" : "st-host"}">${l.is_open ? "Publiée" : "Fermée"}</span></div>
+      ${bks.length ? bks.map((b) => `<div class="guest"><div class="av">${esc((b.guest?.first_name || "?")[0])}</div><div style="flex:1;min-width:0"><b>${esc(b.guest?.first_name || "Invité")}</b> <span class="hint">· ${b.party_size} pers.${b.guest?.id_verified ? " · vérifié" : ""}</span>
+        ${b.for_relative ? `<div class="hint">Pour ${esc(b.for_relative.name)} (${esc(b.for_relative.link)})</div>` : ""}
+        ${b.message ? `<div style="font-size:13.5px;margin-top:4px">${esc(b.message)}</div>` : ""}
+        <div class="hint">${b.bring ? "Apporte : " + esc(b.bring.toLowerCase()) : ""}${b.allergies ? " · Allergies : " + esc(b.allergies) : ""}</div>
+        <div class="row" style="margin-top:8px">${b.status === "en_attente" ? `<button class="btn gold sm" type="button" data-acc="${b.id}">Accepter</button><button class="btn line sm" type="button" data-dec="${b.id}">Refuser</button>` : `<span class="status ${STATUS[b.status][1]}" style="flex:none">${b.arrived_at ? "Arrivé" : STATUS[b.status][0]}</span>`}
+        ${["en_attente", "acceptee"].includes(b.status) && l.kind === "habitant" ? `<button class="btn line sm" type="button" data-chat="${b.id}">${I.chat}</button>` : ""}
+        ${b.status === "acceptee" && l.iftar_date <= today() && !reviewed.has(b.id) ? `<button class="btn ghost sm" type="button" data-review="${b.id}" data-target="${b.guest_id}">Avis</button>` : ""}</div></div></div>`).join("") : `<p class="hint" style="margin:0">Pas encore de demande.</p>`}
+      ${l.is_open ? `<button class="btn line sm" type="button" data-close-l="${l.id}">Fermer les demandes</button>` : ""}</div>`;
+  }).join("") : `<div class="empty"><b>Aucune table publiée</b>Ouvrez votre table pour l'iftar.<br><br><button class="btn gold sm" type="button" data-go="host">J'ouvre ma table</button></div>`;
+  $("#rBody").innerHTML = `<div id="rewards"></div>${listHTML}`;
+  $$("[data-acc],[data-dec]").forEach((x) => x.onclick = async () => {
+    x.disabled = true; const { error: e } = await sb.rpc("respond_booking", { p_booking: x.dataset.acc || x.dataset.dec, p_accept: !!x.dataset.acc });
+    if (e) { x.disabled = false; return toast(errMsg(e)); } toast(x.dataset.acc ? "Demande acceptée, l'adresse est partagée" : "Demande refusée"); render();
+  });
+  $$("[data-chat]").forEach((x) => x.onclick = () => go("chat", { id: x.dataset.chat }));
+  $$("[data-review]").forEach((x) => x.onclick = () => reviewSheet(x.dataset.review, x.dataset.target));
+  $$("[data-close-l]").forEach((x) => x.onclick = async () => { const { error: e } = await sb.from("listings").update({ is_open: false }).eq("id", x.dataset.closeL); if (e) return toast(errMsg(e)); render(); });
+  renderRewards();
+}
+async function renderRewards() {
+  const [rw, gh, cl] = await Promise.all([sb.from("rewards").select("*").order("threshold"), sb.rpc("guests_hosted", { p_host: me() }), sb.from("reward_claims").select("reward_id").eq("host_id", me())]);
+  const n = gh.data || 0, R = rw.data || [], C = new Set((cl.data || []).map((c) => c.reward_id));
+  const next = R.find((r) => n < r.threshold), prev = [...R].reverse().find((r) => n >= r.threshold);
+  const pct = next ? Math.round((n - (prev?.threshold || 0)) / (next.threshold - (prev?.threshold || 0)) * 100) : 100;
+  const box = $("#rewards"); if (!box) return;
+  box.innerHTML = `<div class="panel"><h4>Récompenses de l'hôte</h4><b class="num" style="color:var(--navy)">${n} invité${n > 1 ? "s" : ""} accueilli${n > 1 ? "s" : ""}</b>
+    <div class="hint">${next ? `Plus que ${next.threshold - n} pour : ${esc(next.name)}` : "Tous les paliers sont atteints. Merci !"}</div>
+    <div class="progress" style="margin:8px 0 4px"><i style="width:${pct}%"></i></div>
+    ${R.map((r) => { const st = C.has(r.id) ? "done" : n >= r.threshold ? "ready" : "lock"; return `<div class="tier ${st}"><span class="tn num">${r.threshold}</span><div style="min-width:0"><b>${esc(r.name)}</b><span>${esc(r.sponsor_label || "")}</span></div>${st === "ready" ? `<button class="btn gold sm" type="button" data-claim="${r.id}" style="width:auto;margin-left:auto">Récupérer</button>` : `<span class="ts">${st === "done" ? "Reçu" : "Verrouillé"}</span>`}</div>`; }).join("")}
+    <p class="hint" style="margin:10px 0 0">Cadeaux offerts par nos partenaires pour remercier les hôtes. Le repas reste un don.</p></div>`;
+  $$("[data-claim]", box).forEach((x) => x.onclick = async () => { const { error } = await sb.rpc("claim_reward", { p_reward: x.dataset.claim }); if (error) return toast(errMsg(error)); toast("Cadeau réservé ! Nous vous contactons pour le retrait."); renderRewards(); });
+}
+function arriveSheet(id) {
+  const c = S.profile?.trusted_contact || "";
+  const bg = sheet(`<h2>Bien arrivé ?</h2><p class="lead">Confirmez l'arrivée pour rassurer vos proches.</p><form id="arF"><div class="field"><label for="arC">Proche à prévenir (facultatif)</label><input id="arC" maxlength="80" value="${esc(c)}" placeholder="Ex. : mon frère Karim"></div><button class="btn gold" type="submit">Confirmer l'arrivée</button></form>`);
+  $("#arF", bg).onsubmit = async (e) => { e.preventDefault(); const { error } = await sb.rpc("mark_arrived", { p_booking: id, p_contact: $("#arC").value.trim() || null }); if (error) return toast(errMsg(error)); closeSheet(); toast("Arrivée confirmée"); render(); };
+}
+function reviewSheet(bookingId, target) {
+  let r = 5;
+  const bg = sheet(`<h2>Votre avis</h2><p class="lead">Il aide la communauté à se faire confiance.</p><form id="rvF"><div class="field"><span class="lbl">Note</span><div class="chips" id="rvS">${[1, 2, 3, 4, 5].map((n) => `<button type="button" class="chip ${n === 5 ? "on" : ""}" data-r="${n}">${"★".repeat(n)}</button>`).join("")}</div></div><div class="field"><label for="rvC">Commentaire</label><textarea id="rvC" maxlength="600"></textarea></div><button class="btn gold" type="submit">Publier</button></form>`);
+  $$("#rvS [data-r]", bg).forEach((b) => b.onclick = () => { r = +b.dataset.r; $$("#rvS button").forEach((x) => x.classList.toggle("on", x === b)); });
+  $("#rvF", bg).onsubmit = async (e) => { e.preventDefault(); const { error } = await sb.from("reviews").insert({ booking_id: bookingId, author_id: me(), target_id: target, rating: r, comment: $("#rvC").value.trim() || null }); if (error) return toast(errMsg(error)); closeSheet(); toast("Merci pour votre avis"); render(); };
+}
+async function refreshPending() {
+  if (!me()) return;
+  const { count } = await sb.from("bookings").select("id, listings!inner(host_id)", { count: "exact", head: true }).eq("status", "en_attente").eq("listings.host_id", me());
+  if ((count || 0) !== S.pending) { S.pending = count || 0; const n = $(".nav"); if (n) n.outerHTML = nav(); }
+}
+
+/* ---------- messagerie ---------- */
+VIEWS.chat = {
+  html: () => `${topbar("Messages")}<div class="pad"><div class="chat" id="chat">${loading()}</div>
+    <form class="compose" id="cmp"><input id="cmsg" maxlength="1000" placeholder="Votre message" aria-label="Votre message" autocomplete="off"><button type="submit" aria-label="Envoyer">${I.send}</button></form></div>`,
+  async mount() {
+    const id = S.params.id;
+    const { data: b } = await sb.from("bookings").select("*, listing:listings(host_id)").eq("id", id).single();
+    const other = b ? (b.guest_id === me() ? b.listing.host_id : b.guest_id) : null;
+    const { data: op } = other ? await sb.from("profiles").select("first_name").eq("id", other).single() : { data: null };
+    if (op) $(".bar-top h1").textContent = op.first_name;
+    const box = $("#chat"), seen = new Set();
+    const add = (m) => { if (seen.has(m.id)) return; seen.add(m.id); const d = document.createElement("div"); d.className = "msg " + (m.sender_id === me() ? "me" : "them"); d.textContent = m.body; box.appendChild(d); window.scrollTo(0, document.body.scrollHeight); };
+    const { data, error } = await sb.from("messages").select("*").eq("booking_id", id).order("created_at");
+    if (error) return toast(errMsg(error));
+    box.innerHTML = data.length ? "" : `<p class="hint" id="noMsg" style="text-align:center">Aucun message. Dites bonjour !</p>`;
+    data.forEach(add);
+    S.channel = sb.channel("msg-" + id).on("postgres_changes", { event: "INSERT", schema: "public", table: "messages", filter: `booking_id=eq.${id}` }, (p) => { $("#noMsg")?.remove(); add(p.new); }).subscribe();
+    $("#cmp").onsubmit = async (e) => {
+      e.preventDefault(); const body = $("#cmsg").value.trim(); if (!body) return;
+      $("#cmsg").value = "";
+      const { data: m, error: er } = await sb.from("messages").insert({ booking_id: id, sender_id: me(), body }).select().single();
+      if (er) { $("#cmsg").value = body; return toast(errMsg(er)); }
+      $("#noMsg")?.remove(); add(m);
+    };
+  },
+};
+
+/* ---------- calendrier ---------- */
+VIEWS.cal = {
+  html: () => {
+    const t = today(); let rows = "";
+    for (let d = 1; d <= 30; d++) {
+      const iso = addDays(RAMADAN_START, d - 1), p = prayer(iso, S.pos.lat, S.pos.lng), dt = new Date(iso + "T12:00:00");
+      rows += `<div class="cday ${iso < t ? "past" : iso === t ? "today" : ""} ${d >= 21 ? "last" : ""}"><span class="n">${d}</span><span class="d">${JOURS[dt.getDay()].slice(0, 3)}. ${dt.getDate()} ${MOIS[dt.getMonth()].slice(0, 4)}.</span><span>${fmtH(p.fajr)}</span><span class="m">${fmtH(p.maghrib)}</span><span class="d">${Math.floor(p.maghrib - p.fajr)} h ${pad2(Math.round((p.maghrib - p.fajr) % 1 * 60))}</span></div>`;
+    }
+    const tp = prayer(t, S.pos.lat, S.pos.lng);
+    return `${topbar("Ramadan 1448", false)}<div class="pad">
+      <div class="panel"><h4>Aujourd'hui à ${esc(S.pos.label)}</h4><div class="row"><div><div class="hint">Fajr</div><b class="num" style="font-size:22px;color:var(--navy)">${fmtH(tp.fajr)}</b></div><div><div class="hint">Maghrib</div><b class="num" style="font-size:22px;color:var(--gold-ink)">${fmtH(tp.maghrib)}</b></div></div></div>
+      <div class="notice">${I.moon}<span>Début estimé le <b>lundi 8 février 2027</b>. Les 10 dernières nuits commencent le 27 février. Aïd al-Fitr le 9 ou 10 mars, selon l'observation du croissant.</span></div>
+      <div class="cal-head"><span>Jour</span><span>Date</span><span>Fajr</span><span>Maghrib</span><span>Jeûne</span></div>
+      <div class="callist">${rows}</div>
+      <p class="hint" style="text-align:center;margin-top:12px">Horaires calculés pour ${esc(S.pos.label)} (Fajr à 12°). Valeurs indicatives : fiez-vous aux horaires de votre mosquée.</p></div>`;
+  },
+};
+
+/* ---------- profil ---------- */
+VIEWS.me = {
+  html: () => `${topbar("Mon profil", false)}<div class="pad"><div id="meBody">${loading()}</div></div>`,
+  async mount() {
+    const p = S.profile || {};
+    const [{ data: parts }, { data: rv }] = await Promise.all([sb.from("partners").select("*").eq("owner_id", me()).order("created_at"), sb.from("reviews").select("rating").eq("target_id", me())]);
+    const avg = rv?.length ? (rv.reduce((a, b) => a + b.rating, 0) / rv.length).toFixed(1).replace(".", ",") : null;
+    const PS = { en_attente: ["En vérification", "st-wait"], verifie: ["Vérifié", "st-ok"], refuse: ["Refusé", "st-no"] };
+    $("#meBody").innerHTML = `
+      <div class="prof"><div class="av lg" style="background:linear-gradient(135deg,#C99A45,#8A6418)">${esc((p.first_name || "?")[0])}</div><div><h2>${esc(p.first_name)}</h2><div class="hint">${esc(S.session.user.email)}</div><div class="hint">${avg ? `<span class="stars">★</span> ${avg}/5 · ${rv.length} avis` : "Pas encore d'avis"}</div></div></div>
+      <div class="panel"><h4>Vérifications</h4><div class="hint">${I.check.replace("<svg", '<svg style="width:14px;height:14px;color:var(--green);vertical-align:-2px"')} Email confirmé</div><div class="hint" style="margin-top:6px">${p.id_verified ? "Identité vérifiée" : "Vérification d'identité : bientôt disponible"}</div></div>
+      <form class="panel" id="pF"><h4>Mes informations</h4>
+        <div class="field"><label for="pN">Prénom</label><input id="pN" maxlength="40" value="${esc(p.first_name)}"></div>
+        <div class="field"><label for="pC">Ville</label><input id="pC" maxlength="80" value="${esc(p.city)}"></div>
+        <div class="field"><label for="pT">Contact de confiance</label><input id="pT" maxlength="80" value="${esc(p.trusted_contact)}" placeholder="Prévenu quand vous arrivez à un iftar"></div>
+        <div class="field"><label for="pB">Quelques mots sur moi</label><textarea id="pB" maxlength="500">${esc(p.bio)}</textarea></div>
+        <button class="btn" type="submit">Enregistrer</button></form>
+      <div class="panel"><h4>Espace partenaire</h4>${parts?.length ? parts.map((x) => `<div style="display:flex;gap:10px;align-items:center;margin-bottom:10px"><div class="av sq">${x.kind === "restaurant" ? I.shop : I.mosque}</div><div style="flex:1;min-width:0"><b style="color:var(--navy)">${esc(x.name)}</b><div class="hint">${esc(x.city)}</div></div><span class="status ${PS[x.status][1]}">${PS[x.status][0]}</span></div>`).join("") + (parts.some((x) => x.status === "verifie") ? `<button class="btn gold sm" type="button" data-go="host">Publier un iftar collectif</button>` : `<p class="hint" style="margin:0">Nous vérifions votre structure sous 48 h.</p>`) : `<p class="hint" style="margin:0 0 10px">Mosquée, association ou restaurant : publiez vos iftars avec le badge « Partenaire vérifié ».</p><button class="btn line sm" type="button" id="newPart">Créer un compte partenaire</button>`}</div>
+      <button class="btn ghost" type="button" id="logout">Me déconnecter</button>
+      <p class="hint" style="text-align:center;margin:16px 0">Sufra · version bêta</p>`;
+    $("#pF").onsubmit = async (e) => {
+      e.preventDefault();
+      const upd = { first_name: $("#pN").value.trim(), city: $("#pC").value.trim() || null, trusted_contact: $("#pT").value.trim() || null, bio: $("#pB").value.trim() || null };
+      if (!upd.first_name) return toast("Le prénom est requis.");
+      const { error } = await sb.from("profiles").update(upd).eq("id", me()); if (error) return toast(errMsg(error));
+      Object.assign(S.profile, upd); toast("Profil enregistré");
+    };
+    const np = $("#newPart"); if (np) np.onclick = partnerSheet;
+    $("#logout").onclick = async () => { await sb.auth.signOut(); };
+  },
+};
+function partnerSheet() {
+  const bg = sheet(`<h2>Compte partenaire</h2><p class="lead">Vérifié par l'équipe Sufra sous 48 h.</p><form id="ptF">
+    <div class="field"><label for="ptK">Vous êtes</label><select id="ptK"><option value="mosquee">Une mosquée</option><option value="association">Une association</option><option value="restaurant">Un restaurant</option><option value="sponsor">Une marque ou un commerçant (sponsor)</option></select></div>
+    <div class="field"><label for="ptN">Nom</label><input id="ptN" maxlength="120" required></div>
+    <div class="row2"><div class="field"><label for="ptC">Ville</label><input id="ptC" maxlength="80" required></div><div class="field"><label for="ptCap">Places par soir</label><input id="ptCap" type="number" min="1" max="5000" inputmode="numeric"></div></div>
+    <div class="field"><label for="ptA">Adresse</label><input id="ptA" maxlength="200"></div>
+    <div class="field"><label for="ptR">N° RNA ou SIRET</label><input id="ptR" maxlength="20"></div>
+    <button class="btn gold" type="submit">Envoyer ma demande</button></form>`);
+  $("#ptF", bg).onsubmit = async (e) => {
+    e.preventDefault();
+    const row = { owner_id: me(), kind: $("#ptK").value, name: $("#ptN").value.trim(), city: $("#ptC").value.trim(), address: $("#ptA").value.trim() || null, registry_id: $("#ptR").value.trim() || null, capacity: +$("#ptCap").value || null };
+    if (row.name.length < 2 || !row.city) return toast("Nom et ville requis.");
+    const { error } = await sb.from("partners").insert(row); if (error) return toast(errMsg(error));
+    closeSheet(); toast("Demande envoyée"); render();
+  };
+}
+
+/* =====================================================================
+   DÉMARRAGE
+   ===================================================================== */
+async function loadProfile() {
+  const { data, error } = await sb.from("profiles").select("*").eq("id", me()).maybeSingle();
+  if (error) { toast(errMsg(error)); return; }
+  S.profile = data || { id: me(), first_name: "", gender: null };
+  const meta = S.session.user.user_metadata || {};
+  if (data && !data.gender && meta.gender) {
+    await sb.from("profiles").update({ gender: meta.gender, first_name: data.first_name || meta.first_name || "" }).eq("id", me());
+    S.profile.gender = meta.gender;
+  }
+}
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (event === "INITIAL_SESSION" || event === "TOKEN_REFRESHED") { if (session) S.session = session; return; }
+  const was = !!S.session; S.session = session;
+  if (event === "PASSWORD_RECOVERY") {
+    const bg = sheet(`<h2>Nouveau mot de passe</h2><form id="npF"><div class="field"><label for="npP">Mot de passe</label><input id="npP" type="password" minlength="6" autocomplete="new-password"></div><button class="btn gold" type="submit">Enregistrer</button></form>`);
+    $("#npF", bg).onsubmit = async (e) => { e.preventDefault(); const { error } = await sb.auth.updateUser({ password: $("#npP").value }); if (error) return toast(errMsg(error)); closeSheet(); toast("Mot de passe modifié"); };
+    return;
+  }
+  if (session && !was) {
+    setTimeout(async () => {
+      await loadProfile();
+      const after = store.get("after", "home"); store.set("after", "home");
+      S.stack = []; S.view = after === "host" ? "host" : after === "explore" ? "explore" : "home"; render(); refreshPending();
+    }, 0);
+  } else if (!session && was) { S.profile = null; S.stack = []; S.view = "auth"; render(); }
+});
+(async () => {
+  const { data } = await sb.auth.getSession();
+  S.session = data.session;
+  if (S.session) { await loadProfile(); S.view = "home"; refreshPending(); }
+  else S.view = store.get("seen", false) ? "auth" : "onb";
+  render();
+})();
+
+</script>
+</body>
+</html>
