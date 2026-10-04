@@ -632,17 +632,49 @@ VIEWS.home = {
   },
 };
 
-async function locate() {
-  if (!navigator.geolocation) return toast("Localisation indisponible sur cet appareil.");
-  toast("Recherche de votre position…");
-  navigator.geolocation.getCurrentPosition(async (p) => {
-    S.pos = { lat: p.coords.latitude, lng: p.coords.longitude, label: "Ma position" };
-    try {
-      const r = await fetch(`https://api-adresse.data.gouv.fr/reverse/?lon=${S.pos.lng}&lat=${S.pos.lat}&limit=1`).then((x) => x.json());
-      if (r.features?.[0]) S.pos.label = r.features[0].properties.city;
-    } catch (_) {}
-    store.set("pos", S.pos); render();
-  }, () => toast("Position refusée. Autorisez la localisation dans les réglages."), { enableHighAccuracy: false, timeout: 10000 });
+/* Position : GPS précis, ou adresse saisie à la main (Base Adresse Nationale) */
+function setPos(lat, lng, label, src) {
+  S.pos = { lat, lng, label, src, at: Date.now() }; store.set("pos", S.pos);
+}
+async function reverseLabel(lat, lng) {
+  try {
+    const r = await fetch(`https://api-adresse.data.gouv.fr/reverse/?lon=${lng}&lat=${lat}&limit=1`).then((x) => x.json());
+    const f = r.features?.[0]?.properties; if (f) return f.street ? `${f.street}, ${f.city}` : f.city;
+  } catch (_) {}
+  return "Ma position";
+}
+function gps(silent) {
+  return new Promise((resolve) => {
+    if (!navigator.geolocation) { if (!silent) toast("Localisation indisponible sur cet appareil."); return resolve(false); }
+    navigator.geolocation.getCurrentPosition(async (p) => {
+      setPos(p.coords.latitude, p.coords.longitude, await reverseLabel(p.coords.latitude, p.coords.longitude), "gps");
+      if (!silent) toast(p.coords.accuracy > 1000 ? "Position approximative : activez la position précise" : "Position mise à jour");
+      resolve(true);
+    }, (e) => {
+      if (!silent) toast(e.code === 1 ? "Localisation refusée : autorisez-la dans Réglages" : "Position introuvable, saisissez votre adresse");
+      resolve(false);
+    }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+  });
+}
+function locate() {
+  const bg = sheet(`<h2>Ma position</h2><p class="lead">Sert à trouver les tables autour de vous. Elle n'est jamais partagée.</p>
+    <button class="btn gold" type="button" id="useGps">${I.pin} Utiliser ma position actuelle</button>
+    <div class="field" style="margin-top:16px"><label for="addrQ">Ou saisissez une adresse</label><input id="addrQ" autocomplete="street-address" placeholder="Ex. : 17 rue Stéphane Hessel, L'Isle-d'Abeau"></div>
+    <div id="addrRes" class="opt"></div>
+    <details style="margin-top:16px"><summary class="hint" style="cursor:pointer">La position est fausse ou refusée ?</summary>
+      <p class="hint" style="margin:8px 0 0">Sur iPhone : <b>Réglages → Confidentialité et sécurité → Service de localisation → Sites Safari</b> (ou Safari) → <b>Lorsque l'app est active</b>, et activez <b>Position exacte</b>. Puis fermez et rouvrez Sufra.</p></details>`);
+  $("#useGps", bg).onclick = async () => { $("#useGps").disabled = true; $("#useGps").textContent = "Recherche…"; const ok = await gps(false); if (ok) { closeSheet(); render(); } else { $("#useGps").disabled = false; $("#useGps").innerHTML = `${I.pin} Réessayer`; } };
+  let t;
+  $("#addrQ", bg).oninput = (e) => {
+    clearTimeout(t); const q = e.target.value.trim(); if (q.length < 4) { $("#addrRes").innerHTML = ""; return; }
+    t = setTimeout(async () => {
+      try {
+        const r = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(q)}&limit=5`).then((x) => x.json());
+        $("#addrRes").innerHTML = (r.features || []).map((f, i) => `<button type="button" data-i="${i}"><span><b>${esc(f.properties.name || f.properties.label)}</b><span>${esc(f.properties.postcode || "")} ${esc(f.properties.city)}</span></span></button>`).join("") || `<p class="hint">Aucune adresse trouvée.</p>`;
+        $$("#addrRes [data-i]").forEach((b) => b.onclick = () => { const f = r.features[+b.dataset.i]; setPos(f.geometry.coordinates[1], f.geometry.coordinates[0], f.properties.type === "municipality" ? f.properties.city : (f.properties.name ? `${f.properties.name}, ${f.properties.city}` : f.properties.label), "addr"); closeSheet(); toast("Position enregistrée"); render(); });
+      } catch (_) { $("#addrRes").innerHTML = `<p class="hint">Recherche impossible (réseau).</p>`; }
+    }, 300);
+  };
 }
 
 /* ---------- données des annonces ---------- */
@@ -1121,6 +1153,7 @@ sb.auth.onAuthStateChange(async (event, session) => {
   const { data } = await sb.auth.getSession();
   S.session = data.session;
   if (S.session) { await loadProfile(); S.view = "home"; refreshPending(); }
+  if (!S.pos.src || (S.pos.src === "gps" && Date.now() - (S.pos.at || 0) > 6 * 3600e3)) gps(true).then((ok) => { if (ok && ["home", "explore"].includes(S.view)) render(); });
   else S.view = store.get("seen", false) ? "auth" : "onb";
   render();
 })();
