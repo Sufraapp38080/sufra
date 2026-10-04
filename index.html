@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#0B1C36">
 <meta name="description" content="Sufra : partagez l'iftar. Personne ne devrait rompre le jeûne seul.">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Sufra">
 <title>Sufra · Partageons l'iftar</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230B1C36'/%3E%3Ccircle cx='50' cy='52' r='34' fill='%23C99A45'/%3E%3Ccircle cx='62' cy='45' r='29' fill='%230B1C36'/%3E%3C/svg%3E">
@@ -314,6 +315,31 @@ svg.logo{display:block}
 .dhero .rb{background:rgba(11,28,54,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(226,189,114,.35);z-index:2}
 .hh{background:radial-gradient(120% 80% at 90% 0%,rgba(226,189,114,.16),transparent 60%),linear-gradient(rgba(11,28,54,.45),rgba(11,28,54,.45)),var(--zellige),linear-gradient(180deg,var(--navy-2),var(--navy));background-size:auto,auto,72px 72px,auto}
 
+/* Page de garde v2 : zellige, lanternes, rosace, silhouette */
+html:has(.onb),body:has(.onb){background:#0B1C36}
+.onb{position:relative;overflow:hidden;min-height:100vh;min-height:100dvh;
+  background:radial-gradient(60% 40% at 50% 42%,rgba(226,189,114,.16),transparent 70%),linear-gradient(180deg,#0B1C36 0%,#152B52 40%,#3A3F63 62%,#8A5E4E 82%,#C9874A 100%)}
+.onb::before{content:"";position:absolute;inset:0;background:var(--zellige);background-size:72px 72px;opacity:.55;
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.55) 45%,transparent 80%);mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.55) 45%,transparent 80%)}
+.onb-lanterns{position:absolute;top:0;left:50%;transform:translateX(-50%);width:min(100%,520px);height:auto;pointer-events:none;z-index:1}
+.ln-sway{transform-box:fill-box;transform-origin:50% 0;animation:sway 6s ease-in-out infinite alternate}
+@keyframes sway{from{rotate:-2deg}to{rotate:2deg}}
+.onb-sky{position:absolute;left:0;right:0;bottom:0;width:100%;height:120px;pointer-events:none;z-index:1}
+.onb-in{position:relative;z-index:2;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:calc(170px + env(safe-area-inset-top,0px)) 28px calc(110px + env(safe-area-inset-bottom,0px));text-align:center;max-width:420px;margin:0 auto}
+.onb-logo{position:relative;display:grid;place-items:center}
+.onb-logo::before{content:"";position:absolute;width:210px;height:210px;background:var(--rosace) center/contain no-repeat;opacity:.55;z-index:-1}
+.onb-logo::after{content:"";position:absolute;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,rgba(226,189,114,.28),transparent 70%);z-index:-1}
+.onb .wordmark{margin:14px 0 0 .32em}
+.onb h2{width:100%}
+.hadith{width:100%;max-width:300px}
+.hadith span{display:block;font-style:normal;font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.75;margin-top:8px}
+.choices{max-width:320px}
+.pill{position:relative;justify-content:center}
+.pill svg{position:absolute;left:22px}
+@media (prefers-reduced-motion:reduce){.ln-sway{animation:none}}
+@media (max-height:740px){.onb-in{padding-top:calc(140px + env(safe-area-inset-top,0px));padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}.onb-lanterns{width:auto;height:150px}.onb h2{margin-top:22px}}
+
 </style>
 </head>
 <body>
@@ -496,15 +522,19 @@ const VIEWS = {};
 
 /* ---------- page de garde ---------- */
 VIEWS.onb = {
-  html: () => `<div class="onb"><div class="onb-in">
-    ${logo("#FFFFFF", 76)}
-    <div class="wordmark">SUFRA</div><div class="slog">Partageons l'iftar.</div>
-    <h2>Personne ne devrait<br>rompre le jeûne seul.</h2>
-    <div class="hadith">« Celui qui donne à manger à un jeûneur obtient la même récompense que lui. » — <span style="white-space:nowrap">hadith rapporté par At-Tirmidhî</span></div>
-    <div class="choices">
-      <button class="pill gold" type="button" data-start="host">${I.home}J'ouvre ma table</button>
-      <button class="pill" type="button" data-start="explore">${I.search}Je cherche une table</button>
-    </div></div></div>`,
+  html: () => `<div class="onb">
+    <svg class="onb-lanterns" viewBox="0 0 390 230" preserveAspectRatio="xMidYMin meet" aria-hidden="true"><defs><radialGradient id="lnGlow"><stop offset="0" stop-color="#FFD58A" stop-opacity=".45"/><stop offset="1" stop-color="#FFD58A" stop-opacity="0"/></radialGradient></defs><g transform="translate(70 0)" class="ln-sway" style="animation-delay:0s"><line x1="0" y1="0" x2="0" y2="70" stroke="#E2BD72" stroke-opacity=".55" stroke-width="1.2"/><g transform="translate(0 70) scale(0.9)"><circle cx="0" cy="34" r="34" fill="url(#lnGlow)"/><path d="M-7 0h14l3 6h-20z" fill="#E2BD72"/><path d="M-13 6h26l-3 8h-20z" fill="#C99A45"/><path d="M-12 14h24c3 12 3 26-3 38h-18c-6-12-6-26-3-38z" fill="#F7D58C" fill-opacity=".3" stroke="#E2BD72" stroke-width="1.6"/><path d="M0 18c6 9 6 22 0 31c-6-9-6-22 0-31z" fill="#FFE2A0" opacity=".85"/><path d="M-9 52h18l-4 7h-10z" fill="#C99A45"/><circle cx="0" cy="63" r="2.5" fill="#E2BD72"/></g></g><g transform="translate(150 0)" class="ln-sway" style="animation-delay:0.8s"><line x1="0" y1="0" x2="0" y2="130" stroke="#E2BD72" stroke-opacity=".55" stroke-width="1.2"/><g transform="translate(0 130) scale(1.05)"><circle cx="0" cy="34" r="34" fill="url(#lnGlow)"/><path d="M-7 0h14l3 6h-20z" fill="#E2BD72"/><path d="M-13 6h26l-3 8h-20z" fill="#C99A45"/><path d="M-12 14h24c3 12 3 26-3 38h-18c-6-12-6-26-3-38z" fill="#F7D58C" fill-opacity=".3" stroke="#E2BD72" stroke-width="1.6"/><path d="M0 18c6 9 6 22 0 31c-6-9-6-22 0-31z" fill="#FFE2A0" opacity=".85"/><path d="M-9 52h18l-4 7h-10z" fill="#C99A45"/><circle cx="0" cy="63" r="2.5" fill="#E2BD72"/></g></g><g transform="translate(245 0)" class="ln-sway" style="animation-delay:0.4s"><line x1="0" y1="0" x2="0" y2="40" stroke="#E2BD72" stroke-opacity=".55" stroke-width="1.2"/><g transform="translate(0 40) scale(0.75)"><circle cx="0" cy="34" r="34" fill="url(#lnGlow)"/><path d="M-7 0h14l3 6h-20z" fill="#E2BD72"/><path d="M-13 6h26l-3 8h-20z" fill="#C99A45"/><path d="M-12 14h24c3 12 3 26-3 38h-18c-6-12-6-26-3-38z" fill="#F7D58C" fill-opacity=".3" stroke="#E2BD72" stroke-width="1.6"/><path d="M0 18c6 9 6 22 0 31c-6-9-6-22 0-31z" fill="#FFE2A0" opacity=".85"/><path d="M-9 52h18l-4 7h-10z" fill="#C99A45"/><circle cx="0" cy="63" r="2.5" fill="#E2BD72"/></g></g><g transform="translate(325 0)" class="ln-sway" style="animation-delay:1.2s"><line x1="0" y1="0" x2="0" y2="105" stroke="#E2BD72" stroke-opacity=".55" stroke-width="1.2"/><g transform="translate(0 105) scale(0.95)"><circle cx="0" cy="34" r="34" fill="url(#lnGlow)"/><path d="M-7 0h14l3 6h-20z" fill="#E2BD72"/><path d="M-13 6h26l-3 8h-20z" fill="#C99A45"/><path d="M-12 14h24c3 12 3 26-3 38h-18c-6-12-6-26-3-38z" fill="#F7D58C" fill-opacity=".3" stroke="#E2BD72" stroke-width="1.6"/><path d="M0 18c6 9 6 22 0 31c-6-9-6-22 0-31z" fill="#FFE2A0" opacity=".85"/><path d="M-9 52h18l-4 7h-10z" fill="#C99A45"/><circle cx="0" cy="63" r="2.5" fill="#E2BD72"/></g></g></svg>
+    <svg class="onb-sky" viewBox="0 0 390 120" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><path fill="#0E1426" fill-opacity=".85" d="M0 120V92h22V80h10v12h18V70c0-14 26-14 26 0v22h16V40l4-10 4 10v52h16V84c0-22 44-22 44 0v8h14V60l4-9 4 9v32h18V78c0-12 22-12 22 0v14h22V48l4-10 4 10v44h14V86c0-16 32-16 32 0v6h20V74h10v18h20v28z"/></svg>
+    <div class="onb-in">
+      <div class="onb-logo">${logo("#FFFFFF", 84)}</div>
+      <div class="wordmark">SUFRA</div><div class="slog">Partageons l'iftar.</div>
+      <h2>Personne ne devrait<br>rompre le jeûne seul.</h2>
+      <div class="hadith">« Celui qui donne à manger à un jeûneur obtient la même récompense que lui. »<span>Hadith rapporté par At-Tirmidhî</span></div>
+      <div class="choices">
+        <button class="pill gold" type="button" data-start="host">${I.home}<span>J'ouvre ma table</span></button>
+        <button class="pill" type="button" data-start="explore">${I.search}<span>Je cherche une table</span></button>
+      </div>
+    </div></div>`,
   mount(app) {
     $$("[data-start]", app).forEach((b) => b.onclick = () => { store.set("seen", true); store.set("after", b.dataset.start); go("auth", {}, false); });
   },
