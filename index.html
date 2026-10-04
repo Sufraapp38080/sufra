@@ -348,11 +348,199 @@ html:has(.onb),body:has(.onb){background:#0B1C36}
 .other-in{display:inline-flex;gap:6px;align-items:center;flex:1 1 220px}
 .other-in input{flex:1;min-width:0;border:1.5px solid var(--gold);border-radius:99px;padding:7px 12px;background:var(--card);font-size:16px}
 
+/* ---------- Horaires de prière et Qibla ---------- */
+.pr-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.pr-head h4{margin:0}
+.pr-next{font-size:12px;font-weight:700;color:var(--gold-ink);background:var(--gold-soft);border-radius:99px;padding:4px 10px;white-space:nowrap}
+.prayers{padding:14px 16px 8px}
+.pr{display:flex;justify-content:space-between;align-items:center;padding:10px 10px;margin:0 -10px;border-radius:12px;font-weight:700;color:var(--navy)}
+.pr+.pr{border-top:1px solid var(--line)}
+.pr small{font-weight:600;color:var(--muted);font-size:11.5px}
+.pr b{font-size:16px}
+.pr.sun{color:var(--muted);font-weight:600}
+.pr.done{opacity:.5}
+.pr.on{background:linear-gradient(90deg,var(--navy),var(--navy-2));color:#fff;opacity:1;border-top-color:transparent}
+.pr.on+.pr{border-top-color:transparent}
+.pr.on small{color:var(--gold-2)}
+.pr.on b{color:var(--gold-2)}
+.qibla{display:flex;align-items:center;gap:14px}
+.qibla>div:first-child{flex:1;min-width:0}
+.qibla .btn svg{width:16px;height:16px}
+.dial{--q:0deg;position:relative;width:118px;height:118px;flex:none;border-radius:50%;
+  background:radial-gradient(circle,var(--card) 52%,transparent 53%),var(--zellige),var(--navy);background-size:auto,48px 48px,auto;
+  border:3px solid var(--gold);box-shadow:inset 0 0 0 4px var(--navy),var(--shadow);transition:box-shadow .3s}
+.dial .n{position:absolute;top:5px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--gold-2)}
+.needle{position:absolute;inset:12px;transform:rotate(var(--q));transition:transform .25s ease-out}
+.needle svg{width:100%;height:100%}
+.dial.live .needle{transition:transform .12s linear}
+.dial.ok{border-color:var(--green);box-shadow:inset 0 0 0 4px var(--navy),0 0 0 6px rgba(46,139,87,.2)}
+@media (max-width:360px){.dial{width:96px;height:96px}}
+
+/* ---------- Idées de repas ---------- */
+.search-in input{width:100%;height:46px;border:1px solid var(--line);border-radius:14px;background:var(--card);padding:0 14px 0 40px;font-size:15px;-webkit-appearance:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B6457' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-4-4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:13px center;background-size:18px}
+.search-in input:focus{outline:none;border-color:var(--gold)}
+#rcCat{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:12px;padding-bottom:2px}
+#rcCat::-webkit-scrollbar{display:none}
+#rcCat button{flex:none}
+.recipe .ph{color:#fff}
+.recipe .ph svg{width:22px;height:22px}
+.rc-head{--c:var(--navy);position:relative;overflow:hidden;margin:-4px -2px 14px;padding:18px 18px 16px;border-radius:20px;color:#fff;
+  background:radial-gradient(120% 90% at 90% 0%,rgba(226,189,114,.22),transparent 60%),linear-gradient(rgba(11,28,54,.35),rgba(11,28,54,.35)),var(--zellige),linear-gradient(160deg,var(--c),var(--navy-2));background-size:auto,auto,60px 60px,auto}
+.rc-head .eyebrow{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-2);background:rgba(11,28,54,.5);border:1px solid rgba(226,189,114,.4);border-radius:99px;padding:4px 10px}
+.rc-head h2{font-family:var(--title);font-weight:700;font-size:22px;margin:10px 0 6px;color:#fff}
+.rc-head .ln{display:flex;gap:14px;font-size:13px;font-weight:700;color:rgba(255,255,255,.85)}
+.rc-head .ln span{display:inline-flex;align-items:center;gap:5px}
+.rc-head .ln svg{width:15px;height:15px}
+.stepper.sm button{width:36px;height:34px;font-size:18px}
+.stepper.sm output{min-width:26px;font-size:15px}
+.ing{list-style:none;margin:0;padding:0}
+.ing li+li{border-top:1px dashed var(--line)}
+.ing label{display:flex;align-items:flex-start;gap:10px;padding:9px 0;cursor:pointer}
+.ing input{appearance:none;-webkit-appearance:none;flex:none;width:20px;height:20px;margin:1px 0 0;border:1.5px solid var(--gold);border-radius:6px;background:var(--card);display:grid;place-items:center}
+.ing input:checked{background:var(--gold)}
+.ing input:checked::after{content:"";width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.ing input:checked+span{text-decoration:line-through;color:var(--muted)}
+.ing b{color:var(--navy)}
+.steps{list-style:none;counter-reset:st;margin:0;padding:0}
+.steps li{counter-increment:st;position:relative;padding:0 0 14px 40px;line-height:1.5}
+.steps li::before{content:counter(st);position:absolute;left:0;top:-1px;width:27px;height:27px;border-radius:50%;background:var(--gold-soft);color:var(--gold-ink);font-weight:800;font-size:13px;display:grid;place-items:center}
+.steps li:not(:last-child)::after{content:"";position:absolute;left:13px;top:30px;bottom:4px;width:1px;background:var(--line)}
+
+/* ---------- Mosquées OpenStreetMap ---------- */
+.pin-osm{width:30px;height:30px;border-radius:50%;border:2px solid #fff;background:var(--green);color:#fff;display:grid;place-items:center;padding:0;box-shadow:0 3px 10px rgba(19,41,75,.3)}
+.pin-osm svg{width:16px;height:16px}
+.osm-item .ph svg{width:22px;height:22px}
+.osm-item .tg{background:var(--green-soft);color:var(--green)}
+
+/* ---------- Espace admin ---------- */
+#adTab button{padding:9px 4px;font-size:12px}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
+.kpi b{display:block;font-family:var(--title);font-size:26px;font-weight:700;color:var(--navy);line-height:1.1}
+.kpi span{font-size:12.5px;color:var(--muted);font-weight:700}
+.kpi.warn{background:var(--gold-soft);border-color:var(--gold-2)}
+.kpi.warn b{color:var(--gold-ink)}
+
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
+/* =====================================================================
+   SUFRA · Idées de repas du Ramadan
+   course : rupture | entree | plat | dessert | boisson (mêmes rubriques que le menu)
+   dish   : nom ajouté au menu de l'annonce avec « Je le propose à ma table »
+   ing    : [quantité pour `serves` personnes, unité, ingrédient] ; quantité null = selon le goût
+   ===================================================================== */
+const RECIPES = [
+  // ---------- Rupture du jeûne ----------
+  { id: "dattes-farcies", name: "Dattes farcies aux amandes", course: "rupture", dish: "Dattes", origin: "Maghreb", time: 15, serves: 6, level: "Facile",
+    ing: [[18, "", "dattes Medjool"], [100, "g", "poudre d'amandes"], [40, "g", "sucre glace"], [1, "c. à soupe", "eau de fleur d'oranger"], [18, "", "amandes entières ou noix"]],
+    steps: ["Fendre les dattes sur la longueur et retirer le noyau.", "Mélanger la poudre d'amandes, le sucre glace et la fleur d'oranger jusqu'à obtenir une pâte.", "Garnir chaque datte d'une petite boule de pâte.", "Décorer d'une amande ou d'un cerneau de noix, puis réserver au frais."],
+    tip: "Ajoutez une goutte de colorant vert à la pâte pour la touche festive." },
+  { id: "msemen", name: "Msemen (crêpes feuilletées)", course: "rupture", dish: "Msemen", origin: "Maroc", time: 60, serves: 6, level: "Moyen",
+    ing: [[300, "g", "farine"], [200, "g", "semoule fine"], [1, "c. à café", "sel"], [1, "c. à café", "sucre"], [300, "ml", "eau tiède"], [80, "g", "beurre fondu"], [60, "ml", "huile"]],
+    steps: ["Mélanger farine, semoule, sel et sucre, puis ajouter l'eau petit à petit et pétrir 10 minutes jusqu'à une pâte souple.", "Former des boules de la taille d'une mandarine et les huiler. Laisser reposer 15 minutes.", "Étaler chaque boule très finement sur un plan huilé, badigeonner de beurre, saupoudrer de semoule.", "Replier en carré (un tiers vers le centre, puis l'autre tiers, puis dans l'autre sens).", "Aplatir légèrement et cuire à la poêle chaude 3 minutes de chaque côté jusqu'à ce qu'ils soient dorés."],
+    tip: "Servez-les chauds avec du miel et du beurre, ou fourrés à la viande hachée et aux oignons." },
+
+  // ---------- Soupes et entrées ----------
+  { id: "harira", name: "Harira", course: "entree", dish: "Harira", origin: "Maroc", time: 90, serves: 6, level: "Moyen",
+    ing: [[250, "g", "agneau ou bœuf en petits dés"], [100, "g", "lentilles vertes"], [150, "g", "pois chiches cuits"], [1, "", "oignon"], [500, "g", "tomates mixées"], [2, "c. à soupe", "concentré de tomate"], [1, "bouquet", "coriandre"], [1, "bouquet", "persil"], [2, "branches", "céleri"], [50, "g", "vermicelles"], [3, "c. à soupe", "farine"], [1, "c. à café", "gingembre"], [1, "c. à café", "curcuma"], [1, "c. à café", "poivre"], [null, "", "sel, huile, beurre"]],
+    steps: ["Faire revenir la viande et l'oignon émincé avec un peu d'huile, le beurre et les épices.", "Ajouter le céleri, la moitié des herbes hachées, les lentilles et 2 litres d'eau. Cuire 40 minutes.", "Ajouter les tomates, le concentré et les pois chiches, puis cuire encore 20 minutes.", "Délayer la farine dans un bol d'eau froide et verser en remuant pour épaissir (la « tadouira »).", "Ajouter les vermicelles et le reste des herbes, puis cuire 5 minutes en remuant."],
+    tip: "Servez avec des dattes, un quartier de citron et des chebakia, comme au Maroc." },
+  { id: "chorba-frik", name: "Chorba frik", course: "entree", dish: "Chorba frik", origin: "Algérie", time: 75, serves: 6, level: "Facile",
+    ing: [[400, "g", "agneau (épaule) en morceaux"], [120, "g", "frik (blé vert concassé)"], [1, "", "oignon"], [2, "", "tomates"], [2, "c. à soupe", "concentré de tomate"], [100, "g", "pois chiches cuits"], [1, "bouquet", "coriandre"], [1, "c. à café", "paprika"], [1, "c. à café", "ras el-hanout"], [1, "", "bâton de cannelle"], [null, "", "sel, poivre, huile, menthe séchée"]],
+    steps: ["Faire revenir la viande et l'oignon râpé dans l'huile avec les épices et la cannelle.", "Ajouter les tomates râpées, le concentré et la moitié de la coriandre, puis couvrir de 2 litres d'eau.", "Cuire 45 minutes à feu moyen.", "Ajouter le frik rincé et les pois chiches. Cuire 20 minutes en remuant de temps en temps.", "Finir avec le reste de coriandre et une pincée de menthe séchée."],
+    tip: "La chorba épaissit en refroidissant : rallongez avec un peu d'eau chaude au moment de servir." },
+  { id: "soupe-lentilles", name: "Soupe de lentilles corail", course: "entree", dish: "Soupe de lentilles", origin: "Turquie", time: 35, serves: 6, level: "Facile",
+    ing: [[300, "g", "lentilles corail"], [1, "", "oignon"], [1, "", "carotte"], [1, "", "pomme de terre"], [1, "c. à soupe", "concentré de tomate"], [1, "c. à café", "cumin"], [1, "c. à café", "paprika"], [1.5, "l", "bouillon de légumes"], [1, "", "citron"], [null, "", "sel, huile d'olive, beurre"]],
+    steps: ["Faire fondre l'oignon émincé dans l'huile, ajouter la carotte et la pomme de terre en dés.", "Ajouter le concentré de tomate et les épices, mélanger 1 minute.", "Ajouter les lentilles rincées et le bouillon. Cuire 25 minutes.", "Mixer jusqu'à obtenir un velouté lisse et rectifier l'assaisonnement.", "Servir avec un filet de beurre fondu au paprika et un quartier de citron."],
+    tip: "Très douce pour l'estomac : idéale pour rompre le jeûne." },
+  { id: "bourek", name: "Bourek à la viande hachée", course: "entree", dish: "Bourek", origin: "Algérie", time: 40, serves: 6, level: "Facile",
+    ing: [[12, "", "feuilles de brick"], [300, "g", "viande hachée"], [1, "", "oignon"], [1, "bouquet", "persil"], [100, "g", "fromage râpé"], [2, "", "œufs"], [null, "", "sel, poivre, cannelle, huile de friture"]],
+    steps: ["Faire revenir l'oignon haché et la viande avec sel, poivre et une pincée de cannelle.", "Hors du feu, ajouter le persil haché et laisser tiédir.", "Placer une cuillère de farce sur chaque feuille, ajouter un peu de fromage et d'œuf battu.", "Rouler en cigare en rabattant les côtés, coller avec un peu d'œuf.", "Frire jusqu'à ce qu'ils soient bien dorés, ou cuire au four à 200 °C, 15 minutes, badigeonnés d'huile."],
+    tip: "Version au four : plus légère et tout aussi croustillante." },
+  { id: "bricks-thon", name: "Bricks au thon et à l'œuf", course: "entree", dish: "Bricks au thon", origin: "Tunisie", time: 25, serves: 6, level: "Facile",
+    ing: [[6, "", "feuilles de brick"], [2, "boîtes", "thon au naturel"], [6, "", "œufs"], [1, "", "pomme de terre cuite écrasée"], [1, "c. à soupe", "câpres"], [1, "bouquet", "persil"], [null, "", "harissa, sel, poivre, huile de friture, citron"]],
+    steps: ["Mélanger le thon émietté, la pomme de terre, le persil, les câpres et un peu de harissa.", "Déposer la farce en cercle sur une moitié de la feuille et casser un œuf au centre.", "Replier la feuille en demi-lune et fermer les bords.", "Frire 1 à 2 minutes de chaque côté pour garder le jaune coulant.", "Servir aussitôt avec du citron."],
+    tip: "Préparez la farce à l'avance et faites frire au dernier moment, juste avant Maghrib." },
+  { id: "mechouia", name: "Salade méchouia", course: "entree", dish: "Salade méchouia", origin: "Tunisie", time: 40, serves: 6, level: "Facile",
+    ing: [[4, "", "poivrons"], [4, "", "tomates"], [1, "", "piment vert (selon le goût)"], [2, "gousses", "ail"], [1, "c. à café", "carvi"], [3, "c. à soupe", "huile d'olive"], [2, "", "œufs durs"], [1, "boîte", "thon"], [null, "", "sel, olives"]],
+    steps: ["Griller poivrons, tomates et piment au four ou sur le feu jusqu'à ce que la peau noircisse.", "Les enfermer 10 minutes dans un sac, puis les peler et les épépiner.", "Hacher finement au couteau avec l'ail, le carvi et le sel.", "Arroser d'huile d'olive.", "Décorer d'œufs durs, de thon et d'olives."],
+    tip: "Encore meilleure préparée la veille." },
+
+  // ---------- Plats ----------
+  { id: "tajine-poulet", name: "Tajine de poulet aux olives et citron confit", course: "plat", dish: "Tajine poulet olives", origin: "Maroc", time: 75, serves: 6, level: "Facile",
+    ing: [[1.5, "kg", "poulet en morceaux"], [2, "", "oignons"], [3, "gousses", "ail"], [1, "", "citron confit"], [150, "g", "olives violettes ou vertes"], [1, "c. à café", "gingembre"], [1, "c. à café", "curcuma"], [1, "pincée", "safran"], [1, "bouquet", "coriandre et persil"], [null, "", "sel, poivre, huile d'olive"]],
+    steps: ["Mariner le poulet avec l'ail écrasé, les épices, les herbes hachées et l'huile, au moins 30 minutes.", "Faire revenir les oignons émincés dans le tajine ou une cocotte, puis ajouter le poulet.", "Ajouter un verre d'eau, couvrir et cuire 45 minutes à feu doux.", "Ajouter l'écorce de citron confit en lamelles et les olives. Cuire encore 15 minutes à découvert pour réduire la sauce.", "Servir avec du pain maison."],
+    tip: "Rincez les olives pour qu'elles ne salent pas trop la sauce." },
+  { id: "tajine-agneau", name: "Tajine d'agneau aux pruneaux", course: "plat", dish: "Tajine agneau pruneaux", origin: "Maroc", time: 120, serves: 6, level: "Moyen",
+    ing: [[1.5, "kg", "épaule d'agneau en morceaux"], [2, "", "oignons"], [250, "g", "pruneaux"], [100, "g", "amandes émondées"], [2, "c. à soupe", "miel"], [2, "c. à café", "cannelle"], [1, "c. à café", "gingembre"], [1, "pincée", "safran"], [1, "c. à soupe", "graines de sésame"], [null, "", "sel, poivre, beurre, huile"]],
+    steps: ["Faire revenir l'agneau et les oignons dans l'huile et le beurre avec le gingembre, le safran et une cuillère de cannelle.", "Couvrir d'eau à mi-hauteur et cuire 1 h 30 à feu doux, jusqu'à ce que la viande soit fondante.", "Pocher les pruneaux 10 minutes dans un peu de sauce avec le miel et le reste de cannelle.", "Faire dorer les amandes à la poêle.", "Dresser la viande, napper de pruneaux, parsemer d'amandes et de sésame."],
+    tip: "Le plat sucré-salé des grandes occasions : parfait pour recevoir." },
+  { id: "couscous", name: "Couscous poulet et légumes", course: "plat", dish: "Couscous", origin: "Maghreb", time: 90, serves: 6, level: "Moyen",
+    ing: [[1, "kg", "poulet en morceaux"], [500, "g", "semoule moyenne"], [3, "", "carottes"], [3, "", "courgettes"], [2, "", "navets"], [1, "", "oignon"], [2, "", "tomates"], [200, "g", "pois chiches cuits"], [1, "c. à soupe", "ras el-hanout"], [1, "c. à café", "curcuma"], [null, "", "sel, poivre, huile, beurre"]],
+    steps: ["Faire revenir le poulet et l'oignon dans l'huile avec les épices, ajouter les tomates râpées.", "Couvrir de 2 litres d'eau et cuire 20 minutes, puis ajouter carottes et navets.", "Ajouter les courgettes et les pois chiches 20 minutes avant la fin.", "Pendant ce temps, mouiller la semoule d'eau salée, l'égrener et la cuire deux fois 15 minutes à la vapeur au-dessus du bouillon.", "Beurrer la semoule et servir avec les légumes, le poulet et le bouillon à part."],
+    tip: "Ajoutez une tfaya (oignons caramélisés aux raisins secs) pour les grands jours." },
+  { id: "pastilla", name: "Pastilla au poulet", course: "plat", dish: "Pastilla", origin: "Maroc", time: 120, serves: 8, level: "Difficile",
+    ing: [[1.2, "kg", "cuisses de poulet"], [3, "", "oignons"], [1, "bouquet", "persil et coriandre"], [6, "", "œufs"], [200, "g", "amandes émondées"], [3, "c. à soupe", "sucre"], [2, "c. à café", "cannelle"], [1, "c. à café", "gingembre"], [1, "pincée", "safran"], [10, "", "feuilles de brick"], [100, "g", "beurre fondu"], [null, "", "sucre glace et cannelle pour décorer"]],
+    steps: ["Cuire le poulet avec les oignons, les épices et les herbes et un peu d'eau, 45 minutes, puis l'effilocher.", "Faire réduire la sauce, y ajouter les œufs battus et remuer jusqu'à obtenir une crème épaisse.", "Griller les amandes, les concasser avec le sucre et la cannelle.", "Dans un moule beurré, superposer des feuilles de brick beurrées, puis les amandes, le poulet et la crème d'œufs.", "Refermer avec des feuilles beurrées et cuire 25 minutes à 180 °C. Décorer de sucre glace et de cannelle."],
+    tip: "La reine des tables d'iftar : elle peut se préparer la veille et se réchauffer au four." },
+  { id: "lham-lahlou", name: "Lham lahlou (viande sucrée aux pruneaux)", course: "plat", dish: "Lham lahlou", origin: "Algérie", time: 90, serves: 6, level: "Facile",
+    ing: [[800, "g", "agneau en morceaux"], [250, "g", "pruneaux"], [100, "g", "abricots secs"], [50, "g", "raisins secs"], [3, "c. à soupe", "sucre"], [1, "", "bâton de cannelle"], [1, "c. à soupe", "eau de fleur d'oranger"], [50, "g", "amandes"], [null, "", "beurre, sel"]],
+    steps: ["Faire revenir la viande dans le beurre avec la cannelle et une pincée de sel.", "Couvrir d'eau et cuire 1 heure à feu doux.", "Ajouter les fruits secs, le sucre et la fleur d'oranger. Cuire encore 20 minutes.", "Laisser réduire jusqu'à obtenir un sirop nappant.", "Servir parsemé d'amandes grillées."],
+    tip: "Traditionnellement servi le premier soir du Ramadan, pour un mois « doux »." },
+  { id: "kefta", name: "Tajine de kefta aux œufs", course: "plat", dish: "Kefta", origin: "Maroc", time: 45, serves: 6, level: "Facile",
+    ing: [[800, "g", "viande hachée"], [1, "", "oignon"], [1, "bouquet", "persil et coriandre"], [800, "g", "tomates concassées"], [3, "gousses", "ail"], [6, "", "œufs"], [2, "c. à café", "cumin"], [2, "c. à café", "paprika"], [null, "", "sel, poivre, piment, huile"]],
+    steps: ["Mélanger la viande avec l'oignon râpé, la moitié des herbes et des épices. Former de petites boulettes.", "Faire mijoter les tomates avec l'ail, le reste des épices et un filet d'huile, 15 minutes.", "Ajouter les boulettes et cuire 15 minutes à couvert.", "Casser les œufs dans la sauce et cuire 5 minutes jusqu'à ce que les blancs soient pris.", "Parsemer d'herbes et servir avec du pain."],
+    tip: "Un plat rapide qui plaît à tous, idéal les soirs de semaine." },
+  { id: "riz-poulet", name: "Riz au poulet épicé (biryani simple)", course: "plat", dish: "Biryani", origin: "Inde et Pakistan", time: 70, serves: 6, level: "Moyen",
+    ing: [[1, "kg", "hauts de cuisse de poulet"], [500, "g", "riz basmati"], [2, "", "oignons"], [250, "g", "yaourt nature"], [2, "c. à soupe", "mélange garam masala"], [1, "c. à soupe", "gingembre et ail écrasés"], [1, "pincée", "safran dans un peu de lait"], [1, "bouquet", "coriandre et menthe"], [null, "", "sel, huile"]],
+    steps: ["Mariner le poulet dans le yaourt, l'ail, le gingembre et les épices, au moins 1 heure.", "Faire frire les oignons émincés jusqu'à ce qu'ils soient bien dorés ; en garder une partie pour décorer.", "Cuire le poulet mariné avec les oignons 20 minutes.", "Cuire le riz à moitié (6 minutes) dans l'eau salée, puis l'égoutter.", "Couvrir le poulet de riz, d'herbes et de lait safrané. Cuire 20 minutes à couvert, à feu très doux."],
+    tip: "Ne remuez pas pendant la dernière cuisson : c'est ce qui donne les couches parfumées." },
+  { id: "thieboudienne", name: "Thiéboudienne", course: "plat", dish: "Thiéboudienne", origin: "Sénégal", time: 120, serves: 6, level: "Difficile",
+    ing: [[1.2, "kg", "poisson (thiof ou mérou) en darnes"], [600, "g", "riz brisé"], [3, "c. à soupe", "concentré de tomate"], [1, "", "oignon"], [1, "bouquet", "persil"], [3, "gousses", "ail"], [1, "", "chou"], [3, "", "carottes"], [1, "", "aubergine"], [1, "", "manioc"], [1, "", "piment"], [null, "", "sel, poivre, huile"]],
+    steps: ["Farcir les darnes de poisson d'une pâte de persil, ail, piment et sel, puis les faire dorer.", "Dans la même marmite, faire revenir l'oignon et le concentré de tomate.", "Ajouter de l'eau, les légumes et le poisson. Cuire jusqu'à ce que les légumes soient tendres, puis les retirer.", "Cuire le riz dans le bouillon parfumé, à couvert, jusqu'à absorption.", "Servir le riz au centre, entouré du poisson et des légumes."],
+    tip: "Le « kogn » (riz croustillant au fond de la marmite) est le morceau le plus apprécié." },
+
+  // ---------- Desserts et pâtisseries ----------
+  { id: "makrout", name: "Makrout aux dattes (au four)", course: "dessert", dish: "Makrout", origin: "Algérie", time: 70, serves: 8, level: "Moyen",
+    ing: [[500, "g", "semoule moyenne"], [150, "g", "beurre fondu"], [1, "pincée", "sel"], [100, "ml", "eau de fleur d'oranger et eau"], [300, "g", "pâte de dattes"], [1, "c. à café", "cannelle"], [300, "g", "miel"]],
+    steps: ["Sabler la semoule avec le beurre fondu et le sel, puis laisser reposer 30 minutes.", "Mélanger la pâte de dattes avec la cannelle et en faire des boudins fins.", "Mouiller la semoule petit à petit pour obtenir une pâte souple, sans trop la travailler.", "Faire des boudins de pâte, creuser le centre, y placer les dattes, refermer et couper en losanges.", "Cuire 25 minutes à 180 °C, puis tremper aussitôt dans le miel tiède."],
+    tip: "Ils se conservent une semaine dans une boîte hermétique." },
+  { id: "basboussa", name: "Basboussa (gâteau de semoule)", course: "dessert", dish: "Basboussa", origin: "Égypte", time: 50, serves: 10, level: "Facile",
+    ing: [[300, "g", "semoule fine"], [100, "g", "sucre"], [100, "g", "noix de coco râpée"], [250, "g", "yaourt nature"], [120, "g", "beurre fondu"], [1, "sachet", "levure chimique"], [30, "", "amandes"], [300, "g", "sucre pour le sirop"], [250, "ml", "eau"], [1, "c. à soupe", "eau de fleur d'oranger"]],
+    steps: ["Préparer le sirop : faire bouillir sucre et eau 10 minutes, ajouter la fleur d'oranger et laisser refroidir.", "Mélanger semoule, sucre, coco, levure, puis ajouter le yaourt et le beurre.", "Étaler dans un moule beurré, prédécouper en losanges et poser une amande sur chacun.", "Cuire 30 minutes à 180 °C jusqu'à ce que le dessus soit doré.", "Verser le sirop froid sur le gâteau chaud et laisser absorber."],
+    tip: "Sirop froid sur gâteau chaud : c'est le secret d'une basboussa bien moelleuse." },
+  { id: "kalb-el-louz", name: "Kalb el louz", course: "dessert", dish: "Kalb el louz", origin: "Algérie", time: 80, serves: 12, level: "Moyen",
+    ing: [[500, "g", "semoule grosse"], [200, "g", "sucre"], [150, "g", "beurre fondu"], [150, "ml", "eau de fleur d'oranger"], [200, "g", "amandes en poudre"], [1, "c. à café", "cannelle"], [500, "g", "sucre pour le sirop"], [400, "ml", "eau"], [1, "", "citron (jus)"]],
+    steps: ["Mélanger semoule, sucre et beurre fondu, puis mouiller avec la fleur d'oranger et laisser reposer 1 heure.", "Mélanger la poudre d'amandes, la cannelle et un peu de sucre.", "Étaler la moitié de la semoule dans un moule beurré, ajouter les amandes, puis le reste de semoule.", "Découper en losanges, poser une amande sur chacun, cuire 45 minutes à 180 °C.", "Arroser de sirop chaud (sucre, eau et citron bouillis 10 minutes) dès la sortie du four."],
+    tip: "Le gâteau des soirées de Ramadan à Alger, à servir avec le thé." },
+  { id: "salade-fruits", name: "Salade de fruits à la fleur d'oranger", course: "dessert", dish: "Salade de fruits", origin: "Maghreb", time: 15, serves: 6, level: "Facile",
+    ing: [[3, "", "oranges"], [2, "", "pommes"], [2, "", "bananes"], [250, "g", "fraises ou raisins"], [2, "c. à soupe", "miel"], [1, "c. à soupe", "eau de fleur d'oranger"], [null, "", "cannelle, menthe fraîche"]],
+    steps: ["Peler les oranges à vif et les couper en rondelles, en gardant le jus.", "Couper les autres fruits en morceaux.", "Mélanger le jus d'orange, le miel et la fleur d'oranger.", "Arroser les fruits et parsemer de cannelle et de menthe.", "Servir bien frais."],
+    tip: "Léger et hydratant après une longue journée de jeûne." },
+
+  // ---------- Boissons ----------
+  { id: "the-menthe", name: "Thé à la menthe", course: "boisson", dish: "Thé à la menthe", origin: "Maroc", time: 10, serves: 6, level: "Facile",
+    ing: [[1, "c. à soupe", "thé vert gunpowder"], [1, "bouquet", "menthe fraîche"], [5, "morceaux", "sucre (selon le goût)"], [1, "l", "eau bouillante"]],
+    steps: ["Ébouillanter la théière, ajouter le thé et un fond d'eau bouillante.", "Rincer le thé : jeter ce premier verre, qui retire l'amertume.", "Ajouter la menthe, le sucre et l'eau bouillante.", "Laisser infuser 3 minutes sur feu très doux.", "Servir de haut pour faire mousser, en reversant deux ou trois fois dans la théière."],
+    tip: "On le sert après le repas, pour accompagner les pâtisseries." },
+  { id: "bissap", name: "Jus de bissap", course: "boisson", dish: "Bissap", origin: "Afrique de l'Ouest", time: 20, serves: 8, level: "Facile",
+    ing: [[100, "g", "fleurs d'hibiscus séchées"], [2, "l", "eau"], [150, "g", "sucre"], [1, "sachet", "sucre vanillé"], [null, "", "menthe, eau de fleur d'oranger, gingembre (facultatif)"]],
+    steps: ["Rincer les fleurs d'hibiscus.", "Les faire infuser dans 2 litres d'eau chaude, 15 minutes, ou toute une nuit à froid.", "Filtrer.", "Ajouter le sucre, la vanille et les arômes, puis mélanger.", "Servir très frais."],
+    tip: "Une boisson rouge rubis, riche en vitamine C et très désaltérante." },
+  { id: "citronnade", name: "Citronnade menthe et gingembre", course: "boisson", dish: "Citronnade", origin: "Moyen-Orient", time: 10, serves: 6, level: "Facile",
+    ing: [[4, "", "citrons"], [1, "morceau", "gingembre frais (3 cm)"], [1, "bouquet", "menthe"], [100, "g", "sucre ou miel"], [1.5, "l", "eau fraîche"]],
+    steps: ["Presser les citrons.", "Mixer le jus avec le gingembre pelé, la menthe et le sucre.", "Ajouter l'eau et mélanger.", "Filtrer et servir avec des glaçons et des feuilles de menthe."],
+    tip: "Ajoutez de l'eau de fleur d'oranger pour une version « limonana »." },
+  { id: "qamar-al-din", name: "Qamar al-din", course: "boisson", dish: "Qamar al-din", origin: "Syrie et Égypte", time: 10, serves: 6, level: "Facile",
+    ing: [[400, "g", "pâte d'abricot (qamar al-din)"], [1.2, "l", "eau"], [3, "c. à soupe", "sucre (selon le goût)"], [1, "c. à soupe", "eau de fleur d'oranger"]],
+    steps: ["Couper la pâte d'abricot en morceaux.", "La faire tremper dans l'eau tiède pendant 2 heures, ou toute une nuit.", "Mixer jusqu'à ce que ce soit bien lisse, puis sucrer.", "Ajouter la fleur d'oranger et servir très frais."],
+    tip: "La boisson emblématique du Ramadan au Levant." },
+];
+
 /* =====================================================================
    SUFRA · application web v1
    Données : Supabase (auth, base, temps réel). Carte : Leaflet + OpenStreetMap.
@@ -448,6 +636,9 @@ const I = {
   mosque: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21V11l8-6 8 6v10M9 21v-5a3 3 0 0 1 6 0v5M12 2v3"/></svg>',
   shop: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10l1.5-6h13L20 10M4 10v10h16V10M4 10h16M9 20v-5h6v5"/></svg>',
   bag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 8h14l-1.5 12h-11zM9 8V6a3 3 0 0 1 6 0v2"/></svg>',
+  book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M8 7h7M8 11h7"/></svg>',
+  compass: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>',
+  route: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l18-8-8 18-2-8z"/></svg>',
   basket: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 10h18l-2 10H5zM7 10l4-6M17 10l-4-6M9 14v3M15 14v3"/></svg>',
   plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>',
 };
@@ -491,10 +682,11 @@ function cleanup() {
   if (S.map) { try { S.map.remove(); } catch (_) {} S.map = null; }
   if (S.channel) { sb.removeChannel(S.channel); S.channel = null; }
   if (S.timer) { clearInterval(S.timer); S.timer = null; }
+  (S.offs || []).forEach((f) => { try { f(); } catch (_) {} }); S.offs = [];
 }
 function nav() {
   const t = [["home", I.home, "Accueil"], ["explore", I.map, "Carte"], ["cal", I.moon, "Ramadan"], ["resa", I.cal, "Résas"], ["me", I.user, "Profil"]];
-  const cur = TABS.includes(S.view) ? S.view : ({ host: "home", detail: "explore", chat: "resa" }[S.view] || "");
+  const cur = TABS.includes(S.view) ? S.view : ({ host: "home", detail: "explore", chat: "resa", recipes: "home", admin: "me" }[S.view] || "");
   return `<nav class="nav" aria-label="Navigation">${t.map(([v, ic, l]) => `<button type="button" data-tab="${v}" class="${cur === v ? "on" : ""}">${ic}${l}${v === "resa" && S.pending ? `<span class="nbadge">${S.pending}</span>` : ""}</button>`).join("")}</nav>`;
 }
 function topbar(title, canBack = true) {
@@ -655,8 +847,9 @@ VIEWS.home = {
         <div class="dua-fr">« La soif est partie, les veines sont humidifiées et la récompense est acquise, si Allah le veut. » <span>Rapporté par Abû Dâwûd</span></div></div>
       <div class="sect"><h3>Agir autrement</h3></div>
       <div class="list">
+        <button type="button" data-go="recipes"><span class="ic">${I.book}</span><span><b>Idées de repas</b><small>${RECIPES.length} recettes du Ramadan</small></span><span class="arr">›</span></button>
         <button type="button" data-go="resa"><span class="ic">${I.basket}</span><span><b>Récompenses des hôtes</b><small>Un panier gourmand dès 3 invités</small></span><span class="arr">›</span></button>
-        <button type="button" data-go="cal"><span class="ic">${I.cal}</span><span><b>Calendrier du Ramadan</b><small>Horaires de votre ville</small></span><span class="arr">›</span></button>
+        <button type="button" data-go="cal"><span class="ic">${I.cal}</span><span><b>Horaires et Qibla</b><small>Les 5 prières, le calendrier, la direction de La Mecque</small></span><span class="arr">›</span></button>
         <button type="button" data-go="me"><span class="ic">${I.mosque}</span><span><b>Devenir partenaire</b><small>Mosquée, association, restaurant</small></span><span class="arr">›</span></button>
       </div>
       <p class="sign">Le partage crée des liens qui durent.</p></div>`,
@@ -773,9 +966,17 @@ VIEWS.explore = {
     $$("[data-k]").forEach((b) => b.onclick = () => { S.kind = b.dataset.k; render(); });
     let rows = await nearby(S.date, 30);
     if (S.kind !== "all") rows = rows.filter((r) => r.kind === S.kind);
-    $("#list").innerHTML = rows.length ? rows.map(itemHTML).join("") : `<div class="empty" style="margin-top:12px"><b>Aucune table pour cette date</b>Essayez un autre jour, ou ouvrez votre table.</div>`;
+    const showMosq = S.kind === "all" || S.kind === "mosquee";
+    let mosq = showMosq ? await mosquesNearby() : [];
+    const partnerNames = new Set(rows.filter((r) => r.partner).map((r) => r.partner.name.toLowerCase()));
+    mosq = mosq.filter((m) => !partnerNames.has(m.name.toLowerCase()));
+    const empty = `<div class="empty" style="margin-top:12px"><b>Aucune table pour cette date</b>Essayez un autre jour, ou ouvrez votre table.</div>`;
+    $("#list").innerHTML = (rows.length ? rows.map(itemHTML).join("") : (S.kind === "mosquee" && mosq.length ? "" : empty + (mosq.length ? `<button type="button" class="btn line" id="seeMosq" style="margin-top:10px">${I.mosque} Voir les ${mosq.length} mosquées à proximité</button>` : "")))
+      + (S.kind === "mosquee" ? (mosq.length ? `<div class="sect"><h3>Mosquées à proximité</h3><span class="hint">${mosq.length}</span></div><p class="hint" style="margin:-6px 0 4px">Pas encore partenaires de Sufra. Source : OpenStreetMap.</p>${mosq.slice(0, 30).map(mosqHTML).join("")}` : `<p class="hint" style="margin-top:14px">Aucune mosquée trouvée dans un rayon de 10 km.</p>`) : "");
     bindItems($("#list"));
-    drawMap(rows);
+    const sm = $("#seeMosq"); if (sm) sm.onclick = () => { S.kind = "mosquee"; render(); };
+    $$("[data-osm]", $("#list")).forEach((b) => b.onclick = () => mosqSheet(mosq.find((m) => m.id === b.dataset.osm)));
+    drawMap(rows, mosq);
   },
 };
 
@@ -788,7 +989,36 @@ function pinEl(r) {
   el.innerHTML = `<span class="pin2-ic">${k.i}</span>${free > 0 ? `<span class="pin2-n">${free}</span>` : ""}`;
   return el;
 }
-function drawMap(rows) {
+/* Mosquées autour de moi : OpenStreetMap via l'API Overpass, mises en cache 24 h */
+async function mosquesNearby(radiusKm = 10) {
+  const key = `mosq_${S.pos.lat.toFixed(2)}_${S.pos.lng.toFixed(2)}`, c = store.get(key, null);
+  if (c && Date.now() - c.at < 864e5) return c.list.map((m) => ({ ...m, dist: dist(S.pos.lat, S.pos.lng, m.lat, m.lng) })).sort((a, b) => a.dist - b.dist);
+  const q = `[out:json][timeout:20];nwr["amenity"="place_of_worship"]["religion"="muslim"](around:${radiusKm * 1000},${S.pos.lat},${S.pos.lng});out center tags 80;`;
+  try {
+    const r = await fetch("https://overpass-api.de/api/interpreter?data=" + encodeURIComponent(q)).then((x) => x.json());
+    const list = (r.elements || []).map((e) => {
+      const t = e.tags || {}, lat = e.lat ?? e.center?.lat, lng = e.lon ?? e.center?.lon;
+      const street = [t["addr:housenumber"], t["addr:street"]].filter(Boolean).join(" ");
+      return { id: e.type + e.id, name: t.name || t["name:fr"] || "Mosquée", lat, lng, address: [street, t["addr:postcode"], t["addr:city"]].filter(Boolean).join(", "), city: t["addr:city"] || "", website: t.website || t["contact:website"] || "", phone: t.phone || t["contact:phone"] || "" };
+    }).filter((m) => m.lat != null);
+    store.set(key, { at: Date.now(), list });
+    return list.map((m) => ({ ...m, dist: dist(S.pos.lat, S.pos.lng, m.lat, m.lng) })).sort((a, b) => a.dist - b.dist);
+  } catch (_) { return []; }
+}
+function mosqHTML(m) {
+  return `<button type="button" class="item osm-item" data-osm="${esc(m.id)}"><span class="ph" style="background:#E3F2E8;color:#2E8B57">${I.mosque}</span><span class="tx"><b>${esc(m.name)}</b><span class="ln"><span>${I.pin}${km(m.dist)}</span></span>${m.address ? `<span class="ln m">${esc(m.address)}</span>` : ""}<span class="tags"><span class="tg">Pas encore sur Sufra</span></span></span></button>`;
+}
+function mosqSheet(m) {
+  if (!m) return;
+  const bg = sheet(`<h2>${esc(m.name)}</h2><p class="lead">${m.address ? esc(m.address) + " · " : ""}à ${km(m.dist)}</p>
+    <div class="row" style="margin-bottom:12px"><a class="btn line sm" href="https://maps.apple.com/?daddr=${m.lat},${m.lng}&q=${encodeURIComponent(m.name)}" target="_blank" rel="noopener">${I.route} Itinéraire</a>${m.phone ? `<a class="btn line sm" href="tel:${esc(m.phone.replace(/\s/g, ""))}">Appeler</a>` : ""}</div>
+    ${m.website ? `<p class="hint" style="margin:0 0 12px">Site : <a href="${esc(m.website)}" target="_blank" rel="noopener">${esc(m.website.replace(/^https?:\/\//, ""))}</a></p>` : ""}
+    <div class="notice">${I.mosque}<span>Cette mosquée n'est pas encore partenaire. Si vous la gérez, rejoignez Sufra pour publier vos iftars collectifs.</span></div>
+    <button class="btn gold" type="button" id="claimM">Je gère cette mosquée</button>
+    <p class="hint" style="margin-top:10px">Vous connaissez quelqu'un qui la gère ? Parlez-lui de Sufra.</p>`);
+  $("#claimM", bg).onclick = () => partnerSheet({ name: m.name, city: m.city || S.pos.label, address: m.address });
+}
+function drawMap(rows, mosq = []) {
   const box = $("#map");
   if (!window.maplibregl) { box.innerHTML = `<p class="hint" style="padding:16px">Carte indisponible hors connexion.</p>`; return; }
   const pts = rows.filter((r) => r.approx_lat != null);
@@ -812,10 +1042,19 @@ function drawMap(rows) {
     el.addEventListener("click", (e) => { e.stopPropagation(); select(r); });
     new maplibregl.Marker({ element: el, anchor: "bottom" }).setLngLat([r.approx_lng, r.approx_lat]).addTo(map);
   });
+  mosq.forEach((m) => {
+    const el = document.createElement("button"); el.type = "button"; el.className = "pin-osm"; el.setAttribute("aria-label", m.name); el.innerHTML = I.mosque;
+    el.addEventListener("click", (e) => { e.stopPropagation(); mosqSheet(m); });
+    new maplibregl.Marker({ element: el, anchor: "center" }).setLngLat([m.lng, m.lat]).addTo(map);
+  });
   map.on("click", () => select(null));
   if (pts.length) {
     const b = new maplibregl.LngLatBounds([S.pos.lng, S.pos.lat], [S.pos.lng, S.pos.lat]);
     pts.forEach((r) => b.extend([r.approx_lng, r.approx_lat]));
+    map.fitBounds(b, { padding: { top: 50, bottom: 50, left: 40, right: 70 }, maxZoom: 15, duration: 0 });
+  } else if (mosq.length && S.kind === "mosquee") {
+    const b = new maplibregl.LngLatBounds([S.pos.lng, S.pos.lat], [S.pos.lng, S.pos.lat]);
+    mosq.slice(0, 4).forEach((m) => b.extend([m.lng, m.lat]));
     map.fitBounds(b, { padding: { top: 50, bottom: 50, left: 40, right: 70 }, maxZoom: 15, duration: 0 });
   }
   $("#mzIn").onclick = () => map.zoomIn();
@@ -919,7 +1158,7 @@ VIEWS.host = {
       <div class="field"><label for="hHood">Quartier affiché</label><input id="hHood" maxlength="80" placeholder="Lyon 7e · Gerland"></div>
       <div class="field"><span class="lbl" id="plLbl">Places disponibles</span><div class="stepper"><button type="button" data-p="-1" aria-label="Moins">−</button><output id="hPl" class="num">3</output><button type="button" data-p="1" aria-label="Plus">+</button></div></div>
     </div>
-    <div class="sect"><h3>Au menu</h3><span class="hint" id="menuCount"></span></div><p class="hint" style="margin:-6px 0 12px">Touchez les plats que vous proposez. « + Autre » pour ajouter le vôtre.</p><div class="panel">${COURSES.map(([c, n]) => `<div class="field course-pick"><span class="lbl">${n}</span><div class="chips" data-course="${c}"></div></div>`).join("")}</div>
+    <div class="sect"><h3>Au menu</h3><button type="button" data-go="recipes">${I.book.replace("<svg", '<svg style="width:14px;height:14px;vertical-align:-2px"')} Idées de repas</button></div><p class="hint" id="menuCount" style="margin:-8px 0 8px"></p><p class="hint" style="margin:-6px 0 12px">Touchez les plats que vous proposez. « + Autre » pour ajouter le vôtre.</p><div class="panel">${COURSES.map(([c, n]) => `<div class="field course-pick"><span class="lbl">${n}</span><div class="chips" data-course="${c}"></div></div>`).join("")}</div>
     <div class="sect"><h3>Mes invités</h3></div><div class="panel">
       <div class="field"><label for="hAud">Qui peut venir ?</label><select id="hAud">${Object.entries(AUD).map(([k, v]) => `<option value="${k}">${v}</option>`).join("")}</select></div>
       <div class="field"><span class="lbl">Précisions</span><div class="chips" id="hTags">${TAGS.map((t) => `<button type="button" class="chip ${t === "Halal" ? "on" : ""}" data-t="${t}">${t}</button>`).join("")}</div></div>
@@ -934,7 +1173,8 @@ VIEWS.host = {
       $("#asPartner").innerHTML = `<div class="panel"><div class="field"><label for="hAs">Publier au nom de</label><select id="hAs"><option value="">Moi-même (iftar chez moi)</option>${parts.map((p) => `<option value="${p.id}">${esc(p.name)}</option>`).join("")}</select></div></div>`;
       $("#hAs").onchange = (e) => { partnerId = e.target.value || null; $("#fmt").hidden = !!partnerId; const p = parts.find((x) => x.id === partnerId); if (p && p.address) $("#hAddr").value = p.address; $("#plLbl").textContent = partnerId ? "Places par soir" : "Places disponibles"; };
     }
-    const picked = {}; COURSES.forEach(([c]) => picked[c] = [...(DEFAULT_MENU[c] || [])]);
+    const picked = S.hostMenu || {}; if (!S.hostMenu) { COURSES.forEach(([c]) => picked[c] = [...(DEFAULT_MENU[c] || [])]); S.hostMenu = picked; }
+    const add = store.get("addDish", null); if (add && picked[add.course] && !picked[add.course].includes(add.dish)) { picked[add.course].push(add.dish); toast(`${add.dish} ajouté à votre menu`); } store.set("addDish", null);
     const drawCourse = (c) => {
       const box = $(`[data-course="${c}"]`), opts = [...DISHES[c], ...picked[c].filter((d) => !DISHES[c].includes(d))];
       box.innerHTML = opts.map((d) => `<button type="button" class="chip ${picked[c].includes(d) ? "on" : ""}" data-dish="${esc(d)}" aria-pressed="${picked[c].includes(d)}">${picked[c].includes(d) ? "✓ " : ""}${esc(d)}</button>`).join("")
@@ -985,7 +1225,7 @@ VIEWS.host = {
       if (error) { $("#hBtn").disabled = false; return msg(errMsg(error)); }
       const { error: e2 } = await sb.from("listing_private").insert({ listing_id: data.id, address: geo.label, lat: geo.lat, lng: geo.lng });
       if (e2) { await sb.from("listings").delete().eq("id", data.id); $("#hBtn").disabled = false; return msg(errMsg(e2)); }
-      toast("Table publiée !"); go("resa", { tab: "host" });
+      S.hostMenu = null; toast("Table publiée !"); go("resa", { tab: "host" });
     };
   },
 };
@@ -1119,15 +1359,139 @@ VIEWS.cal = {
       const iso = addDays(RAMADAN_START, d - 1), p = prayer(iso, S.pos.lat, S.pos.lng), dt = new Date(iso + "T12:00:00");
       rows += `<div class="cday ${iso < t ? "past" : iso === t ? "today" : ""} ${d >= 21 ? "last" : ""}"><span class="n">${d}</span><span class="d">${JOURS[dt.getDay()].slice(0, 3)}. ${dt.getDate()} ${MOIS[dt.getMonth()].slice(0, 4)}.</span><span>${fmtH(p.fajr)}</span><span class="m">${fmtH(p.maghrib)}</span><span class="d">${Math.floor(p.maghrib - p.fajr)} h ${pad2(Math.round((p.maghrib - p.fajr) % 1 * 60))}</span></div>`;
     }
-    const tp = prayer(t, S.pos.lat, S.pos.lng);
-    return `${topbar("Ramadan 1448", false)}<div class="pad">
-      <div class="panel"><h4>Aujourd'hui à ${esc(S.pos.label)}</h4><div class="row"><div><div class="hint">Fajr</div><b class="num" style="font-size:22px;color:var(--navy)">${fmtH(tp.fajr)}</b></div><div><div class="hint">Maghrib</div><b class="num" style="font-size:22px;color:var(--gold-ink)">${fmtH(tp.maghrib)}</b></div></div></div>
+    const P = prayers5(t, S.pos.lat, S.pos.lng), now = new Date(), h = now.getHours() + now.getMinutes() / 60;
+    const names = [["fajr", "Fajr"], ["sunrise", "Lever du soleil"], ["dhuhr", "Dhuhr"], ["asr", "Asr"], ["maghrib", "Maghrib"], ["isha", "Isha"]];
+    const next = names.find(([k]) => k !== "sunrise" && P[k] > h);
+    const qb = qibla(S.pos.lat, S.pos.lng);
+    return `${topbar("Prières et Ramadan", false)}<div class="pad">
+      <div class="panel prayers"><div class="pr-head"><h4>Aujourd'hui à ${esc(S.pos.label)}</h4>${next ? `<span class="pr-next">${next[1]} dans <b class="num" id="prLeft"></b></span>` : ""}</div>
+        ${names.map(([k, n]) => `<div class="pr ${next && next[0] === k ? "on" : ""} ${k === "sunrise" ? "sun" : ""} ${P[k] < h ? "done" : ""}"><span>${n}${k === "maghrib" ? ' <small>· iftar</small>' : k === "fajr" ? ' <small>· début du jeûne</small>' : ""}</span><b class="num">${fmtH(P[k])}</b></div>`).join("")}
+      </div>
+      <div class="panel qibla"><div><h4>Direction de la Qibla</h4><p class="hint" style="margin:0 0 4px"><b class="num" style="color:var(--navy);font-size:20px">${Math.round(qb)}°</b> depuis le Nord, vers l'est-sud-est</p><p class="hint" id="qbHint" style="margin:0">Activez la boussole et tenez le téléphone à plat.</p>
+        <button class="btn gold sm" type="button" id="qbBtn" style="margin-top:10px;width:auto">${I.compass} Activer la boussole</button></div>
+        <div class="dial" id="dial" style="--q:${qb}deg"><span class="n">N</span><div class="needle"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 30L56 50L50 70L44 50Z" fill="#C99A45"/><path d="M50 50L56 50L50 70Z" fill="#8A6418"/><rect x="40" y="6" width="20" height="18" rx="2" fill="#13294B"/><rect x="40" y="10" width="20" height="3" fill="#E2BD72"/><circle cx="50" cy="50" r="4" fill="#fff" stroke="#13294B" stroke-width="2"/></svg></div></div></div>
       <div class="notice">${I.moon}<span>Début estimé le <b>lundi 8 février 2027</b>. Les 10 dernières nuits commencent le 27 février. Aïd al-Fitr le 9 ou 10 mars, selon l'observation du croissant.</span></div>
       <div class="cal-head"><span>Jour</span><span>Date</span><span>Fajr</span><span>Maghrib</span><span>Jeûne</span></div>
       <div class="callist">${rows}</div>
-      <p class="hint" style="text-align:center;margin-top:12px">Horaires calculés pour ${esc(S.pos.label)} (Fajr à 12°). Valeurs indicatives : fiez-vous aux horaires de votre mosquée.</p></div>`;
+      <p class="hint" style="text-align:center;margin-top:12px">Horaires calculés pour ${esc(S.pos.label)} : Fajr et Isha à 12° (UOIF), Asr standard. Valeurs indicatives : fiez-vous aux horaires de votre mosquée.</p></div>`;
+  },
+  mount() {
+    const P = prayers5(today(), S.pos.lat, S.pos.lng);
+    const tick = () => { const n = new Date(), h = n.getHours() + n.getMinutes() / 60 + n.getSeconds() / 3600, nx = ["fajr", "dhuhr", "asr", "maghrib", "isha"].map((k) => P[k]).find((v) => v > h), el = $("#prLeft"); if (!el || nx == null) return; const sec = Math.round((nx - h) * 3600); el.textContent = `${Math.floor(sec / 3600)} h ${pad2(Math.floor(sec % 3600 / 60))}`; };
+    tick(); S.timer = setInterval(tick, 15000);
+    const qb = qibla(S.pos.lat, S.pos.lng), dial = $("#dial");
+    $("#qbBtn").onclick = async () => {
+      try { if (typeof DeviceOrientationEvent !== "undefined" && DeviceOrientationEvent.requestPermission) { const r = await DeviceOrientationEvent.requestPermission(); if (r !== "granted") return toast("Boussole refusée"); } } catch (_) { return toast("Boussole indisponible"); }
+      const on = (e) => {
+        const head = e.webkitCompassHeading ?? (e.absolute && e.alpha != null ? 360 - e.alpha : null); if (head == null) return;
+        dial.style.setProperty("--q", `${qb - head}deg`); dial.classList.add("live");
+        const diff = Math.abs(((qb - head + 540) % 360) - 180); dial.classList.toggle("ok", diff < 5);
+        $("#qbHint").textContent = diff < 5 ? "Vous êtes face à la Qibla." : "Tournez-vous jusqu'à ce que la flèche dorée pointe vers le haut.";
+      };
+      window.addEventListener("deviceorientationabsolute", on); window.addEventListener("deviceorientation", on);
+      S.offs.push(() => { window.removeEventListener("deviceorientationabsolute", on); window.removeEventListener("deviceorientation", on); });
+      $("#qbBtn").hidden = true;
+    };
   },
 };
+
+/* 5 prières (Fajr et Isha à 12°, Asr à ombre simple) et direction de La Mecque */
+function prayers5(iso, lat, lng) {
+  const d = new Date(iso + "T12:00:00"), start = new Date(d.getFullYear(), 0, 0), N = Math.round((d - start) / 864e5);
+  const tz = -d.getTimezoneOffset() / 60, r = Math.PI / 180;
+  const B = 2 * Math.PI * (N - 81) / 364, eot = 9.87 * Math.sin(2 * B) - 7.53 * Math.cos(B) - 1.5 * Math.sin(B);
+  const dec = 23.45 * Math.sin(2 * Math.PI * (284 + N) / 365) * r, la = lat * r, noon = 12 + tz - lng / 15 - eot / 60;
+  const H = (alt) => Math.acos((Math.sin(alt * r) - Math.sin(la) * Math.sin(dec)) / (Math.cos(la) * Math.cos(dec))) / r / 15;
+  const asrAlt = Math.atan(1 / (1 + Math.tan(Math.abs(la - dec)))) / r;
+  return { fajr: noon - H(-12), sunrise: noon - H(-0.833), dhuhr: noon + 2 / 60, asr: noon + H(asrAlt), maghrib: noon + H(-0.833), isha: noon + H(-12) };
+}
+function qibla(lat, lng) {
+  const r = Math.PI / 180, k = [21.4225 * r, 39.8262 * r], p = [lat * r, lng * r];
+  const y = Math.sin(k[1] - p[1]), x = Math.cos(p[0]) * Math.tan(k[0]) - Math.sin(p[0]) * Math.cos(k[1] - p[1]);
+  return (Math.atan2(y, x) / r + 360) % 360;
+}
+
+/* ---------- idées de repas ---------- */
+const COURSE_LABEL = Object.fromEntries(COURSES);
+const COURSE_COLOR = { rupture: "#8A6418", entree: "#2E8B57", plat: "#13294B", dessert: "#B0412E", boisson: "#2F6E9E" };
+VIEWS.recipes = {
+  html: () => `${topbar("Idées de repas")}<div class="pad">
+    <p class="hint" style="margin:0 0 12px">Des recettes du Ramadan de tout le monde musulman. Ajoutez-les à votre table en un geste.</p>
+    <div class="search-in"><input id="rcQ" type="search" placeholder="Chercher : harira, tajine, dattes…" aria-label="Chercher une recette"></div>
+    <div class="pills" id="rcCat" style="margin-top:10px"><button type="button" class="on" data-c="">Tout</button>${COURSES.map(([c, n]) => `<button type="button" data-c="${c}">${n}</button>`).join("")}</div>
+    <div id="rcList"></div></div>`,
+  mount() {
+    let cat = S.params.cat || "", q = "";
+    const draw = () => {
+      const qq = q.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const L = RECIPES.filter((r) => (!cat || r.course === cat) && (!qq || (r.name + " " + r.origin + " " + r.ing.map((i) => i[2]).join(" ")).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(qq)));
+      $$("#rcCat button").forEach((b) => b.classList.toggle("on", b.dataset.c === cat));
+      $("#rcList").innerHTML = L.length ? L.map((r) => `<button type="button" class="item recipe" data-rc="${r.id}"><span class="ph" style="background:${COURSE_COLOR[r.course]}">${I.book}</span><span class="tx"><b>${esc(r.name)}</b><span class="ln"><span>${I.clock}${r.time < 60 ? r.time + " min" : Math.floor(r.time / 60) + " h" + (r.time % 60 ? " " + pad2(r.time % 60) : "")}</span><span>${I.ppl}${r.serves} pers.</span><span>${esc(r.level)}</span></span><span class="tags"><span class="tg">${COURSE_LABEL[r.course]}</span><span class="tg">${esc(r.origin)}</span></span></span></button>`).join("") : `<div class="empty" style="margin-top:12px"><b>Aucune recette</b>Essayez un autre mot.</div>`;
+      $$("[data-rc]").forEach((b) => b.onclick = () => recipeSheet(RECIPES.find((r) => r.id === b.dataset.rc)));
+    };
+    $("#rcCat").onclick = (e) => { const b = e.target.closest("[data-c]"); if (b) { cat = b.dataset.c; draw(); } };
+    $("#rcQ").oninput = (e) => { q = e.target.value.trim(); draw(); };
+    draw();
+  },
+};
+function fmtQty(v, unit) {
+  if (v == null) return "";
+  let x = v;
+  if (["g", "ml"].includes(unit)) x = x >= 100 ? Math.round(x / 10) * 10 : Math.round(x / 5) * 5;
+  else if (["kg", "l"].includes(unit)) x = Math.round(x * 10) / 10;
+  else x = Math.max(0.5, Math.round(x * 2) / 2);
+  return String(x).replace(".", ",");
+}
+function recipeSheet(r) {
+  let n = r.serves;
+  const bg = sheet(`<div class="rc-head" style="--c:${COURSE_COLOR[r.course]}"><span class="eyebrow">${COURSE_LABEL[r.course]} · ${esc(r.origin)}</span><h2>${esc(r.name)}</h2>
+      <div class="ln"><span>${I.clock}${r.time} min</span><span>${esc(r.level)}</span></div></div>
+    <div class="panel"><div class="pr-head"><h4 style="margin:0">Ingrédients</h4><div class="stepper sm"><button type="button" data-n="-1" aria-label="Moins de personnes">−</button><output id="rcN" class="num">${n}</output><button type="button" data-n="1" aria-label="Plus de personnes">+</button></div></div><p class="hint" style="margin:4px 0 10px">personnes</p><ul class="ing" id="rcIng"></ul></div>
+    <div class="panel"><h4>Préparation</h4><ol class="steps">${r.steps.map((t) => `<li>${esc(t)}</li>`).join("")}</ol></div>
+    ${r.tip ? `<div class="notice">${I.book}<span><b>Astuce :</b> ${esc(r.tip)}</span></div>` : ""}
+    <button class="btn gold" type="button" id="rcAdd">${I.plus} Je le propose à ma table</button>
+    <p class="hint" style="text-align:center;margin-top:8px">« ${esc(r.dish)} » sera ajouté au menu de votre annonce.</p>`);
+  const drawIng = () => { $("#rcN").textContent = n; $("#rcIng").innerHTML = r.ing.map(([q, u, name]) => `<li><label><input type="checkbox"><span><b class="num">${q == null ? "" : fmtQty(q * n / r.serves, u) + (u ? " " + esc(u) : "")}</b> ${esc(name)}</span></label></li>`).join(""); };
+  $$("[data-n]", bg).forEach((b) => b.onclick = () => { n = Math.max(1, Math.min(40, n + +b.dataset.n)); drawIng(); });
+  drawIng();
+  $("#rcAdd", bg).onclick = () => { store.set("addDish", { course: r.course, dish: r.dish }); closeSheet(); go("host"); };
+}
+
+/* ---------- espace administration ---------- */
+VIEWS.admin = {
+  html: () => `${topbar("Espace admin")}<div class="pad">
+    <div class="seg2" id="adTab"><button type="button" data-t="dash" class="${(S.params.tab || "dash") === "dash" ? "on" : ""}">Bilan</button><button type="button" data-t="part" class="${S.params.tab === "part" ? "on" : ""}">Partenaires</button><button type="button" data-t="rep" class="${S.params.tab === "rep" ? "on" : ""}">Signalements</button><button type="button" data-t="host" class="${S.params.tab === "host" ? "on" : ""}">Hôtes</button></div>
+    <div id="adBody">${loading()}</div></div>`,
+  async mount() {
+    if (!S.isAdmin) { toast("Réservé à l'administration"); return go("me"); }
+    $$("#adTab [data-t]").forEach((b) => b.onclick = () => { S.params = { tab: b.dataset.t }; render(); });
+    const tab = S.params.tab || "dash", box = $("#adBody");
+    if (tab === "dash") {
+      const { data: st, error } = await sb.rpc("admin_stats"); if (error) return toast(errMsg(error));
+      const T = [["membres", "Membres"], ["hotes", "Hôtes"], ["annonces_ouvertes", "Annonces ouvertes"], ["annonces", "Annonces au total"], ["demandes", "Demandes"], ["repas_partages", "Repas partagés"], ["partenaires_attente", "Partenaires à valider"], ["signalements", "Signalements ouverts"]];
+      box.innerHTML = `<div class="kpis">${T.map(([k, n]) => `<div class="kpi ${["partenaires_attente", "signalements"].includes(k) && st[k] > 0 ? "warn" : ""}"><b class="num">${st[k]}</b><span>${n}</span></div>`).join("")}</div>`;
+    } else if (tab === "part") {
+      const { data, error } = await sb.from("partners").select("*, owner:profiles!partners_owner_id_fkey(first_name)").order("created_at", { ascending: false }); if (error) return toast(errMsg(error));
+      const PS = { en_attente: ["À valider", "st-wait"], verifie: ["Vérifié", "st-ok"], refuse: ["Refusé", "st-no"] }, K = { mosquee: "Mosquée", association: "Association", restaurant: "Restaurant", sponsor: "Sponsor" };
+      box.innerHTML = data.length ? data.map((x) => `<div class="req"><div class="h"><div style="min-width:0"><b>${esc(x.name)}</b><span class="hint">${K[x.kind]} · ${esc(x.city)} · par ${esc(x.owner?.first_name || "?")}</span></div><span class="status ${PS[x.status][1]}">${PS[x.status][0]}</span></div>
+        <div class="hint">${x.registry_id ? "RNA / SIRET : <b>" + esc(x.registry_id) + "</b>" : "Aucun numéro RNA ou SIRET fourni"}${x.address ? "<br>" + esc(x.address) : ""}${x.capacity ? "<br>" + x.capacity + " places par soir" : ""}</div>
+        ${x.registry_id ? `<a class="hint" href="https://annuaire-entreprises.data.gouv.fr/rechercher?terme=${encodeURIComponent(x.registry_id)}" target="_blank" rel="noopener">Vérifier sur l'annuaire officiel des entreprises et associations ›</a>` : ""}
+        <div class="row">${x.status !== "verifie" ? `<button class="btn gold sm" type="button" data-ps="verifie" data-id="${x.id}">Valider</button>` : ""}${x.status !== "refuse" ? `<button class="btn line sm" type="button" data-ps="refuse" data-id="${x.id}">Refuser</button>` : ""}</div></div>`).join("") : `<div class="empty"><b>Aucune demande</b>Les demandes de partenariat apparaîtront ici.</div>`;
+      $$("[data-ps]", box).forEach((b) => b.onclick = async () => { const { error: e } = await sb.rpc("admin_set_partner_status", { p_partner: b.dataset.id, p_status: b.dataset.ps }); if (e) return toast(errMsg(e)); toast(b.dataset.ps === "verifie" ? "Partenaire validé" : "Partenaire refusé"); render(); });
+    } else if (tab === "rep") {
+      const { data, error } = await sb.from("reports").select("*, reporter:profiles!reports_reporter_id_fkey(first_name), target:profiles!reports_target_id_fkey(first_name)").order("handled").order("created_at", { ascending: false }); if (error) return toast(errMsg(error));
+      box.innerHTML = data.length ? data.map((x) => `<div class="req"><div class="h"><div style="min-width:0"><b>Signalé : ${esc(x.target?.first_name || "annonce")}</b><span class="hint">par ${esc(x.reporter?.first_name || "?")} · ${new Date(x.created_at).toLocaleDateString("fr-FR")}</span></div><span class="status ${x.handled ? "st-ok" : "st-wait"}">${x.handled ? "Traité" : "À traiter"}</span></div>
+        <div style="font-size:14px">${esc(x.reason)}</div>
+        ${x.handled ? "" : `<div class="row">${x.listing_id ? `<button class="btn line sm" type="button" data-go="detail" data-id="${x.listing_id}">Voir l'annonce</button>` : ""}<button class="btn danger sm" type="button" data-hr="${x.id}" data-close-l="1">Fermer l'annonce</button><button class="btn ghost sm" type="button" data-hr="${x.id}">Classer</button></div>`}</div>`).join("") : `<div class="empty"><b>Aucun signalement</b>Tout va bien.</div>`;
+      $$("[data-hr]", box).forEach((b) => b.onclick = async () => { const { error: e } = await sb.rpc("admin_handle_report", { p_report: b.dataset.hr, p_close_listing: !!b.dataset.closeL }); if (e) return toast(errMsg(e)); toast(b.dataset.closeL ? "Annonce fermée" : "Signalement classé"); render(); });
+    } else {
+      const { data, error } = await sb.rpc("admin_hosts"); if (error) return toast(errMsg(error));
+      box.innerHTML = `<p class="hint" style="margin:0 0 10px">Marquez « vérifié » un hôte après avoir contrôlé sa pièce d'identité.</p>` + (data.length ? data.map((x) => `<div class="req" style="grid-template-columns:1fr"><div class="h"><div class="av">${esc((x.first_name || "?")[0])}</div><div style="min-width:0;flex:1"><b>${esc(x.first_name || "Sans prénom")}</b><span class="hint">${esc(x.city || "")} · ${x.annonces} annonce${x.annonces > 1 ? "s" : ""}</span></div><button class="btn ${x.id_verified ? "ghost" : "gold"} sm" type="button" style="width:auto" data-ver="${x.id}" data-v="${x.id_verified ? "" : "1"}">${x.id_verified ? "Vérifié ✓" : "Vérifier"}</button></div></div>`).join("") : `<div class="empty"><b>Aucun hôte</b>Les membres qui publient une table apparaîtront ici.</div>`);
+      $$("[data-ver]", box).forEach((b) => b.onclick = async () => { const { error: e } = await sb.rpc("admin_set_verified", { p_user: b.dataset.ver, p_verified: !!b.dataset.v }); if (e) return toast(errMsg(e)); toast(b.dataset.v ? "Hôte vérifié" : "Vérification retirée"); render(); });
+    }
+  },
+};
+
 
 /* ---------- profil ---------- */
 VIEWS.me = {
@@ -1147,6 +1511,7 @@ VIEWS.me = {
         <div class="field"><label for="pB">Quelques mots sur moi</label><textarea id="pB" maxlength="500">${esc(p.bio)}</textarea></div>
         <button class="btn" type="submit">Enregistrer</button></form>
       <div class="panel"><h4>Espace partenaire</h4>${parts?.length ? parts.map((x) => `<div style="display:flex;gap:10px;align-items:center;margin-bottom:10px"><div class="av sq">${x.kind === "restaurant" ? I.shop : I.mosque}</div><div style="flex:1;min-width:0"><b style="color:var(--navy)">${esc(x.name)}</b><div class="hint">${esc(x.city)}</div></div><span class="status ${PS[x.status][1]}">${PS[x.status][0]}</span></div>`).join("") + (parts.some((x) => x.status === "verifie") ? `<button class="btn gold sm" type="button" data-go="host">Publier un iftar collectif</button>` : `<p class="hint" style="margin:0">Nous vérifions votre structure sous 48 h.</p>`) : `<p class="hint" style="margin:0 0 10px">Mosquée, association ou restaurant : publiez vos iftars avec le badge « Partenaire vérifié ».</p><button class="btn line sm" type="button" id="newPart">Créer un compte partenaire</button>`}</div>
+      ${S.isAdmin ? `<button class="btn" type="button" data-go="admin" style="margin-bottom:10px">${I.shield} Espace admin</button>` : ""}
       <button class="btn ghost" type="button" id="logout">Me déconnecter</button>
       <p class="hint" style="text-align:center;margin:16px 0">Sufra · version bêta</p>`;
     $("#pF").onsubmit = async (e) => {
@@ -1156,16 +1521,16 @@ VIEWS.me = {
       const { error } = await sb.from("profiles").update(upd).eq("id", me()); if (error) return toast(errMsg(error));
       Object.assign(S.profile, upd); toast("Profil enregistré");
     };
-    const np = $("#newPart"); if (np) np.onclick = partnerSheet;
+    const np = $("#newPart"); if (np) np.onclick = () => partnerSheet();
     $("#logout").onclick = async () => { await sb.auth.signOut(); };
   },
 };
-function partnerSheet() {
+function partnerSheet(pre = {}) {
   const bg = sheet(`<h2>Compte partenaire</h2><p class="lead">Vérifié par l'équipe Sufra sous 48 h.</p><form id="ptF">
     <div class="field"><label for="ptK">Vous êtes</label><select id="ptK"><option value="mosquee">Une mosquée</option><option value="association">Une association</option><option value="restaurant">Un restaurant</option><option value="sponsor">Une marque ou un commerçant (sponsor)</option></select></div>
-    <div class="field"><label for="ptN">Nom</label><input id="ptN" maxlength="120" required></div>
-    <div class="row2"><div class="field"><label for="ptC">Ville</label><input id="ptC" maxlength="80" required></div><div class="field"><label for="ptCap">Places par soir</label><input id="ptCap" type="number" min="1" max="5000" inputmode="numeric"></div></div>
-    <div class="field"><label for="ptA">Adresse</label><input id="ptA" maxlength="200"></div>
+    <div class="field"><label for="ptN">Nom</label><input id="ptN" maxlength="120" required value="${esc(pre.name || "")}"></div>
+    <div class="row2"><div class="field"><label for="ptC">Ville</label><input id="ptC" maxlength="80" required value="${esc(pre.city || "")}"></div><div class="field"><label for="ptCap">Places par soir</label><input id="ptCap" type="number" min="1" max="5000" inputmode="numeric"></div></div>
+    <div class="field"><label for="ptA">Adresse</label><input id="ptA" maxlength="200" value="${esc(pre.address || "")}"></div>
     <div class="field"><label for="ptR">N° RNA ou SIRET</label><input id="ptR" maxlength="20"></div>
     <button class="btn gold" type="submit">Envoyer ma demande</button></form>`);
   $("#ptF", bg).onsubmit = async (e) => {
@@ -1184,6 +1549,7 @@ async function loadProfile() {
   const { data, error } = await sb.from("profiles").select("*").eq("id", me()).maybeSingle();
   if (error) { toast(errMsg(error)); return; }
   S.profile = data || { id: me(), first_name: "", gender: null };
+  try { const { data: ad } = await sb.from("admins").select("user_id").eq("user_id", me()).maybeSingle(); S.isAdmin = !!ad; } catch (_) { S.isAdmin = false; }
   const meta = S.session.user.user_metadata || {};
   if (data && !data.gender && meta.gender) {
     await sb.from("profiles").update({ gender: meta.gender, first_name: data.first_name || meta.first_name || "" }).eq("id", me());
