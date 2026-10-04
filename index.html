@@ -340,6 +340,14 @@ html:has(.onb),body:has(.onb){background:#0B1C36}
 @media (prefers-reduced-motion:reduce){.ln-sway{animation:none}}
 @media (max-height:740px){.onb-in{padding-top:calc(140px + env(safe-area-inset-top,0px));padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}.onb-lanterns{width:auto;height:150px}.onb h2{margin-top:22px}}
 
+/* Choix des plats */
+.course-pick .chips{gap:7px}
+.course-pick .chip{font-weight:600;padding:8px 12px}
+.course-pick .chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.add-chip{border-style:dashed!important;border-color:var(--gold)!important;color:var(--gold-ink)!important;background:none!important}
+.other-in{display:inline-flex;gap:6px;align-items:center;flex:1 1 220px}
+.other-in input{flex:1;min-width:0;border:1.5px solid var(--gold);border-radius:99px;padding:7px 12px;background:var(--card);font-size:16px}
+
 </style>
 </head>
 <body>
@@ -447,7 +455,15 @@ const logo = (fg = "#13294B", size = 76) => `<svg class="logo" width="${size}" h
 
 /* ---------- vocabulaire ---------- */
 const AUD = { tout_le_monde: "Tout le monde", familles: "Familles", femmes: "Femmes uniquement", hommes: "Hommes uniquement", etudiants: "Étudiants" };
-const COURSES = [["rupture", "Rupture du jeûne"], ["entree", "Soupe et entrées"], ["plat", "Plat"], ["dessert", "Douceurs et boissons"]];
+const COURSES = [["rupture", "Rupture du jeûne"], ["entree", "Soupes et entrées"], ["plat", "Plats"], ["dessert", "Desserts et pâtisseries"], ["boisson", "Boissons"]];
+const DISHES = {
+  rupture: ["Dattes", "Lben", "Lait", "Fruits secs", "Msemen", "Batbout", "Chebakia", "Œufs durs"],
+  entree: ["Chorba", "Harira", "Chorba frik", "Soupe de lentilles", "Bourek", "Briouates", "Bricks au thon", "Samoussas", "Pastels", "Salade méchouia", "Salade marocaine"],
+  plat: ["Couscous", "Tajine poulet olives", "Tajine agneau pruneaux", "Pastilla", "Rfissa", "Lham lahlou", "Kefta", "Poulet rôti", "Poisson au four", "Thiéboudienne", "Mafé", "Yassa poulet", "Biryani", "Plat végétarien"],
+  dessert: ["Makrout", "Zlabia", "Kalb el louz", "Cornes de gazelle", "Baklava", "Basboussa", "Qatayef", "Griwech", "Thiakry", "Salade de fruits", "Gâteau maison"],
+  boisson: ["Thé à la menthe", "Café", "Jus d'orange pressé", "Citronnade", "Bissap", "Jus de gingembre", "Qamar al-din", "Ayran", "Lait d'amande", "Eau gazeuse"],
+};
+const DEFAULT_MENU = { rupture: ["Dattes", "Lben"], entree: ["Chorba"], plat: [], dessert: [], boisson: ["Thé à la menthe"] };
 const TAGS = ["Halal", "Enfants bienvenus", "Prière ensemble", "Non-fumeur", "Accessible PMR", "Végétarien possible"];
 const STATUS = { en_attente: ["En attente", "st-wait"], acceptee: ["Confirmée", "st-ok"], refusee: ["Refusée", "st-no"], annulee: ["Annulée", "st-no"], expiree: ["Expirée", "st-no"] };
 function kindStyle(l) {
@@ -903,7 +919,7 @@ VIEWS.host = {
       <div class="field"><label for="hHood">Quartier affiché</label><input id="hHood" maxlength="80" placeholder="Lyon 7e · Gerland"></div>
       <div class="field"><span class="lbl" id="plLbl">Places disponibles</span><div class="stepper"><button type="button" data-p="-1" aria-label="Moins">−</button><output id="hPl" class="num">3</output><button type="button" data-p="1" aria-label="Plus">+</button></div></div>
     </div>
-    <div class="sect"><h3>Au menu</h3></div><div class="panel">${COURSES.map(([c, n]) => `<div class="field"><span class="lbl">${n}</span><div data-course="${c}"></div><button type="button" class="add" data-addc="${c}">+ Ajouter</button></div>`).join("")}</div>
+    <div class="sect"><h3>Au menu</h3><span class="hint" id="menuCount"></span></div><p class="hint" style="margin:-6px 0 12px">Touchez les plats que vous proposez. « + Autre » pour ajouter le vôtre.</p><div class="panel">${COURSES.map(([c, n]) => `<div class="field course-pick"><span class="lbl">${n}</span><div class="chips" data-course="${c}"></div></div>`).join("")}</div>
     <div class="sect"><h3>Mes invités</h3></div><div class="panel">
       <div class="field"><label for="hAud">Qui peut venir ?</label><select id="hAud">${Object.entries(AUD).map(([k, v]) => `<option value="${k}">${v}</option>`).join("")}</select></div>
       <div class="field"><span class="lbl">Précisions</span><div class="chips" id="hTags">${TAGS.map((t) => `<button type="button" class="chip ${t === "Halal" ? "on" : ""}" data-t="${t}">${t}</button>`).join("")}</div></div>
@@ -918,9 +934,20 @@ VIEWS.host = {
       $("#asPartner").innerHTML = `<div class="panel"><div class="field"><label for="hAs">Publier au nom de</label><select id="hAs"><option value="">Moi-même (iftar chez moi)</option>${parts.map((p) => `<option value="${p.id}">${esc(p.name)}</option>`).join("")}</select></div></div>`;
       $("#hAs").onchange = (e) => { partnerId = e.target.value || null; $("#fmt").hidden = !!partnerId; const p = parts.find((x) => x.id === partnerId); if (p && p.address) $("#hAddr").value = p.address; $("#plLbl").textContent = partnerId ? "Places par soir" : "Places disponibles"; };
     }
-    const addDish = (c, v = "") => { const d = document.createElement("div"); d.className = "dishrow"; d.innerHTML = `<input maxlength="60" aria-label="Plat" value="${esc(v)}"><button type="button" class="x" aria-label="Retirer">×</button>`; d.querySelector(".x").onclick = () => d.remove(); $(`[data-course="${c}"]`).appendChild(d); };
-    [["rupture", "Dattes et lben"], ["entree", "Chorba"], ["plat", ""], ["dessert", "Thé à la menthe"]].forEach(([c, v]) => addDish(c, v));
-    $$("[data-addc]").forEach((b) => b.onclick = () => addDish(b.dataset.addc));
+    const picked = {}; COURSES.forEach(([c]) => picked[c] = [...(DEFAULT_MENU[c] || [])]);
+    const drawCourse = (c) => {
+      const box = $(`[data-course="${c}"]`), opts = [...DISHES[c], ...picked[c].filter((d) => !DISHES[c].includes(d))];
+      box.innerHTML = opts.map((d) => `<button type="button" class="chip ${picked[c].includes(d) ? "on" : ""}" data-dish="${esc(d)}" aria-pressed="${picked[c].includes(d)}">${picked[c].includes(d) ? "✓ " : ""}${esc(d)}</button>`).join("")
+        + `<button type="button" class="chip add-chip" data-other>+ Autre</button><span class="other-in" hidden><input maxlength="60" placeholder="Nom du plat" aria-label="Autre plat"><button type="button" class="chip on" data-ok>OK</button></span>`;
+      $$("[data-dish]", box).forEach((b) => b.onclick = () => { const d = b.dataset.dish, i = picked[c].indexOf(d); i < 0 ? picked[c].push(d) : picked[c].splice(i, 1); drawCourse(c); });
+      const oi = $(".other-in", box), inp = $("input", oi);
+      $("[data-other]", box).onclick = () => { oi.hidden = false; $("[data-other]", box).hidden = true; inp.focus(); };
+      const addOther = () => { const v = inp.value.trim().replace(/\s+/g, " "); if (v && !picked[c].some((x) => x.toLowerCase() === v.toLowerCase())) picked[c].push(v.charAt(0).toUpperCase() + v.slice(1)); drawCourse(c); };
+      $("[data-ok]", box).onclick = addOther;
+      inp.onkeydown = (e) => { if (e.key === "Enter") { e.preventDefault(); addOther(); } };
+      const n = COURSES.reduce((a, [k]) => a + picked[k].length, 0); $("#menuCount").textContent = n ? `${n} sélectionné${n > 1 ? "s" : ""}` : "";
+    };
+    COURSES.forEach(([c]) => drawCourse(c));
     $$("#fmt [data-f]").forEach((b) => b.onclick = () => { fmt = b.dataset.f; $$("#fmt button").forEach((x) => x.classList.toggle("on", x === b)); $("#plLbl").textContent = fmt === "plat" ? "Nombre de parts" : "Places disponibles"; });
     $$("[data-p]").forEach((b) => b.onclick = () => { places = Math.max(1, Math.min(partnerId ? 2000 : 20, places + +b.dataset.p)); $("#hPl").textContent = places; });
     $$("#hTags [data-t]").forEach((b) => b.onclick = () => b.classList.toggle("on"));
@@ -943,7 +970,7 @@ VIEWS.host = {
       if (!geo) await geocode();
       if (!geo) return msg("Indiquez une adresse valide : elle sert à vous placer sur la carte.");
       const hood = $("#hHood").value.trim(); if (!hood) return msg("Indiquez le quartier affiché.");
-      const menu = {}; COURSES.forEach(([c]) => { menu[c] = $$(`[data-course="${c}"] input`).map((i) => i.value.trim()).filter(Boolean); });
+      const menu = {}; COURSES.forEach(([c]) => { menu[c] = [...picked[c]]; });
       if (!flatMenu(menu).length) return msg("Ajoutez au moins un plat au menu.");
       const part = parts?.find((p) => p.id === partnerId);
       const row = {
