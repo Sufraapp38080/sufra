@@ -1435,7 +1435,9 @@ async function render() {
     if (e.target.closest("[data-back]")) return back();
     const g = e.target.closest("[data-go]"); if (g) return go(g.dataset.go, g.dataset.id ? { id: g.dataset.id } : {});
   };
-  try { if (V.mount) await V.mount(app); } catch (e) { console.error(e); toast(errMsg(e)); }
+  const tok = S.rtok = (S.rtok || 0) + 1;
+  // Si l'écran a changé pendant le chargement, l'ancien écran s'arrête sans message d'erreur.
+  try { if (V.mount) await V.mount(app); } catch (e) { console.error(e); if (tok === S.rtok) toast(errMsg(e)); }
   if (ry) { const v = S.view; window.scrollTo(0, ry); setTimeout(() => { if (S.view === v && window.scrollY < ry - 40) window.scrollTo(0, ry); }, 350); }
 }
 
@@ -1597,6 +1599,7 @@ VIEWS.home = {
     };
     tick(); S.timer = setInterval(tick, 1000);
     const rows = await nearby(today(), 25);
+    if (!$("#tonight")) return;
     $("#tonight").innerHTML = rows.length ? rows.slice(0, 4).map(itemHTML).join("") : `<div class="empty"><b>Pas encore de table ce soir</b>Soyez le premier à ouvrir la vôtre près de chez vous.</div>`;
     bindItems($("#tonight"));
   },
@@ -2750,6 +2753,8 @@ async function loadProfile() {
 }
 sb.auth.onAuthStateChange(async (event, session) => {
   if (event === "INITIAL_SESSION" || event === "TOKEN_REFRESHED") { if (session) S.session = session; return; }
+  // Pendant le démarrage, c'est le démarrage qui choisit l'écran (page de garde) : on ne fait que noter la session.
+  if (!S.booted && event !== "PASSWORD_RECOVERY") { S.session = session; return; }
   const was = !!S.session; S.session = session;
   if (event === "PASSWORD_RECOVERY") {
     const bg = sheet(`<h2>Nouveau mot de passe</h2><form id="npF"><div class="field"><label for="npP">Mot de passe</label><input id="npP" type="password" minlength="6" autocomplete="new-password"></div><button class="btn gold" type="submit">Enregistrer</button></form>`);
@@ -2772,6 +2777,7 @@ sb.auth.onAuthStateChange(async (event, session) => {
   else S.view = store.get("seen", false) ? "auth" : "onb";
   if (!S.pos.src || (S.pos.src === "gps" && Date.now() - (S.pos.at || 0) > 6 * 3600e3)) gps(true).then((ok) => { if (ok && ["home", "explore"].includes(S.view)) render(); });
   render();
+  S.booted = true;
   if (S.session) openLink(location.search);
   else if (/[?&]v=biz\b/.test(location.search)) { S.view = "biz"; render(); try { history.replaceState(null, "", location.pathname); } catch (_) {} }
   else if (/[?&]v=/.test(location.search)) { store.set("pendingLink", location.search); try { history.replaceState(null, "", location.pathname); } catch (_) {} }
