@@ -8,6 +8,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Sufra">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Sufra · Partageons l'iftar</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230B1C36'/%3E%3Ccircle cx='50' cy='52' r='34' fill='%23C99A45'/%3E%3Ccircle cx='62' cy='45' r='29' fill='%230B1C36'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,7 +22,7 @@
 <style>
 :root{
   --cream:#FAF5EC;--sand:#F2E8D8;--card:#FFFFFF;--line:#EADFCD;--ink:#18233A;--muted:#6B6457;
-  --navy:#13294B;--navy-2:#0B1C36;--gold:#C99A45;--gold-2:#E2BD72;--gold-soft:#F6EAD2;--gold-ink:#8A6418;
+  --navy:#13294B;--navy-2:#0B1C36;--brand:#13294B;--page-shade:rgba(19,41,75,.06);--gold:#C99A45;--gold-2:#E2BD72;--gold-soft:#F6EAD2;--gold-ink:#8A6418;
   --green:#2E8B57;--green-soft:#E3F2E8;--red:#B0412E;--red-soft:#F8E4DF;
   --title:"Montserrat",system-ui,sans-serif;--body:"Nunito Sans",system-ui,-apple-system,sans-serif;--script:"Parisienne",cursive;--arabic:"Amiri",serif;
   --r:18px;--shadow:0 1px 2px rgba(19,41,75,.06),0 10px 28px -16px rgba(19,41,75,.3);
@@ -52,7 +55,7 @@ svg.logo{display:block}
 .nbadge{position:absolute;top:0;right:calc(50% - 22px);background:var(--gold);color:#fff;border-radius:99px;font-size:10px;min-width:17px;height:17px;display:grid;place-items:center;padding:0 4px;font-weight:800}
 
 /* communs */
-.btn{border:0;background:var(--navy);color:#fff;border-radius:14px;padding:15px 16px;font-weight:800;width:100%;font-size:15px;display:flex;justify-content:center;align-items:center;gap:8px}
+.btn{border:0;background:var(--brand);color:#fff;border-radius:14px;padding:15px 16px;font-weight:800;width:100%;font-size:15px;display:flex;justify-content:center;align-items:center;gap:8px}
 .btn.gold{background:linear-gradient(180deg,var(--gold-2),var(--gold));color:var(--navy-2)}
 .btn.ghost{background:var(--sand);color:var(--navy)}
 .btn.line{background:none;border:1.5px solid var(--line);color:var(--navy)}
@@ -76,7 +79,7 @@ svg.logo{display:block}
 .notice svg{flex:none;width:18px;height:18px;color:var(--gold-ink);margin-top:1px}
 .notice.err{background:var(--red-soft);color:var(--red)}
 .notice.ok{background:var(--green-soft);color:var(--green)}
-.av{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-family:var(--title);font-weight:700;color:#fff;flex:none;font-size:17px;background:var(--navy)}
+.av{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-family:var(--title);font-weight:700;color:#fff;flex:none;font-size:17px;background:var(--brand)}
 .av.lg{width:72px;height:72px;font-size:28px}
 .av.sq{border-radius:12px}
 .av svg{width:22px;height:22px}
@@ -132,14 +135,14 @@ svg.logo{display:block}
 .stepper output{min-width:34px;text-align:center;font-weight:800;font-size:16px;color:var(--navy)}
 .chips{display:flex;gap:6px;flex-wrap:wrap}
 .chip{border:1.5px solid var(--line);background:var(--card);border-radius:99px;padding:7px 12px;font-size:13px;font-weight:700;color:var(--navy)}
-.chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.chip.on{background:var(--brand);border-color:var(--brand);color:#fff}
 
 /* accueil */
-.hh{background:linear-gradient(180deg,var(--navy-2),var(--navy));color:#fff;padding:calc(16px + env(safe-area-inset-top,0px)) 18px 0}
+.hh{background:linear-gradient(180deg,var(--navy-2),var(--brand));color:#fff;padding:calc(16px + env(safe-area-inset-top,0px)) 18px 0}
 .hh-row{display:flex;justify-content:space-between;align-items:center}
 .brand{display:flex;align-items:center;gap:8px}
 .brand .wordmark{font-size:17px;color:#fff}
-.loc{font-size:12.5px;font-weight:700;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:99px;padding:6px 11px;display:flex;align-items:center;gap:5px;max-width:55%}
+.loc{font-size:12.5px;font-weight:700;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:99px;padding:6px 11px;display:flex;align-items:center;gap:5px;max-width:100%;min-width:0}
 .loc span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .loc svg{width:14px;height:14px;flex:none}
 .hh-greet{font-family:var(--title);font-weight:500;font-size:15px;opacity:.85;margin:14px 0 10px}
@@ -176,7 +179,7 @@ svg.logo{display:block}
 .pills{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
 .pills::-webkit-scrollbar{display:none}
 .pills button,.pills label{flex:none;border:1.5px solid var(--line);background:var(--card);border-radius:99px;padding:8px 14px;font-size:13px;font-weight:700;color:var(--navy);position:relative}
-.pills .on{background:var(--navy);border-color:var(--navy);color:#fff}
+.pills .on{background:var(--brand);border-color:var(--brand);color:#fff}
 .pills input[type=date]{position:absolute;inset:0;opacity:0}
 .kinds{display:flex;gap:18px;border-bottom:1px solid var(--line);margin-top:12px}
 .kinds button{border:0;background:none;padding:10px 0;font-weight:800;font-size:13.5px;color:var(--muted);border-bottom:2.5px solid transparent;margin-bottom:-1px}
@@ -268,7 +271,7 @@ svg.logo{display:block}
 .chat{display:flex;flex-direction:column;gap:8px;min-height:240px;padding:4px 0 12px}
 .msg{max-width:80%;padding:10px 13px;border-radius:16px;font-size:14px;white-space:pre-wrap;word-wrap:break-word}
 .msg.them{background:var(--card);border:1px solid var(--line);border-bottom-left-radius:4px;align-self:flex-start}
-.msg.me{background:var(--navy);color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+.msg.me{background:var(--brand);color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
 .compose{display:flex;gap:8px;position:sticky;bottom:calc(76px + env(safe-area-inset-bottom,0px));background:var(--cream);padding:8px 0}
 .compose input{flex:1;min-width:0;border:1px solid var(--line);background:var(--card);border-radius:14px;padding:12px 13px;font-size:16px}
 .compose button{width:48px;border:0;border-radius:14px;background:var(--gold);color:var(--navy-2);display:grid;place-items:center}
@@ -285,7 +288,7 @@ svg.logo{display:block}
 .cday .m{font-weight:800;color:var(--navy)}
 .cday .d{color:var(--muted)}
 .cday.past{opacity:.5}
-.cday.today{background:var(--navy);color:#fff}
+.cday.today{background:var(--brand);color:#fff}
 .cday.today .n,.cday.today .m{color:var(--gold-2)}
 .cday.today .d{color:rgba(255,255,255,.75)}
 .cday.last .n{color:var(--gold-ink)}
@@ -293,7 +296,7 @@ svg.logo{display:block}
 /* profil */
 .prof{display:flex;gap:16px;align-items:center;padding:4px 0 14px}
 .prof h2{font-family:var(--title);font-weight:600;font-size:22px;color:var(--navy);margin:0}
-.toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 16px;border-radius:99px;font-size:13px;font-weight:800;z-index:60;box-shadow:var(--shadow);max-width:calc(100% - 40px);width:max-content;text-align:center;animation:tup .25s}
+.toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--brand);color:#fff;padding:10px 16px;border-radius:99px;font-size:13px;font-weight:800;z-index:60;box-shadow:var(--shadow);max-width:calc(100% - 40px);width:max-content;text-align:center;animation:tup .25s}
 @keyframes tup{from{transform:translate(-50%,20px);opacity:.5}}
 .map-card .tags,.map-card .ln.m{display:none}.map-card .item .ph{width:56px;height:56px}
 /* iOS : les champs date et heure ont une largeur et une hauteur propres à Safari, on les aligne sur les autres champs */
@@ -313,7 +316,7 @@ svg.logo{display:block}
 .dhero .eyebrow{position:relative;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-2);background:rgba(11,28,54,.55);border:1px solid rgba(226,189,114,.4);border-radius:99px;padding:5px 11px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .dhero h2{font-size:26px;line-height:1.15}
 .dhero .rb{background:rgba(11,28,54,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(226,189,114,.35);z-index:2}
-.hh{background:radial-gradient(120% 80% at 90% 0%,rgba(226,189,114,.16),transparent 60%),linear-gradient(rgba(11,28,54,.45),rgba(11,28,54,.45)),var(--zellige),linear-gradient(180deg,var(--navy-2),var(--navy));background-size:auto,auto,72px 72px,auto}
+.hh{background:radial-gradient(120% 80% at 90% 0%,rgba(226,189,114,.16),transparent 60%),linear-gradient(rgba(11,28,54,.45),rgba(11,28,54,.45)),var(--zellige),linear-gradient(180deg,var(--navy-2),var(--brand));background-size:auto,auto,72px 72px,auto}
 
 /* Page de garde v2 : zellige, lanternes, rosace, silhouette */
 html:has(.onb),body:has(.onb){background:#0B1C36}
@@ -343,7 +346,7 @@ html:has(.onb),body:has(.onb){background:#0B1C36}
 /* Choix des plats */
 .course-pick .chips{gap:7px}
 .course-pick .chip{font-weight:600;padding:8px 12px}
-.course-pick .chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.course-pick .chip.on{background:var(--brand);border-color:var(--brand);color:#fff}
 .add-chip{border-style:dashed!important;border-color:var(--gold)!important;color:var(--gold-ink)!important;background:none!important}
 .other-in{display:inline-flex;gap:6px;align-items:center;flex:1 1 220px}
 .other-in input{flex:1;min-width:0;border:1.5px solid var(--gold);border-radius:99px;padding:7px 12px;background:var(--card);font-size:16px}
@@ -359,7 +362,7 @@ html:has(.onb),body:has(.onb){background:#0B1C36}
 .pr b{font-size:16px}
 .pr.sun{color:var(--muted);font-weight:600}
 .pr.done{opacity:.5}
-.pr.on{background:linear-gradient(90deg,var(--navy),var(--navy-2));color:#fff;opacity:1;border-top-color:transparent}
+.pr.on{background:linear-gradient(90deg,var(--brand),var(--navy-2));color:#fff;opacity:1;border-top-color:transparent}
 .pr.on+.pr{border-top-color:transparent}
 .pr.on small{color:var(--gold-2)}
 .pr.on b{color:var(--gold-2)}
@@ -367,13 +370,13 @@ html:has(.onb),body:has(.onb){background:#0B1C36}
 .qibla>div:first-child{flex:1;min-width:0}
 .qibla .btn svg{width:16px;height:16px}
 .dial{--q:0deg;position:relative;width:118px;height:118px;flex:none;border-radius:50%;
-  background:radial-gradient(circle,var(--card) 52%,transparent 53%),var(--zellige),var(--navy);background-size:auto,48px 48px,auto;
-  border:3px solid var(--gold);box-shadow:inset 0 0 0 4px var(--navy),var(--shadow);transition:box-shadow .3s}
+  background:radial-gradient(circle,var(--card) 52%,transparent 53%),var(--zellige),var(--brand);background-size:auto,48px 48px,auto;
+  border:3px solid var(--gold);box-shadow:inset 0 0 0 4px var(--brand),var(--shadow);transition:box-shadow .3s}
 .dial .n{position:absolute;top:5px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--gold-2)}
 .needle{position:absolute;inset:12px;transform:rotate(var(--q));transition:transform .25s ease-out}
 .needle svg{width:100%;height:100%}
 .dial.live .needle{transition:transform .12s linear}
-.dial.ok{border-color:var(--green);box-shadow:inset 0 0 0 4px var(--navy),0 0 0 6px rgba(46,139,87,.2)}
+.dial.ok{border-color:var(--green);box-shadow:inset 0 0 0 4px var(--brand),0 0 0 6px rgba(46,139,87,.2)}
 @media (max-width:360px){.dial{width:96px;height:96px}}
 
 /* ---------- Idées de repas ---------- */
@@ -385,7 +388,7 @@ html:has(.onb),body:has(.onb){background:#0B1C36}
 #rcCat button{flex:none}
 .recipe .ph{color:#fff}
 .recipe .ph svg{width:22px;height:22px}
-.rc-head{--c:var(--navy);position:relative;overflow:hidden;margin:-4px -2px 14px;padding:18px 18px 16px;border-radius:20px;color:#fff;
+.rc-head{--c:var(--brand);position:relative;overflow:hidden;margin:-4px -2px 14px;padding:18px 18px 16px;border-radius:20px;color:#fff;
   background:radial-gradient(120% 90% at 90% 0%,rgba(226,189,114,.22),transparent 60%),linear-gradient(rgba(11,28,54,.35),rgba(11,28,54,.35)),var(--zellige),linear-gradient(160deg,var(--c),var(--navy-2));background-size:auto,auto,60px 60px,auto}
 .rc-head .eyebrow{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-2);background:rgba(11,28,54,.5);border:1px solid rgba(226,189,114,.4);border-radius:99px;padding:4px 10px}
 .rc-head h2{font-family:var(--title);font-weight:700;font-size:22px;margin:10px 0 6px;color:#fff}
@@ -424,7 +427,7 @@ html:has(.onb),body:has(.onb){background:#0B1C36}
 
 /* ---------- Vérification d'identité ---------- */
 .nudge{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:1px solid var(--gold-2);background:linear-gradient(120deg,var(--gold-soft),var(--card));border-radius:var(--r);padding:12px 14px;margin:0 0 14px}
-.nudge .ic{width:36px;height:36px;border-radius:11px;background:var(--navy);color:var(--gold-2);display:grid;place-items:center;flex:none}
+.nudge .ic{width:36px;height:36px;border-radius:11px;background:var(--brand);color:var(--gold-2);display:grid;place-items:center;flex:none}
 .nudge .ic svg{width:19px;height:19px}
 .nudge b{display:block;font-size:14px;color:var(--navy)}
 .nudge small{display:block;font-size:12px;line-height:1.35;color:var(--muted);margin-top:2px}
@@ -440,7 +443,7 @@ html:has(.onb),body:has(.onb){background:#0B1C36}
 .shot{position:relative;display:flex;align-items:center;gap:12px;background:var(--card);border:1.5px dashed var(--gold-2);border-radius:16px;padding:12px;margin-bottom:10px;cursor:pointer;min-height:76px;transition:border-color .2s,background .2s}
 .shot input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 .shot:focus-within{outline:2px solid var(--gold);outline-offset:2px}
-.shot-ic{width:48px;height:48px;border-radius:14px;background:var(--navy);color:var(--gold-2);display:grid;place-items:center;flex:none}
+.shot-ic{width:48px;height:48px;border-radius:14px;background:var(--brand);color:var(--gold-2);display:grid;place-items:center;flex:none}
 .shot-ic svg{width:26px;height:26px}
 .shot-tx{flex:1;min-width:0}
 .shot-tx b{display:block;font-size:14.5px;color:var(--navy)}
@@ -462,6 +465,57 @@ html:has(.onb),body:has(.onb){background:#0B1C36}
 .idpics a span{position:absolute;left:8px;bottom:8px;font-size:11px;font-weight:800;color:#fff;background:rgba(11,28,54,.7);border-radius:99px;padding:3px 9px}
 .nopic{display:grid;place-items:center;aspect-ratio:4/3;border-radius:12px;background:var(--sand);font-size:12px;color:var(--muted);text-align:center;padding:8px}
 button.kpi{text-align:left;font:inherit;cursor:pointer}
+
+/* ---------- Notifications ---------- */
+.hh-r{display:flex;align-items:center;gap:8px;min-width:0;max-width:62%}
+.bell{position:relative;flex:none;width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;display:grid;place-items:center;padding:0}
+.bell svg{width:19px;height:19px}
+.bell-n{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 5px;border-radius:99px;background:var(--gold-2);color:var(--navy-2);font-size:10.5px;font-weight:800;display:grid;place-items:center;box-shadow:0 0 0 2px var(--navy-2)}
+.bell-n[hidden]{display:none}
+.nlist{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.nitem{display:flex;gap:12px;width:100%;text-align:left;border:0;background:none;padding:14px;position:relative}
+.nitem+.nitem{border-top:1px solid var(--line)}
+.nitem.new{background:linear-gradient(90deg,var(--gold-soft),transparent 70%)}
+.nitem.new::after{content:"";position:absolute;right:14px;top:18px;width:8px;height:8px;border-radius:50%;background:var(--gold)}
+.nic{--c:var(--brand);width:38px;height:38px;border-radius:12px;flex:none;display:grid;place-items:center;color:#fff;background:var(--c)}
+.nic svg{width:18px;height:18px}
+.ntx{flex:1;min-width:0;padding-right:12px}
+.ntx b{display:block;font-size:14px;color:var(--navy)}
+.ntx span{display:block;font-size:13px;color:var(--ink);line-height:1.4;margin-top:2px}
+.ntx small{display:block;font-size:11.5px;color:var(--muted);margin-top:4px;font-weight:700}
+.nprev{display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:18px;padding:12px;margin:4px 0 16px;box-shadow:var(--shadow)}
+.nprev-ic{width:36px;height:36px;border-radius:9px;background:var(--brand);display:grid;place-items:center;flex:none}
+.nprev b{display:block;font-size:13.5px;color:#18233A}
+.nprev small{font-size:12.5px;color:#6B6457}
+
+/* ---------- Liste de courses ---------- */
+.ck-prog{background:var(--brand);color:#fff;border-radius:var(--r);padding:14px 16px;margin-bottom:6px;background-image:radial-gradient(120% 90% at 90% 0%,rgba(226,189,114,.2),transparent 60%),linear-gradient(rgba(11,28,54,.6),rgba(11,28,54,.6)),var(--zellige),linear-gradient(160deg,#13294B,#0B1C36);background-size:auto,auto,60px 60px,auto}
+.ck-prog div{color:rgba(255,255,255,.9);font-weight:700}
+.ck-prog b{font-family:var(--title);font-size:20px;color:var(--gold-2)}
+.ck-prog .bar{height:6px;border-radius:6px;background:rgba(255,255,255,.18);margin-top:10px;overflow:hidden}
+.ck-prog .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold-2),var(--gold));border-radius:6px;transition:width .3s}
+.ck-rc{padding:6px 14px 12px}
+.ck-r{display:flex;align-items:center;gap:8px;padding:8px 0}
+.ck-r+.ck-r{border-top:1px solid var(--line)}
+.ck-rn{flex:1;min-width:0;text-align:left;border:0;background:none;padding:0}
+.ck-rn b{display:block;font-size:14px;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ck-rn small{font-size:12px;color:var(--muted)}
+.ck-x{flex:none;width:32px;height:32px;border-radius:50%;border:0;background:none;color:var(--muted);display:grid;place-items:center;padding:0}
+.ck-x svg{width:16px;height:16px}
+.ck-list{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:2px 14px}
+.ck-list li{display:flex;align-items:center}
+.ck-list label{flex:1;min-width:0}
+.ck-list small{display:block;font-size:11.5px;color:var(--muted);margin-top:1px}
+.ck-add{display:flex;gap:8px;margin-top:16px}
+.ck-add input{flex:1;min-width:0;height:44px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:0 12px;font-size:16px}
+.ck-add .btn svg{width:18px;height:18px}
+
+/* ---------- Mode sombre ---------- */
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--cream:#0A1424;--sand:#17263E;--card:#111E34;--line:#24385A;--ink:#E9E2D4;--muted:#9AA4B6;--navy:#F2E7CF;--brand:#24467C;--gold-soft:#2B2414;--gold-ink:#E8C47D;--green:#4DB57D;--green-soft:#11301F;--red:#E58068;--red-soft:#3A1C17;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px -16px rgba(0,0,0,.7);color-scheme:dark}}
+:root[data-theme="dark"]{--cream:#0A1424;--sand:#17263E;--card:#111E34;--line:#24385A;--ink:#E9E2D4;--muted:#9AA4B6;--navy:#F2E7CF;--brand:#24467C;--gold-soft:#2B2414;--gold-ink:#E8C47D;--green:#4DB57D;--green-soft:#11301F;--red:#E58068;--red-soft:#3A1C17;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px -16px rgba(0,0,0,.7);color-scheme:dark}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .mapctl>button,:root:not([data-theme="light"]) .mapctl .zoom{background:rgba(17,30,52,.92)}:root:not([data-theme="light"]) .pin2-n{color:#13294B}}
+:root[data-theme="dark"] .mapctl>button,:root[data-theme="dark"] .mapctl .zoom{background:rgba(17,30,52,.92)}
+:root[data-theme="dark"] .pin2-n{color:#13294B}
 
 </style>
 </head>
@@ -590,17 +644,29 @@ const RECIPES = [
 const SUPABASE_URL = "https://nrhikltszevayxvsvbbi.supabase.co";
 const SUPABASE_KEY = "sb_publishable_KH6NzA-iZgu5KdfGJERWug_1h7qJPFn";
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const VAPID_PUBLIC = "BB60U6CWv4GPySEDVJH4wn5qVzBurcw_0vg15EzEa4-SojJDEyllRFUuEfgplFfgnpGvMcAyO6BhHSkxwEjqkWU";
 
 /* ---------- état ---------- */
 const S = {
   session: null, profile: null, view: "onb", params: {}, stack: [],
   pos: { lat: 45.7578, lng: 4.8320, label: "Lyon" },
-  date: null, kind: "all", map: null, channel: null, timer: null, pending: 0,
+  date: null, kind: "all", map: null, channel: null, timer: null, pending: 0, unread: 0, nchan: null,
 };
 const store = {
   get(k, d) { try { const v = localStorage.getItem("sufra_" + k); return v ? JSON.parse(v) : d; } catch (_) { return d; } },
   set(k, v) { try { localStorage.setItem("sufra_" + k, JSON.stringify(v)); } catch (_) {} },
 };
+/* ---------- apparence : auto, clair ou sombre ---------- */
+const darkMQ = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+const isDark = () => { const t = store.get("theme", "auto"); return t === "dark" || (t === "auto" && !!darkMQ?.matches); };
+function applyTheme() {
+  const t = store.get("theme", "auto");
+  if (t === "auto") delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = t;
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", isDark() ? "#0A1424" : "#0B1C36");
+}
+applyTheme();
+darkMQ?.addEventListener?.("change", () => { if (store.get("theme", "auto") === "auto") { applyTheme(); if (S.view === "explore") render(); } });
+
 S.pos = store.get("pos", S.pos);
 
 /* ---------- utilitaires ---------- */
@@ -658,6 +724,10 @@ const RAMADAN_START = "2027-02-08"; // date estimée, à confirmer selon l'obser
 
 /* ---------- icônes ---------- */
 const I = {
+  cart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2.5l2.2 10.5h10.6L20.5 7H7"/><circle cx="9.5" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/></svg>',
+  x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  bell: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0"/></svg>',
+  share: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 15V3M8 7l4-4 4 4"/><path d="M6 11H5v10h14V11h-1"/></svg>',
   idcard: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.2"/><path d="M5.8 16c.6-1.6 1.8-2.4 3.2-2.4s2.6.8 3.2 2.4M14.5 10h4M14.5 13.5h3"/></svg>',
   selfie: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="10" r="3"/><path d="M7.5 17c.9-2 2.6-3 4.5-3s3.6 1 4.5 3"/></svg>',
   home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11L12 4l9 7M5 10v10h14V10M10 20v-5h4v5"/></svg>',
@@ -729,7 +799,7 @@ function cleanup() {
 }
 function nav() {
   const t = [["home", I.home, "Accueil"], ["explore", I.map, "Carte"], ["cal", I.moon, "Ramadan"], ["resa", I.cal, "Résas"], ["me", I.user, "Profil"]];
-  const cur = TABS.includes(S.view) ? S.view : ({ host: "home", detail: "explore", chat: "resa", recipes: "home", admin: "me" }[S.view] || "");
+  const cur = TABS.includes(S.view) ? S.view : ({ host: "home", detail: "explore", chat: "resa", recipes: "home", admin: "me", notifs: "home", courses: "home" }[S.view] || "");
   return `<nav class="nav" aria-label="Navigation">${t.map(([v, ic, l]) => `<button type="button" data-tab="${v}" class="${cur === v ? "on" : ""}">${ic}${l}${v === "resa" && S.pending ? `<span class="nbadge">${S.pending}</span>` : ""}</button>`).join("")}</nav>`;
 }
 function topbar(title, canBack = true) {
@@ -876,7 +946,7 @@ VIEWS.complete = {
 VIEWS.home = {
   html: () => `<header class="hh">
       <div class="hh-row"><div class="brand">${logo("#FFFFFF", 30)}<span class="wordmark">SUFRA</span></div>
-      <button class="loc" type="button" id="locBtn">${I.pin}<span>${esc(S.pos.label)}</span></button></div>
+      <div class="hh-r"><button class="loc" type="button" id="locBtn">${I.pin}<span>${esc(S.pos.label)}</span></button><button class="bell" type="button" data-go="notifs" aria-label="Notifications">${I.bell}<span class="bell-n" id="bellN" ${S.unread ? "" : "hidden"}>${S.unread > 9 ? "9+" : S.unread}</span></button></div></div>
       <div class="hh-greet">Salam, ${esc(S.profile?.first_name || "")}</div>
       <button class="hh-count" type="button" data-go="cal"><span class="hh-mid"><span class="k" id="cdK">Iftar dans</span><span class="v num" id="cdV">--:--:--</span></span>
       <span class="hh-times"><span>Maghrib <b class="num" id="tM"></b></span><span>Fajr <b class="num" id="tF"></b></span></span></button>
@@ -890,6 +960,7 @@ VIEWS.home = {
         <div class="dua-fr">« La soif est partie, les veines sont humidifiées et la récompense est acquise, si Allah le veut. » <span>Rapporté par Abû Dâwûd</span></div></div>
       <div class="sect"><h3>Agir autrement</h3></div>
       <div class="list">
+        <button type="button" data-go="courses"><span class="ic">${I.cart}</span><span><b>Ma liste de courses</b><small>${(() => { const n = (store.get("courses", null)?.items || []).length; return n ? `${n} plat${n > 1 ? "s" : ""} au programme` : "Générée depuis vos recettes"; })()}</small></span><span class="arr">›</span></button>
         <button type="button" data-go="recipes"><span class="ic">${I.book}</span><span><b>Idées de repas</b><small>${RECIPES.length} recettes du Ramadan</small></span><span class="arr">›</span></button>
         <button type="button" data-go="resa"><span class="ic">${I.basket}</span><span><b>Récompenses des hôtes</b><small>Un panier gourmand dès 3 invités</small></span><span class="arr">›</span></button>
         <button type="button" data-go="cal"><span class="ic">${I.cal}</span><span><b>Horaires et Qibla</b><small>Les 5 prières, le calendrier, la direction de La Mecque</small></span><span class="arr">›</span></button>
@@ -1024,7 +1095,7 @@ VIEWS.explore = {
 };
 
 /* Carte : MapLibre + OpenFreeMap (style « Liberty », vectoriel, gratuit et sans clé), épingles aux couleurs de Sufra */
-const MAP_STYLE = "https://tiles.openfreemap.org/styles/liberty";
+const mapStyle = () => `https://tiles.openfreemap.org/styles/${isDark() ? "dark" : "liberty"}`;
 function pinEl(r) {
   const k = kindStyle(r), free = r.places - r.taken, el = document.createElement("button");
   el.type = "button"; el.className = "pin2"; el.style.setProperty("--c", k.c);
@@ -1049,7 +1120,7 @@ async function mosquesNearby(radiusKm = 10) {
   } catch (_) { return []; }
 }
 function mosqHTML(m) {
-  return `<button type="button" class="item osm-item" data-osm="${esc(m.id)}"><span class="ph" style="background:#E3F2E8;color:#2E8B57">${I.mosque}</span><span class="tx"><b>${esc(m.name)}</b><span class="ln"><span>${I.pin}${km(m.dist)}</span></span>${m.address ? `<span class="ln m">${esc(m.address)}</span>` : ""}<span class="tags"><span class="tg">Pas encore sur Sufra</span></span></span></button>`;
+  return `<button type="button" class="item osm-item" data-osm="${esc(m.id)}"><span class="ph" style="background:var(--green-soft);color:var(--green)">${I.mosque}</span><span class="tx"><b>${esc(m.name)}</b><span class="ln"><span>${I.pin}${km(m.dist)}</span></span>${m.address ? `<span class="ln m">${esc(m.address)}</span>` : ""}<span class="tags"><span class="tg">Pas encore sur Sufra</span></span></span></button>`;
 }
 function mosqSheet(m) {
   if (!m) return;
@@ -1065,7 +1136,7 @@ function drawMap(rows, mosq = []) {
   const box = $("#map");
   if (!window.maplibregl) { box.innerHTML = `<p class="hint" style="padding:16px">Carte indisponible hors connexion.</p>`; return; }
   const pts = rows.filter((r) => r.approx_lat != null);
-  const map = S.map = new maplibregl.Map({ container: box, style: MAP_STYLE, center: [S.pos.lng, S.pos.lat], zoom: 13, attributionControl: { compact: true }, dragRotate: false, pitchWithRotate: false, cooperativeGestures: false });
+  const map = S.map = new maplibregl.Map({ container: box, style: mapStyle(), center: [S.pos.lng, S.pos.lat], zoom: 13, attributionControl: { compact: true }, dragRotate: false, pitchWithRotate: false, cooperativeGestures: false });
   map.touchZoomRotate.disableRotation();
   const me = document.createElement("div"); me.className = "me-dot";
   new maplibregl.Marker({ element: me, anchor: "center" }).setLngLat([S.pos.lng, S.pos.lat]).addTo(map);
@@ -1178,7 +1249,7 @@ function askSheet(l) {
     if (forOther && !rel.name) return toast("Indiquez le prénom de votre proche.");
     const { error } = await sb.rpc("request_booking", { p_listing: l.id, p_party: n, p_message: $("#askMsg")?.value || null, p_bring: $("#askBring")?.value || null, p_allergies: $("#askAll").value || null, p_for_relative: rel });
     if (error) return toast(errMsg(error));
-    closeSheet(); toast(pro ? "Inscription confirmée" : "Demande envoyée"); go("resa");
+    closeSheet(); toast(pro ? "Inscription confirmée" : "Demande envoyée"); go("resa"); maybeAskPush();
   };
 }
 function reportSheet(l) {
@@ -1202,7 +1273,7 @@ VIEWS.host = {
       <div class="field"><label for="hHood">Quartier affiché</label><input id="hHood" maxlength="80" placeholder="Lyon 7e · Gerland"></div>
       <div class="field"><span class="lbl" id="plLbl">Places disponibles</span><div class="stepper"><button type="button" data-p="-1" aria-label="Moins">−</button><output id="hPl" class="num">3</output><button type="button" data-p="1" aria-label="Plus">+</button></div></div>
     </div>
-    <div class="sect"><h3>Au menu</h3><button type="button" data-go="recipes">${I.book.replace("<svg", '<svg style="width:14px;height:14px;vertical-align:-2px"')} Idées de repas</button></div><p class="hint" id="menuCount" style="margin:-8px 0 8px"></p><p class="hint" style="margin:-6px 0 12px">Touchez les plats que vous proposez. « + Autre » pour ajouter le vôtre.</p><div class="panel">${COURSES.map(([c, n]) => `<div class="field course-pick"><span class="lbl">${n}</span><div class="chips" data-course="${c}"></div></div>`).join("")}</div>
+    <div class="sect"><h3>Au menu</h3><button type="button" data-go="recipes">${I.book.replace("<svg", '<svg style="width:14px;height:14px;vertical-align:-2px"')} Idées de repas</button></div><p class="hint" id="menuCount" style="margin:-8px 0 8px"></p><p class="hint" style="margin:-6px 0 12px">Touchez les plats que vous proposez. « + Autre » pour ajouter le vôtre.</p><div class="panel">${COURSES.map(([c, n]) => `<div class="field course-pick"><span class="lbl">${n}</span><div class="chips" data-course="${c}"></div></div>`).join("")}<button type="button" class="btn line sm" id="toCart" style="margin-top:14px">${I.cart} Liste de courses de ce menu</button></div>
     <div class="sect"><h3>Mes invités</h3></div><div class="panel">
       <div class="field"><label for="hAud">Qui peut venir ?</label><select id="hAud">${Object.entries(AUD).map(([k, v]) => `<option value="${k}">${v}</option>`).join("")}</select></div>
       <div class="field"><span class="lbl">Précisions</span><div class="chips" id="hTags">${TAGS.map((t) => `<button type="button" class="chip ${t === "Halal" ? "on" : ""}" data-t="${t}">${t}</button>`).join("")}</div></div>
@@ -1218,6 +1289,12 @@ VIEWS.host = {
       $("#hAs").onchange = (e) => { partnerId = e.target.value || null; $("#fmt").hidden = !!partnerId; const p = parts.find((x) => x.id === partnerId); if (p && p.address) $("#hAddr").value = p.address; $("#plLbl").textContent = partnerId ? "Places par soir" : "Places disponibles"; };
     }
     const picked = S.hostMenu || {}; if (!S.hostMenu) { COURSES.forEach(([c]) => picked[c] = [...(DEFAULT_MENU[c] || [])]); S.hostMenu = picked; }
+    $("#toCart").onclick = () => {
+      const dishes = Object.values(picked).flat(), guests = (+$("#hPl").textContent || 3) + 1;
+      const R = RECIPES.filter((r) => dishes.includes(r.dish));
+      if (!R.length) return toast("Aucune recette pour ces plats : ajoutez-en depuis les idées de repas");
+      cartAdd(R.map((r) => [r.id, guests])); toast(`${R.length} recette${R.length > 1 ? "s" : ""} pour ${guests} pers. ajoutée${R.length > 1 ? "s" : ""}`); go("courses");
+    };
     const add = store.get("addDish", null); if (add && picked[add.course] && !picked[add.course].includes(add.dish)) { picked[add.course].push(add.dish); toast(`${add.dish} ajouté à votre menu`); } store.set("addDish", null);
     const drawCourse = (c) => {
       const box = $(`[data-course="${c}"]`), opts = [...DISHES[c], ...picked[c].filter((d) => !DISHES[c].includes(d))];
@@ -1269,7 +1346,7 @@ VIEWS.host = {
       if (error) { $("#hBtn").disabled = false; return msg(errMsg(error)); }
       const { error: e2 } = await sb.from("listing_private").insert({ listing_id: data.id, address: geo.label, lat: geo.lat, lng: geo.lng });
       if (e2) { await sb.from("listings").delete().eq("id", data.id); $("#hBtn").disabled = false; return msg(errMsg(e2)); }
-      S.hostMenu = null; toast("Table publiée !"); go("resa", { tab: "host" });
+      S.hostMenu = null; toast("Table publiée !"); go("resa", { tab: "host" }); maybeAskPush();
     };
   },
 };
@@ -1493,13 +1570,91 @@ function recipeSheet(r) {
     <div class="panel"><div class="pr-head"><h4 style="margin:0">Ingrédients</h4><div class="stepper sm"><button type="button" data-n="-1" aria-label="Moins de personnes">−</button><output id="rcN" class="num">${n}</output><button type="button" data-n="1" aria-label="Plus de personnes">+</button></div></div><p class="hint" style="margin:4px 0 10px">personnes</p><ul class="ing" id="rcIng"></ul></div>
     <div class="panel"><h4>Préparation</h4><ol class="steps">${r.steps.map((t) => `<li>${esc(t)}</li>`).join("")}</ol></div>
     ${r.tip ? `<div class="notice">${I.book}<span><b>Astuce :</b> ${esc(r.tip)}</span></div>` : ""}
+    <button class="btn line" type="button" id="rcCart" style="margin-bottom:10px">${I.cart} Ajouter à ma liste de courses</button>
     <button class="btn gold" type="button" id="rcAdd">${I.plus} Je le propose à ma table</button>
     <p class="hint" style="text-align:center;margin-top:8px">« ${esc(r.dish)} » sera ajouté au menu de votre annonce.</p>`);
   const drawIng = () => { $("#rcN").textContent = n; $("#rcIng").innerHTML = r.ing.map(([q, u, name]) => `<li><label><input type="checkbox"><span><b class="num">${q == null ? "" : fmtQty(q * n / r.serves, u) + (u ? " " + esc(u) : "")}</b> ${esc(name)}</span></label></li>`).join(""); };
   $$("[data-n]", bg).forEach((b) => b.onclick = () => { n = Math.max(1, Math.min(40, n + +b.dataset.n)); drawIng(); });
   drawIng();
+  $("#rcCart", bg).onclick = () => { cartAdd([[r.id, n]]); toast(`${r.name} · ${n} pers. ajouté à la liste`); };
   $("#rcAdd", bg).onclick = () => { store.set("addDish", { course: r.course, dish: r.dish }); closeSheet(); go("host"); };
 }
+
+/* ---------- liste de courses ---------- */
+const AISLES = [
+  ["Fruits et légumes", /oignon|tomate|carotte|pomme de terre|courgette|poivron|citron(?! confit)|coriandre|persil|menthe fra|^menthe$|ail\b|^ail|céleri|aubergine|chou|navet|banane|orange|pomme|fraise|raisins?$|fraises|gingembre frais|piment|manioc/],
+  ["Boucherie et poisson", /agneau|bœuf|boeuf|poulet|viande|poisson|thon|veau|dinde/],
+  ["Crèmerie", /lait|lben|beurre|œuf|oeuf|crème|fromage|yaourt/],
+  ["Épices et herbes sèches", /^sel$|poivre|cumin|curcuma|paprika|ras el|cannelle|safran|carvi|garam|harissa|gingembre$|gingembre et|menthe séchée/],
+  ["Épicerie sucrée", /sucre|miel|datte|amande|sésame|noix|fleur d'oranger|abricot|pruneau|raisins secs|coco|levure|qamar/],
+  ["Épicerie salée", /farine|semoule|riz|lentille|pois chiche|vermicelle|concentré|huile|brick|frik|olive|câpre|bouillon|confit|tomates concassées/],
+  ["Boissons", /thé|hibiscus|bissap/],
+];
+const aisleOf = (name) => (AISLES.find(([, re]) => re.test(name.toLowerCase())) || ["Autres"])[0];
+const cartGet = () => { const c = store.get("courses", null) || {}; return { items: c.items || [], checked: c.checked || {}, extra: c.extra || [] }; };
+const cartSet = (c) => store.set("courses", c);
+function cartAdd(list) {
+  const c = cartGet();
+  list.forEach(([id, n]) => { const x = c.items.find((i) => i.id === id); if (x) x.n = n; else c.items.push({ id, n }); });
+  cartSet(c);
+}
+function cartLines(c) {
+  const M = new Map();
+  for (const it of c.items) {
+    const r = RECIPES.find((x) => x.id === it.id); if (!r) continue;
+    for (const [q, u, name] of r.ing) {
+      if (/^eau( |$)/.test(name)) continue;
+      const parts = q == null ? name.split(/,\s*/) : [name];
+      for (const raw of parts) {
+        const nm = raw.replace(/\s*\((selon le goût|facultatif)\)/, "").replace(/ pour (décorer|le sirop)$/, "").trim();
+        const norm = nm.toLowerCase().split(" ").map((w) => w.replace(/s$/, "")).join(" ");
+        const key = norm + "|" + (q == null ? "" : u);
+        const L = M.get(key) || { key, norm, name: nm, unit: q == null ? "" : u, qty: q == null ? null : 0, from: new Set() };
+        if (nm.length > L.name.length) L.name = nm;
+        if (q != null) L.qty += q * it.n / r.serves;
+        L.from.add(r.name); M.set(key, L);
+      }
+    }
+  }
+  for (const [k, L] of M) if (L.qty == null) { const o = [...M.values()].find((x) => x !== L && x.norm === L.norm && x.qty != null); if (o) { L.from.forEach((f) => o.from.add(f)); M.delete(k); } }
+  c.extra.forEach((t, i) => M.set("extra|" + i, { key: "extra|" + i, name: t, unit: "", qty: null, from: new Set(), extra: i }));
+  const G = {}; for (const L of M.values()) (G[L.extra != null ? "Ajouts personnels" : aisleOf(L.name)] ||= []).push(L);
+  const order = [...AISLES.map(([a]) => a), "Autres", "Ajouts personnels"];
+  return order.filter((a) => G[a]).map((a) => [a, G[a].sort((x, y) => x.name.localeCompare(y.name, "fr"))]);
+}
+const lineQty = (L) => L.qty == null ? "" : `${fmtQty(L.qty, L.unit)}${L.unit ? " " + L.unit : ""}`;
+VIEWS.courses = {
+  html: () => `${topbar("Liste de courses")}<div class="pad" id="ckBody"></div>`,
+  mount() {
+    const draw = () => {
+      const c = cartGet(), box = $("#ckBody");
+      if (!c.items.length && !c.extra.length) {
+        box.innerHTML = `<div class="empty" style="margin-top:8px"><b>Votre liste est vide</b>Ajoutez des recettes depuis les idées de repas, ou depuis le menu de votre table.</div><button class="btn gold" type="button" data-go="recipes" style="margin-top:14px">${I.book} Voir les idées de repas</button>`;
+        return;
+      }
+      const G = cartLines(c), all = G.flatMap(([, l]) => l), done = all.filter((L) => c.checked[L.key]).length;
+      box.innerHTML = `<div class="ck-prog"><div><b class="num">${done}/${all.length}</b> dans le panier</div><div class="bar"><i style="width:${all.length ? Math.round(done / all.length * 100) : 0}%"></i></div></div>
+        ${c.items.length ? `<div class="sect" style="margin-top:6px"><h3>Au programme</h3></div><div class="panel ck-rc">${c.items.map((it) => { const r = RECIPES.find((x) => x.id === it.id); return r ? `<div class="ck-r"><button type="button" class="ck-rn" data-rc="${r.id}"><b>${esc(r.name)}</b><small>${COURSE_LABEL[r.course]}</small></button><div class="stepper sm"><button type="button" data-cn="${r.id}" data-d="-1" aria-label="Moins de personnes">−</button><output class="num">${it.n}</output><button type="button" data-cn="${r.id}" data-d="1" aria-label="Plus de personnes">+</button></div><button type="button" class="ck-x" data-rm="${r.id}" aria-label="Retirer ${esc(r.name)}">${I.x}</button></div>` : ""; }).join("")}<p class="hint" style="margin:8px 0 0">Nombre de personnes par plat. Les quantités s'adaptent.</p></div>` : ""}
+        ${G.map(([a, lines]) => `<div class="sect"><h3>${a}</h3><span class="hint">${lines.length}</span></div><ul class="ing ck-list">${lines.map((L) => `<li><label><input type="checkbox" data-k="${esc(L.key)}" ${c.checked[L.key] ? "checked" : ""}><span><b class="num">${lineQty(L)}</b> ${esc(L.name)}${L.from.size > 1 ? `<small>${[...L.from].map(esc).join(" · ")}</small>` : ""}</span></label>${L.extra != null ? `<button type="button" class="ck-x" data-rx="${L.extra}" aria-label="Supprimer">${I.x}</button>` : ""}</li>`).join("")}</ul>`).join("")}
+        <form class="ck-add" id="ckAdd"><input id="ckIn" maxlength="60" placeholder="Ajouter un article : pain, jus, serviettes…" aria-label="Ajouter un article"><button type="submit" class="btn sm" style="width:auto">${I.plus}</button></form>
+        <div class="row" style="margin-top:16px"><button class="btn gold" type="button" id="ckShare">${I.share} Partager la liste</button></div>
+        <div class="row" style="margin-top:8px"><button class="btn ghost sm" type="button" id="ckUn">Tout décocher</button><button class="btn ghost sm" type="button" id="ckClear">Vider la liste</button></div>`;
+      $$("[data-k]", box).forEach((x) => x.onchange = () => { const c2 = cartGet(); x.checked ? c2.checked[x.dataset.k] = 1 : delete c2.checked[x.dataset.k]; cartSet(c2); draw(); });
+      $$("[data-cn]", box).forEach((b) => b.onclick = () => { const c2 = cartGet(), it = c2.items.find((i) => i.id === b.dataset.cn); it.n = Math.max(1, Math.min(60, it.n + +b.dataset.d)); cartSet(c2); draw(); });
+      $$("[data-rm]", box).forEach((b) => b.onclick = () => { const c2 = cartGet(); c2.items = c2.items.filter((i) => i.id !== b.dataset.rm); cartSet(c2); draw(); });
+      $$("[data-rx]", box).forEach((b) => b.onclick = () => { const c2 = cartGet(); c2.extra.splice(+b.dataset.rx, 1); c2.checked = Object.fromEntries(Object.entries(c2.checked).filter(([k]) => !k.startsWith("extra|"))); cartSet(c2); draw(); });
+      $$("[data-rc]", box).forEach((b) => b.onclick = () => recipeSheet(RECIPES.find((r) => r.id === b.dataset.rc)));
+      $("#ckAdd").onsubmit = (e) => { e.preventDefault(); const t = $("#ckIn").value.trim(); if (!t) return; const c2 = cartGet(); c2.extra.push(t); cartSet(c2); draw(); $("#ckIn")?.focus(); };
+      $("#ckUn").onclick = () => { const c2 = cartGet(); c2.checked = {}; cartSet(c2); draw(); };
+      $("#ckClear").onclick = () => { if (!confirm("Vider toute la liste de courses ?")) return; cartSet({ items: [], checked: {}, extra: [] }); draw(); };
+      $("#ckShare").onclick = async () => {
+        const txt = "Liste de courses · Sufra\n" + cartLines(cartGet()).map(([a, l]) => `\n${a.toUpperCase()}\n` + l.filter((L) => !cartGet().checked[L.key]).map((L) => `☐ ${lineQty(L) ? lineQty(L) + " " : ""}${L.name}`).join("\n")).join("\n");
+        try { if (navigator.share) await navigator.share({ title: "Liste de courses", text: txt }); else { await navigator.clipboard.writeText(txt); toast("Liste copiée : collez-la dans un message"); } } catch (_) {}
+      };
+    };
+    draw();
+  },
+};
 
 /* ---------- espace administration ---------- */
 VIEWS.admin = {
@@ -1561,6 +1716,125 @@ VIEWS.admin = {
   },
 };
 
+
+/* ---------- notifications ---------- */
+const NK = { demande: [I.ppl, "#C99A45"], inscription: [I.ppl, "#C99A45"], acceptee: [I.check, "#2E8B57"], refusee: [I.cal, "#B0412E"], annulation: [I.cal, "#B0412E"], message: [I.chat || I.bell, "#13294B"], identite: [I.shield, "#2E8B57"], partenaire: [I.mosque, "#2E8B57"], recompense: [I.gift || I.check, "#8A6418"], rappel: [I.moon, "#13294B"], arrivee: [I.pin, "#2E8B57"], test: [I.bell, "#13294B"] };
+function setUnread(n) {
+  S.unread = Math.max(0, n); const b = $("#bellN");
+  if (b) { b.hidden = !S.unread; b.textContent = S.unread > 9 ? "9+" : S.unread; }
+  try { if (navigator.setAppBadge) S.unread ? navigator.setAppBadge(S.unread) : navigator.clearAppBadge(); } catch (_) {}
+}
+async function startNotifs() {
+  if (!me()) return;
+  stopNotifs();
+  const { count } = await sb.from("notifications").select("id", { count: "exact", head: true }).is("read_at", null);
+  setUnread(count || 0);
+  S.nchan = sb.channel("notif-" + me()).on("postgres_changes", { event: "INSERT", schema: "public", table: "notifications", filter: `user_id=eq.${me()}` }, (p) => {
+    setUnread(S.unread + 1);
+    if (S.view === "notifs") render(); else toast(p.new.title);
+    if (["demande", "inscription", "annulation"].includes(p.new.kind)) refreshPending();
+  }).subscribe();
+  syncPush();
+}
+function stopNotifs() { if (S.nchan) { sb.removeChannel(S.nchan); S.nchan = null; } }
+function openLink(qs) {
+  const q = new URLSearchParams(String(qs || "").replace(/^.*\?/, "")), v = q.get("v");
+  if (!v || !VIEWS[v]) return;
+  try { history.replaceState(null, "", location.pathname); } catch (_) {}
+  const params = {}; for (const [k, x] of q) if (k !== "v") params[k] = x;
+  if (v === "home") { S.stack = []; S.view = "home"; return render(); }
+  go(v, params);
+}
+const ago = (iso) => {
+  const m = Math.round((Date.now() - new Date(iso)) / 6e4);
+  if (m < 1) return "à l'instant"; if (m < 60) return `il y a ${m} min`; const h = Math.round(m / 60); if (h < 24) return `il y a ${h} h`;
+  const d = Math.round(h / 24); return d === 1 ? "hier" : d < 7 ? `il y a ${d} jours` : new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
+};
+VIEWS.notifs = {
+  html: () => `${topbar("Notifications")}<div class="pad"><div id="nfBody">${loading()}</div></div>`,
+  async mount() {
+    const { data, error } = await sb.from("notifications").select("*").order("created_at", { ascending: false }).limit(60);
+    if (error) return toast(errMsg(error));
+    const push = await pushState();
+    $("#nfBody").innerHTML = (push === "off" || push === "ios-install" ? `<button type="button" class="nudge" id="nfPush"><span class="ic">${I.bell}</span><span><b>Recevoir les alertes sur ce téléphone</b><small>Même quand Sufra est fermée.</small></span><span class="arr">›</span></button>` : "")
+      + (data.length ? `<div class="nlist">${data.map((n) => { const [ic, c] = NK[n.kind] || [I.bell, "#13294B"]; return `<button type="button" class="nitem ${n.read_at ? "" : "new"}" data-u="${esc(n.url)}"><span class="nic" style="--c:${c}">${ic}</span><span class="ntx"><b>${esc(n.title)}</b><span>${esc(n.body)}</span><small>${ago(n.created_at)}</small></span></button>`; }).join("")}</div>`
+        : `<div class="empty"><b>Aucune notification</b>Vous serez prévenu ici des demandes, réponses et messages.</div>`);
+    const np = $("#nfPush"); if (np) np.onclick = () => pushSheet();
+    $$("[data-u]").forEach((b) => b.onclick = () => openLink(b.dataset.u));
+    if (data.some((n) => !n.read_at)) { await sb.from("notifications").update({ read_at: new Date().toISOString() }).is("read_at", null); setUnread(0); }
+  },
+};
+
+/* ---------- notifications push (téléphone) ---------- */
+const isIOS = () => /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+const standalone = () => window.matchMedia?.("(display-mode: standalone)").matches || navigator.standalone === true;
+const pushSupported = () => "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
+const b64u8 = (s) => { s = s.replace(/-/g, "+").replace(/_/g, "/"); while (s.length % 4) s += "="; return Uint8Array.from(atob(s), (c) => c.charCodeAt(0)); };
+async function swReg() { return navigator.serviceWorker.register("sw.js"); }
+async function pushState() {
+  if (!pushSupported()) return isIOS() && !standalone() ? "ios-install" : "unsupported";
+  if (Notification.permission === "denied") return "denied";
+  try { const reg = await swReg(); return (await reg.pushManager.getSubscription()) && Notification.permission === "granted" ? "on" : "off"; } catch (_) { return "off"; }
+}
+async function syncPush() {
+  if (!pushSupported() || Notification.permission !== "granted") return;
+  try {
+    const sub = await (await swReg()).pushManager.getSubscription(); if (!sub) return;
+    const j = sub.toJSON(); await sb.rpc("save_push_subscription", { p_endpoint: j.endpoint, p_p256dh: j.keys.p256dh, p_auth: j.keys.auth });
+  } catch (_) {}
+}
+async function enablePush() {
+  if (!pushSupported()) { pushSheet(); return false; }
+  try {
+    const perm = await Notification.requestPermission();
+    if (perm !== "granted") { toast(perm === "denied" ? "Notifications bloquées dans les réglages du téléphone" : "Notifications non activées"); return false; }
+    const reg = await swReg(); await navigator.serviceWorker.ready;
+    const sub = (await reg.pushManager.getSubscription()) || await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64u8(VAPID_PUBLIC) });
+    const j = sub.toJSON();
+    const { error } = await sb.rpc("save_push_subscription", { p_endpoint: j.endpoint, p_p256dh: j.keys.p256dh, p_auth: j.keys.auth });
+    if (error) { toast(errMsg(error)); return false; }
+    toast("Notifications activées sur ce téléphone"); return true;
+  } catch (e) { toast("Activation impossible : " + (e.message || e)); return false; }
+}
+async function disablePush() {
+  try {
+    const sub = await (await swReg()).pushManager.getSubscription();
+    if (sub) { await sb.from("push_subscriptions").delete().eq("endpoint", sub.endpoint); await sub.unsubscribe(); }
+    toast("Notifications désactivées sur ce téléphone");
+  } catch (e) { toast(errMsg(e)); }
+}
+function pushSheet() {
+  const ios = isIOS() && !standalone() && !pushSupported();
+  const bg = sheet(ios ? `<h2>Activer les notifications</h2><p class="lead">Sur iPhone, Sufra doit d'abord être ajoutée à l'écran d'accueil (une seule fois).</p>
+      <ol class="steps"><li>Dans Safari, touchez ${I.share.replace("<svg", '<svg style="width:18px;height:18px;vertical-align:-3px;color:#2F6E9E"')} <b>Partager</b> en bas de l'écran.</li><li>Choisissez <b>Sur l'écran d'accueil</b>, puis <b>Ajouter</b>.</li><li>Ouvrez Sufra depuis sa nouvelle icône, puis revenez ici et touchez <b>Activer</b>.</li></ol>
+      <button class="btn" type="button" data-close>J'ai compris</button>`
+    : !pushSupported() ? `<h2>Notifications</h2><p class="lead">Ce navigateur ne permet pas les notifications. Essayez avec Chrome, Safari (iPhone, iOS 16.4 ou plus récent) ou Edge.</p><button class="btn" type="button" data-close>Fermer</button>`
+    : `<h2>Être prévenu à temps</h2><p class="lead">Une alerte sur votre téléphone quand on vous répond, quand quelqu'un demande votre table, et le jour de l'iftar.</p>
+      <div class="nprev"><span class="nprev-ic">${logo("#FFFFFF", 22)}</span><span><b>Votre demande est acceptée</b><small>Sarah vous attend le lundi 8 février à 18h30.</small></span></div>
+      <button class="btn gold" type="button" id="psGo">${I.bell} Activer les notifications</button><button class="btn ghost" type="button" data-close style="margin-top:8px">Plus tard</button>`);
+  const g = $("#psGo", bg); if (g) g.onclick = async () => { if (await enablePush()) { closeSheet(); if (S.view === "me" || S.view === "notifs") render(); } };
+}
+function maybeAskPush() {
+  if (store.get("askedPush", false)) return;
+  store.set("askedPush", true);
+  pushState().then((st) => { if (st === "off" || st === "ios-install") setTimeout(pushSheet, 2600); });
+}
+async function notifPanelHTML() {
+  const st = await pushState();
+  const T = {
+    on: `<div class="idst ok"><span class="ic">${I.bell}</span><div><b>Activées sur ce téléphone</b><span>Demandes, réponses, messages et rappel le jour de l'iftar.</span></div></div><div class="row" style="margin-top:12px"><button class="btn line sm" type="button" id="npTest">Envoyer un test</button><button class="btn ghost sm" type="button" id="npOff">Désactiver</button></div>`,
+    off: `<p class="hint" style="margin:0 0 12px">Recevez une alerte même quand Sufra est fermée.</p><button class="btn gold" type="button" id="npOn">${I.bell} Activer les notifications</button>`,
+    "ios-install": `<p class="hint" style="margin:0 0 12px">Sur iPhone, ajoutez d'abord Sufra à l'écran d'accueil.</p><button class="btn gold" type="button" id="npOn">${I.bell} Comment faire ?</button>`,
+    denied: `<div class="idst no"><span class="ic">${I.bell}</span><div><b>Bloquées</b><span>Réactivez-les dans les réglages du téléphone : Notifications › Sufra.</span></div></div>`,
+    unsupported: `<p class="hint" style="margin:0">Ce navigateur ne permet pas les notifications. Celles-ci restent visibles dans la cloche de l'accueil.</p>`,
+  };
+  return `<div class="panel" id="npPanel"><h4>Notifications</h4>${T[st]}</div>`;
+}
+function bindNotifPanel() {
+  const on = $("#npOn"); if (on) on.onclick = () => pushSheet();
+  const off = $("#npOff"); if (off) off.onclick = async () => { await disablePush(); render(); };
+  const t = $("#npTest"); if (t) t.onclick = async () => { const { error } = await sb.rpc("send_test_notification"); toast(error ? errMsg(error) : "Test envoyé : il arrive dans quelques secondes"); };
+}
 
 /* ---------- vérification d'identité ---------- */
 const DOC_T = { cni: "Carte d'identité", passeport: "Passeport", permis: "Permis de conduire", autre: "Autre pièce officielle" };
@@ -1632,6 +1906,8 @@ VIEWS.me = {
     $("#meBody").innerHTML = `
       <div class="prof"><div class="av lg" style="background:linear-gradient(135deg,#C99A45,#8A6418)">${esc((p.first_name || "?")[0])}</div><div><h2>${esc(p.first_name)}</h2><div class="hint">${esc(S.session.user.email)}</div><div class="hint">${avg ? `<span class="stars">★</span> ${avg}/5 · ${rv.length} avis` : "Pas encore d'avis"}</div></div></div>
       ${idPanelHTML(p, idc?.[0])}
+      ${await notifPanelHTML()}
+      <div class="panel"><h4>Apparence</h4><div class="seg2" id="thSeg" style="margin:0">${[["auto", "Automatique"], ["light", "Clair"], ["dark", "Sombre"]].map(([k, n]) => `<button type="button" data-th="${k}" class="${store.get("theme", "auto") === k ? "on" : ""}">${n}</button>`).join("")}</div><p class="hint" style="margin:8px 0 0">Automatique suit le réglage de votre téléphone.</p></div>
       <form class="panel" id="pF"><h4>Mes informations</h4>
         <div class="field"><label for="pN">Prénom</label><input id="pN" maxlength="40" value="${esc(p.first_name)}"></div>
         <div class="field"><label for="pC">Ville</label><input id="pC" maxlength="80" value="${esc(p.city)}"></div>
@@ -1651,6 +1927,8 @@ VIEWS.me = {
     };
     const np = $("#newPart"); if (np) np.onclick = () => partnerSheet();
     const ig = $("#idGo"); if (ig) ig.onclick = () => idSheet();
+    bindNotifPanel();
+    $$("[data-th]").forEach((b) => b.onclick = () => { store.set("theme", b.dataset.th); applyTheme(); $$("[data-th]").forEach((x) => x.classList.toggle("on", x === b)); });
     $("#logout").onclick = async () => { await sb.auth.signOut(); };
   },
 };
@@ -1675,6 +1953,7 @@ function partnerSheet(pre = {}) {
    DÉMARRAGE
    ===================================================================== */
 async function loadProfile() {
+  setTimeout(startNotifs, 0);
   const { data, error } = await sb.from("profiles").select("*").eq("id", me()).maybeSingle();
   if (error) { toast(errMsg(error)); return; }
   S.profile = data || { id: me(), first_name: "", gender: null };
@@ -1699,15 +1978,17 @@ sb.auth.onAuthStateChange(async (event, session) => {
       const after = store.get("after", "home"); store.set("after", "home");
       S.stack = []; S.view = after === "host" ? "host" : after === "explore" ? "explore" : "home"; render(); refreshPending();
     }, 0);
-  } else if (!session && was) { S.profile = null; S.stack = []; S.view = "auth"; render(); }
+  } else if (!session && was) { stopNotifs(); S.profile = null; S.stack = []; S.view = "auth"; render(); }
 });
 (async () => {
   const { data } = await sb.auth.getSession();
   S.session = data.session;
   if (S.session) { await loadProfile(); S.view = "home"; refreshPending(); }
-  if (!S.pos.src || (S.pos.src === "gps" && Date.now() - (S.pos.at || 0) > 6 * 3600e3)) gps(true).then((ok) => { if (ok && ["home", "explore"].includes(S.view)) render(); });
   else S.view = store.get("seen", false) ? "auth" : "onb";
+  if (!S.pos.src || (S.pos.src === "gps" && Date.now() - (S.pos.at || 0) > 6 * 3600e3)) gps(true).then((ok) => { if (ok && ["home", "explore"].includes(S.view)) render(); });
   render();
+  if (S.session) openLink(location.search);
+  if ("serviceWorker" in navigator) navigator.serviceWorker.addEventListener?.("message", (e) => { if (e.data?.type === "open" && S.session) openLink(e.data.url); });
 })();
 
 </script>
